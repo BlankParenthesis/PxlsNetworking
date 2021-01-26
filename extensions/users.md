@@ -6,7 +6,6 @@ Consequently, implementing this extension requires implementing the [authenticat
 User objects are represented with the following type:
 ```typescript
 {
-	"id": number | string;
 	"name": string;
 	"createdAt": Timestamp;
 }
@@ -46,40 +45,6 @@ The client user has changed.
 
 --------------------------------------------------------------------------------
 
-## /users
-### GET
-Returns a list of User objects.
-#### Errors
-| Response Code | Cause                                                           |
-|---------------|-----------------------------------------------------------------|
-| 403 Forbidden | The client does not have the required privileges to list users. |
-
---------------------------------------------------------------------------------
-
-## /users/{user_id}
-### GET
-Returns the User object with the ID specified by `user_id`.
-#### Errors
-| Response Code | Cause                                                                     |
-|---------------|---------------------------------------------------------------------------|
-| 404 Not Found | No user with the requested ID exists.                                     |
-| 403 Forbidden | The client does not have the required privileges to view the user's data. |
-
-### PATCH
-Updates the User object with the ID specified by `user_id`.
-#### Request
-A partial User object without the ID.
-#### Response
-The updated User object.
-#### Errors
-| Response Code | Cause                                                                     |
-|---------------|---------------------------------------------------------------------------|
-| 404 Not Found | No user with the requested ID exists.                                     |
-| 403 Forbidden | The client does not have the required privileges to edit the user's data. |
-
-
---------------------------------------------------------------------------------
-
 ## /board/pixels/{x}/{y}
 ### GET
 ```typescript
@@ -87,3 +52,39 @@ The updated User object.
 	"user"?: User;
 }
 ```
+
+--------------------------------------------------------------------------------
+
+## /users
+### GET
+A list of all users.
+#### Response
+An array of User References.
+#### Errors
+| Response Code | Cause                                                           |
+|---------------|-----------------------------------------------------------------|
+| 403 Forbidden | The client does not have the required privileges to list users. |
+
+--------------------------------------------------------------------------------
+
+## {user_uri}
+### GET
+#### Response
+The User object.
+#### Errors
+| Response Code | Cause                                                                     |
+|---------------|---------------------------------------------------------------------------|
+| 403 Forbidden | The client does not have the required privileges to view the user's data. |
+
+### PATCH
+Updates the User object.
+#### Request
+A partial User object.
+#### Response
+The updated User object.
+#### Errors
+| Response Code | Cause                                                                     |
+|---------------|---------------------------------------------------------------------------|
+| 403 Forbidden | The client does not have the required privileges to edit the user's data. |
+
+

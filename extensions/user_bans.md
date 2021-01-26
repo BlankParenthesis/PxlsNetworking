@@ -6,7 +6,6 @@ Since this concerns user objects directly, implementing this extension requires 
 This extension adds Ban objects which are described by following type:
 ```typescript
 {
-	"id": number | string;
 	"issued": Timestamp;
 	"expiry": Timestamp;
 	"issuer"?: User;
@@ -46,18 +45,18 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
-## /users/{user_id}/bans
+## {user_uri}/bans
 ### GET
-Information on every ban that has been issued to the specified user.
-Returns an array of Ban objects.
+A list of all bans for the user.
+#### Response
+An array of Ban References.
 ##### Errors
 | Response Code            | Cause                                                          |
 |--------------------------|----------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                          |
 | 403 Forbidden            | The client does not have the required privileges to list bans. |
 
 ### POST
-Bans the specified user.
+Ban the user.
 #### Request
 ```typescript
 {
@@ -66,29 +65,26 @@ Bans the specified user.
 }
 ```
 ##### Response
-The created Ban object.
+A reference to the created Ban object.
 ##### Errors
 | Response Code            | Cause                                                             |
 |--------------------------|-------------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                             |
 | 403 Forbidden            | The client does not have the required privileges to ban the user. |
 | 422 Unprocessable Entity | The ban reason is invalid.                                        |
 
 --------------------------------------------------------------------------------
 
-## /users/{user_id}/bans/{ban_id}
+## {ban_uri}
 ### GET
-Information on a specific ban that has been issued to the specified user.
-Returns a Ban object.
+#### Response
+The Ban object.
 ##### Errors
 | Response Code | Cause                                                          |
 |---------------|----------------------------------------------------------------|
-| 404 Not Found | No user with the specified ID exists.                          |
-| 404 Not Found | No ban with the specified ID exists.                           |
 | 403 Forbidden | The client does not have the required privileges view the ban. |
 
 ### PATCH
-Updates a specific ban that has been issued to the specified user.
+Updates the ban.
 #### Request
 ```typescript
 {
@@ -97,20 +93,16 @@ Updates a specific ban that has been issued to the specified user.
 }
 ```
 ##### Response
-The created Ban object.
+The updated Ban object.
 ##### Errors
 | Response Code            | Cause                                                             |
 |--------------------------|-------------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                             |
-| 404 Not Found            | No ban with the specified ID exists.                              |
 | 403 Forbidden            | The client does not have the required privileges to ban the user. |
 | 422 Unprocessable Entity | The ban reason is invalid.                                        |
 
 ### DELETE
-Removes a specific ban that has been issued to the specified user.
+Removes the ban.
 ##### Errors
 | Response Code | Cause                                                               |
 |---------------|---------------------------------------------------------------------|
-| 404 Not Found | No user with the specified ID exists.                               |
-| 404 Not Found | No ban with the specified ID exists.                                |
 | 403 Forbidden | The client does not have the required privileges to unban the user. |

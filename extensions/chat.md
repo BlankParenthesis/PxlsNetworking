@@ -5,7 +5,6 @@ Implementing this extensions adds support for real-time chat.
 At the core of chat is the Message object defined as follows:
 ```typescript
 {
-	"id": number | string;
 	"createdAt": Timestamp;
 	"raw"?: string;
 	"message": string;
@@ -15,7 +14,6 @@ At the core of chat is the Message object defined as follows:
 Messages are grouped by Chatroom objects which are defined below:
 ```typescript
 {
-	"id": number | string;
 	"name": string;
 	"createdAt": Timestamp;
 }
@@ -58,19 +56,19 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 Websocket connection point for chat messages.
 ### Client packets
 #### Subscribe
-Request that the server send events from the specified chatrooms.
+Request that the server send events from the chatrooms specified by URI.
 ```typescript
 {
 	"type": "subscribe";
-	"rooms": Array<number | string>;
+	"rooms": string[];
 }
 ```
 #### Unsubscribe
-Request that the server no longer send events from the specified chatrooms.
+Request that the server no longer send events from the chatrooms specified by URI.
 ```typescript
 {
 	"type": "unsubscribe";
-	"rooms": Array<number | string>;
+	"rooms": string[];
 }
 ```
 
@@ -81,8 +79,8 @@ New messages were sent.
 ```typescript
 {
 	"type": "messages";
-	"room": number | string;
-	"messages": Message[];
+	"room": Reference<Chatroom>;
+	"messages": Reference<Message>[];
 }
 ```
 
@@ -95,7 +93,7 @@ If multiple rooms were invalid, the server need only mention one.
 {
 	"type": "error";
 	"error": "INVALID_ROOM";
-	"room": number | string;
+	"room": string;
 	"cause": "FORBIDDEN" | "MISSING";
 }
 ```
@@ -107,7 +105,7 @@ If multiple rooms were invalid, the server need only mention one.
 General information on chatrooms.
 ```typescript
 {
-	"defaultRoom"?: number | string;
+	"defaultRoom"?: Reference<Chatroom>;
 	"characterLimit": number;
 	"customEmoji": Array<{
 		"emoji": string;
@@ -120,8 +118,9 @@ General information on chatrooms.
 
 ## /chat/rooms
 ### GET
-Information on all chatrooms.
-Returns an array of Chatroom objects.
+A list of all chatrooms.
+#### Request
+An array of Chatroom References.
 #### Errors
 | Response Code | Cause                                                       |
 |---------------|-------------------------------------------------------------|
@@ -129,29 +128,29 @@ Returns an array of Chatroom objects.
 
 --------------------------------------------------------------------------------
 
-## /chat/rooms/{room_id}
+## {chatroom_uri}
 ### GET
-Returns the Chatroom object with the ID specified by `room_id`.
+#### Request
+The Chatroom object.
 #### Errors
 | Response Code | Cause                                                                    |
 |---------------|--------------------------------------------------------------------------|
 | 403 Forbidden | The client lacks the required privileges to view the chatroom requested. |
-| 404 Not Found | No chatroom with the requested ID exists.                                |
 
 --------------------------------------------------------------------------------
 
-## /chat/rooms/{room_id}/messages
+## {chatroom_uri}/messages
 ### GET
-Previously sent messages.
-Returns an array of Message objects.
+A list of all messages in the chatroom.
+#### Response
+An array of Message References.
 #### Errors
 | Response Code | Cause                                                            |
 |---------------|------------------------------------------------------------------|
-| 404 Not Found | No chatroom with the requested ID exists.                        |
 | 403 Forbidden | The client lacks the required privileges to access chat history. |
 
 ### POST
-Creates a new chat message and sends it to the chatroom.
+Create a new chat message and sends it to the chatroom.
 #### Request
 ```typescript
 {
@@ -159,22 +158,19 @@ Creates a new chat message and sends it to the chatroom.
 }
 ```
 #### Response
-The created message object.
+A Reference to the created message object.
 #### Errors
 | Response Code | Cause                                                      |
 |---------------|------------------------------------------------------------|
-| 404 Not Found | No chatroom with the requested ID exists.                  |
 | 403 Forbidden | The client lacks the required privileges to post messages. |
 
 --------------------------------------------------------------------------------
 
-## /chat/rooms/{room_id}/messages/{message_id}
+## {message_uri}
 ### GET
-A chat message.
-Returns a Message object.
+#### Request
+The Message object.
 #### Errors
 | Response Code | Cause                                                            |
 |---------------|------------------------------------------------------------------|
-| 404 Not Found | No chatroom with the requested ID exists.                        |
 | 403 Forbidden | The client lacks the required privileges to access chat history. |
-| 404 Not Found | No message with the requested ID exists.                         |

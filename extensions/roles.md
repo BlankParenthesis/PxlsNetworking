@@ -2,17 +2,16 @@ Roles
 =====
 Implementing this extension provides a way to distinguish different classes of users and assign different privileges to each class.
 
-This extension does not require that the [users extension](./users.md) is implemented, but if it is this extension modifies the User object to add a list of role names associated with a given user:
+This extension does not require that the [users extension](./users.md) is implemented, but if it is this extension modifies the User object to add a list of Role References for the roles associated with a given user:
 ```typescript
 {
-	"roles": string[];
+	"roles": Reference<Role>[];
 }
 ```
 
 Role objects are defined by the following type:
 ```typescript
 {
-	"id": number | string;
 	"name": string;
 	"permissions": string[];
 	"icon"?: string;
@@ -59,41 +58,50 @@ Server implementations may forgo implementing any of these modifying permissions
 
 ## /roles
 ### GET
-Information on all roles.
-Returns an array of Role objects.
+A list of all roles.
+#### Response
+An array of Role References.
 #### Errors
 | Response Code | Cause                                                   |
 |---------------|---------------------------------------------------------|
 | 403 Forbidden | The client lacks the required privileges to list roles. |
 
+### POST
+Create a new role.
+#### Request
+A role object
+#### Response
+A reference to the created Role object.
+#### Errors
+| Response Code | Cause                                                     |
+|---------------|-----------------------------------------------------------|
+| 403 Forbidden | The client lacks the required privileges to create roles. |
+
 --------------------------------------------------------------------------------
 
-## /roles/{role_id}
+## {role_uri}
 ### GET
-Information on a specified role.
-Returns the Role object with the id matching `role_id`.
+#### Response
+The Role object.
 #### Errors
 | Response Code | Cause                                                      |
 |---------------|------------------------------------------------------------|
-| 404 Not Found | No role with the requested ID exists.                      |
 | 403 Forbidden | The client lacks the required privileges to view the role. |
 
 ### PATCH
-Updates the Role object with the ID specified by `role_id`.
+Updates the Role object.
 #### Request
-A partial Role object without the ID.
+A partial Role object.
 #### Response
 The updated Role object.
 #### Errors
 | Response Code | Cause                                                           |
 |---------------|-----------------------------------------------------------------|
-| 404 Not Found | No role with the requested ID exists.                           |
 | 403 Forbidden | The client does not have the required privileges to edit roles. |
 
 ### DELETE
-Deletes the Role object with the ID specified by `role_id`.
+Deletes the Role object.
 #### Errors
 | Response Code | Cause                                                             |
 |---------------|-------------------------------------------------------------------|
-| 404 Not Found | No role with the requested ID exists.                             |
 | 403 Forbidden | The client does not have the required privileges to delete roles. |

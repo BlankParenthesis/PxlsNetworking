@@ -8,7 +8,6 @@ It also requires implementing the [users extension](./users.md) to identify user
 This extension adds Mute objects which are described by following type:
 ```typescript
 {
-	"id": number | string;
 	"issued": Timestamp;
 	"expiry": Timestamp;
 	"issuer"?: User;
@@ -40,7 +39,7 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
-## /chat/rooms/{room_id}/messages
+## {chatroom_uri}/messages
 ### POST
 #### Errors
 | Response Code | Cause                                                    |
@@ -49,14 +48,14 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
-## /users/{user_id}/mutes
+## {user_uri}/mutes
 ### GET
-Information on every mute that has been issued to the specified user.
-Returns an array of Mute objects.
+A list of all mutes for the user.
+#### Request
+An array of Mute objects.
 ##### Errors
 | Response Code            | Cause                                                           |
 |--------------------------|-----------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                           |
 | 403 Forbidden            | The client does not have the required privileges to list mutes. |
 
 ### POST
@@ -73,21 +72,18 @@ The created Mute object.
 ##### Errors
 | Response Code            | Cause                                                              |
 |--------------------------|--------------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                              |
 | 403 Forbidden            | The client does not have the required privileges to mute the user. |
 | 422 Unprocessable Entity | The mute reason is invalid.                                        |
 
 --------------------------------------------------------------------------------
 
-## /users/{user_id}/mutes/{mute_id}
+## {mute_uri}
 ### GET
-Information on a specific mute that has been issued to the specified user.
-Returns a Mute object.
+#### Request
+The Mute object.
 ##### Errors
 | Response Code | Cause                                                           |
 |---------------|-----------------------------------------------------------------|
-| 404 Not Found | No user with the specified ID exists.                           |
-| 404 Not Found | No mute with the specified ID exists.                           |
 | 403 Forbidden | The client does not have the required privileges view the mute. |
 
 ### PATCH
@@ -104,16 +100,12 @@ The created Mute object.
 ##### Errors
 | Response Code            | Cause                                                              |
 |--------------------------|--------------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                              |
-| 404 Not Found            | No mute with the specified ID exists.                              |
 | 403 Forbidden            | The client does not have the required privileges to mute the user. |
 | 422 Unprocessable Entity | The mute reason is invalid.                                        |
 
 ### DELETE
-Removes a specific mute that has been issued to the specified user.
+Removes a the Mute.
 ##### Errors
 | Response Code | Cause                                                                |
 |---------------|----------------------------------------------------------------------|
-| 404 Not Found | No user with the specified ID exists.                                |
-| 404 Not Found | No mute with the specified ID exists.                                |
 | 403 Forbidden | The client does not have the required privileges to unmute the user. |

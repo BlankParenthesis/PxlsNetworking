@@ -8,6 +8,20 @@ Within these extensions, endpoints declared either here or in other extensions m
 These **duplicate response type definitions should be treated as the union of implemented definitions**.
 This allows extensions to add new fields to responses in a flexible way.
 
+Extensions also define a number of extra objects.
+These objects refer to other objects by using a Reference.
+A Reference can be described with the following type:
+```typescript
+type Reference<T> = {
+	uri: string;
+	view?: T;
+};
+```
+where `uri` points to a location where `T` can be obtained with a simple GET request.
+
+Server implementations may choose to logically arrange their reference URIs (e.g. `/users/{user_id}`), but are not required to do so.
+Clients should not assume such a structure.
+
 --------------------------------------------------------------------------------
 
 ## /info
