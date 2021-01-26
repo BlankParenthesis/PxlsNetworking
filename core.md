@@ -8,6 +8,22 @@ Within these extensions, endpoints declared either here or in other extensions m
 These **duplicate response type definitions should be treated as the union of implemented definitions**.
 This allows extensions to add new fields to responses in a flexible way.
 
+At the core of Pxls is the board on which pixels are placed.
+This is represented here as the Board objected defined by the following type:
+```typescript
+{
+	"id": number | string;
+	"name": string;
+	"createdAt": Timestamp;
+	"width": number;
+	"height": number;
+	"palette": Array<{
+		"name": string;
+		"value": string;
+	}>;
+}
+```
+
 --------------------------------------------------------------------------------
 
 ## /info
@@ -21,12 +37,36 @@ Implementations should return the union of all lists defined by every implemente
 	"version"?: string;
 	"source"?: string;
 	"extensions": string[];
+	"defaultBoard": number | string;
 }
 ```
 
 --------------------------------------------------------------------------------
 
-## /board/ws
+## /boards
+### GET
+#### Response
+An array of Board objects.
+#### Errors
+| Response Code | Cause                                                    |
+|---------------|----------------------------------------------------------|
+| 403 Forbidden | The client lacks the required privileges to list boards. |
+
+--------------------------------------------------------------------------------
+
+## /boards/{board_id}
+### GET
+#### Response
+The Board object.
+#### Errors
+| Response Code | Cause                                                       |
+|---------------|-------------------------------------------------------------|
+| 404 Not Found | No board with the requested ID exists.                      |
+| 403 Forbidden | The client lacks the required privileges to view the board. |
+
+--------------------------------------------------------------------------------
+
+## /boards/{board_id}/ws
 Websocket connection point.
 ### Server packets
 These packets are sent by the server to inform the client of something.
@@ -58,7 +98,7 @@ How many pixels may be placed by the current user without encountering a cooldow
 
 --------------------------------------------------------------------------------
 
-## /board/data/initial
+## /boards/{board_id}/data/initial
 ### GET
 Binary data. 
 8-bit palette index for every pixel.
@@ -70,7 +110,7 @@ Represents the initial state of the board.
 
 --------------------------------------------------------------------------------
 
-## /board/data/colors
+## /boards/{board_id}/data/colors
 ### GET
 Binary data. 
 8-bit palette index for every pixel.
@@ -82,7 +122,7 @@ Represents the current state of the board.
 
 --------------------------------------------------------------------------------
 
-## /board/data/mask
+## /boards/{board_id}/data/mask
 ### GET
 Binary data. 
 8-bit mask identifier for every pixel.
@@ -100,7 +140,7 @@ Binary data.
 
 --------------------------------------------------------------------------------
 
-## /board/data/modified
+## /boards/{board_id}/data/modified
 ### GET
 Binary data. 
 32-bit timestamp for every pixel. 
@@ -114,29 +154,7 @@ Each timestamp represents the last-modified time for a pixel.
 
 --------------------------------------------------------------------------------
 
-## /board/info
-### GET
-Metadata for the current board.
-```typescript
-{
-	"name": string;
-	"createdAt": Timestamp;
-	"width": number;
-	"height": number;
-	"palette": Array<{
-		"name": string;
-		"value": string;
-	}>;
-}
-```
-#### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to read board data. |
-
---------------------------------------------------------------------------------
-
-## /board/users
+## /boards/{board_id}/users
 ### GET
 Information on the active and idle user counts.
 ```typescript
@@ -153,7 +171,7 @@ Information on the active and idle user counts.
 
 --------------------------------------------------------------------------------
 
-## /board/pixels/{x}/{y}
+## /boards/{board_id}/pixels/{x}/{y}
 ### GET
 Information for a given board position.
 ```typescript

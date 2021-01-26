@@ -25,13 +25,15 @@ The the best generic way I can think of is specifying an icon src but this would
 A list of basic permissions are given here, but other extensions add to this list as needed.
 These cover the core protocol: 
 
-| Permission          | Purpose                                                           |
-|---------------------|-------------------------------------------------------------------|
-| `board.data`        | Allows GET requests to `/board/data` endpoints and `/board/info`. |
-| `board.users`       | Allows GET requests to `/board/users`.                            |
-| `board.socket`      | Allows connecting to the websocket at `/board/ws`.                |
-| `board.pixels.get`  | Allows GET requests to `/board/pixels/{x}/{y}`.                   |
-| `board.pixels.post` | Allows POST requests to `/board/pixels/{x}/{y}`.                  |
+| Permission           | Purpose                                                        |
+|----------------------|----------------------------------------------------------------|
+| `boards.list`        | Allows GET requests to `/boards`.                              |
+| `boards.get`         | Allows GET requests to `/boards/{board_id}`.                   |
+| `boards.get.data`    | Allows GET requests to `/boards/{board_id}/data` endpoints.    |
+| `boards.get.users`   | Allows GET requests to `/boards/{board_id}/users`.             |
+| `boards.socket`      | Allows connecting to the websocket at `/boards/{board_id}/ws`. |
+| `boards.pixels.get`  | Allows GET requests to `/boards/{board_id}/pixels/{x}/{y}`.    |
+| `boards.pixels.post` | Allows POST requests to `/boards/{board_id}/pixels/{x}/{y}`.   |
 
 These permissions cover the extra functionality added by this extension: 
 
