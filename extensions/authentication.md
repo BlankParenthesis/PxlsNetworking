@@ -10,7 +10,6 @@ To accommodate servers allowing authentication of known users while disallowing 
 Authentication options are given by Methods which are defined by the following type:
 ```typescript
 {
-	"id": number | string;
 	"type": "OAUTH" | "BASIC";
 	"name": string;
 	"description"?: string;
@@ -43,15 +42,16 @@ Server implementations may forgo implementing any of these modifying permissions
 
 ## /auth/methods
 ### GET
-Information about how and where clients can authenticate.
-Returns an array of Methods.
+A list of all authentication methods.
+#### Response
+An array of Method References.
 
 ### POST
 Add a new method which clients can use to to authenticate.
 #### Request
 A Method object without an ID.
 #### Response
-The created Method object.
+A Reference to the created Method object.
 #### Errors
 | Response Code | Cause                                                                          |
 |---------------|--------------------------------------------------------------------------------|
@@ -59,29 +59,27 @@ The created Method object.
 
 --------------------------------------------------------------------------------
 
-## /auth/methods/{method_id}
+## {method_uri}
 ### GET
-Information on the method with ID equal to `method_id`.
-Returns a Method object.
+#### Response
+The Method object.
 
 ### PATCH
-Updates an authentication method.
+Updates the authentication method.
 #### Request
-A partial Method object with an ID.
+A partial Method object.
 #### Response
-The modified Method object.
+The updated Method object.
 #### Errors
 | Response Code | Cause                                                                          |
 |---------------|--------------------------------------------------------------------------------|
-| 404 Not Found | No Method with the requested ID exists.                                        |
 | 403 Forbidden | The client lacks the required privileges to change the authentication methods. |
 
 ### DELETE
-Removes an authentication method.
+Removes the authentication method.
 #### Errors
 | Response Code | Cause                                                                          |
 |---------------|--------------------------------------------------------------------------------|
-| 404 Not Found | No Method with the requested ID exists.                                        |
 | 403 Forbidden | The client lacks the required privileges to change the authentication methods. |
 
 

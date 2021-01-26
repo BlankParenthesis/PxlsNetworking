@@ -5,7 +5,6 @@ Implementing this extension adds factions which allow users to group themselves 
 Factions objects are defined by the following type: 
 ```typescript
 {
-	"id": number | string;
 	"name": string;
 	"tag": string;
 	"color": number;
@@ -17,7 +16,6 @@ Factions objects are defined by the following type:
 Factions identify users with Member objects which are defined by the following type:
 ```typescript
 {
-	"id": number | string;
 	"displaysFaction": boolean;
 	"approval": {
 		"member": boolean;
@@ -71,8 +69,9 @@ Perhaps both options are the correct approach - there should be a sensible way t
 
 ## /factions
 ### GET
-Information on all factions.
-Returns an array of Faction objects.
+A list of all factions.
+#### Response
+An array of Faction References.
 #### Errors
 | Response Code | Cause                                                      |
 |---------------|------------------------------------------------------------|
@@ -89,7 +88,7 @@ Create a new Faction.
 }
 ```
 #### Response
-The created Faction object.
+A reference to the created Faction object.
 #### Errors
 | Response Code | Cause                                                        |
 |---------------|--------------------------------------------------------------|
@@ -100,18 +99,17 @@ The created Faction object.
 
 --------------------------------------------------------------------------------
 
-## /factions/{faction_id}
+## {faction_uri}
 ### GET
-Information on a specified faction.
-Returns the Faction object with the ID matching `faction_id`.
+#### Response
+The Faction object.
 #### Errors
 | Response Code | Cause                                                         |
 |---------------|---------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                      |
 | 403 Forbidden | The client lacks the required privileges to view the faction. |
 
 ### PATCH
-Updates the Faction object with the ID specified by `faction_id`.
+Updates the Faction.
 #### Request
 ```typescript
 Partial<{
@@ -121,84 +119,75 @@ Partial<{
 }>
 ```
 #### Response
-The modified Faction.
+The update Faction object.
 #### Errors
 | Response Code | Cause                                                           |
 |---------------|-----------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                        |
 | 403 Forbidden | The client lacks the required privileges to update the faction. |
 
 ### DELETE
-Deletes a faction.
+Deletes the faction.
 #### Errors
 | Response Code | Cause                                                           |
 |---------------|-----------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                        |
 | 403 Forbidden | The client lacks the required privileges to delete the faction. |
 
 --------------------------------------------------------------------------------
 
-## /factions/{faction_id}/members
+## {faction_uri}/members
 ### GET
-Information on all members of a faction.
-Returns the all User objects who are members of the Faction object with the ID matching `faction_id`.
+A list of all members in the faction.
+#### Response
+An array of Member References.
 #### Errors
 | Response Code | Cause                                                                 |
 |---------------|-----------------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                              |
 | 403 Forbidden | The client lacks the required privileges to view the faction members. |
 
 ### POST
-Adds a new member to the Faction with the ID matching `faction_id`.
+Add a new member to the Faction.
 #### Request
-Empty unless the [users extension](./users.md) is implemented in which case, an optional User ID may be specified:
+Empty unless the [users extension](./users.md) is implemented in which case, an optional User URI may be specified:
 ```typescript
 {
-	"id"?: number | string;
+	"user": string;
 }
 ```
 If unspecified, the user added will be the currently authenticated one.
 #### Response
-The created Member object.
+A reference to the created Member object.
 #### Errors
 | Response Code | Cause                                                           |
 |---------------|-----------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                        |
-| 404 Not Found | No user with the specified ID exists.                           |
 | 403 Forbidden | The client lacks the required privileges to join the user.      |
+| 404 Not Found | The user URI is invalid.                                        |
 | 409 Conflict  | The user is already a member of the requested faction.          |
 
 --------------------------------------------------------------------------------
 
-## /factions/{faction_id}/members/{member_id}
+## {member_uri}
 ### GET
-Information on a faction member.
-Returns the Member specified by `member_id` in the faction specified by `faction_id`.
+#### Response
+The Member object.
 #### Errors
 | Response Code | Cause                                                        |
 |---------------|--------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                     |
-| 404 Not Found | No member with the requested ID exists in the faction.       |
 | 403 Forbidden | The client lacks the required privileges to view the member. |
 
 ### PATCH
-Edits a faction member.
+Edit a faction member.
 #### Request
-A partial Member object without ID (or User) specified.
+A partial Member object.
 #### Response
 The updated Member object.
 #### Errors
 | Response Code | Cause                                                        |
 |---------------|--------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                     |
-| 404 Not Found | No member with the requested ID exists in the faction.       |
 | 403 Forbidden | The client lacks the required privileges to edit the member. |
 
 ### DELETE
-Removes a faction member.
+Remove a faction member.
 #### Errors
 | Response Code | Cause                                                          |
 |---------------|----------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                       |
-| 404 Not Found | No member with the requested ID exists in the faction.         |
 | 403 Forbidden | The client lacks the required privileges to remove the member. |

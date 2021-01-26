@@ -5,7 +5,6 @@ Implementing this extension provides users with a means of notifying moderators 
 Reports are represented with Report objects which are described by the type below:
 ```typescript
 {
-	"id": number | string;
 	"artifacts": Array<{
 		"uri": string;
 		"timestamp"?: Timestamp;
@@ -64,8 +63,9 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 ## /reports
 ### GET 
-Information on all reports.
-Returns an array of Report objects.
+A list of all reports.
+#### Response
+An array of Report References.
 #### Errors
 | Response Code | Cause                                                     |
 |---------------|-----------------------------------------------------------|
@@ -76,7 +76,7 @@ Create a new Report.
 #### Request
 A Report object without an ID, history, or status.
 #### Response
-The created Report object.
+A reference to the created Report object.
 #### Errors
 | Response Code | Cause                                                       |
 |---------------|-------------------------------------------------------------|
@@ -88,8 +88,10 @@ The created Report object.
 --------------------------------------------------------------------------------
 
 ## /reports/open
-Information on all Reports with a status of "OPENED".
-Returns an array of Report objects.
+### GET
+A list of all reports with a status of "OPENED".
+#### Response
+An array of Report References.
 #### Errors
 | Response Code | Cause                                                     |
 |---------------|-----------------------------------------------------------|
@@ -98,8 +100,10 @@ Returns an array of Report objects.
 --------------------------------------------------------------------------------
 
 ## /reports/closed
-Information on all Reports with a status of "CLOSED".
-Returns an array of Report objects.
+### GET
+A list of all reports with a status of "CLOSED".
+#### Response
+An array of Report References.
 #### Errors
 | Response Code | Cause                                                     |
 |---------------|-----------------------------------------------------------|
@@ -107,18 +111,17 @@ Returns an array of Report objects.
 
 --------------------------------------------------------------------------------
 
-## /reports/{report_id}
+## {report_uri}
 ### GET
-Information on a specified report.
-Returns the Report object with the ID matching `report_id`.
+#### Response
+The Report object.
 #### Errors
 | Response Code | Cause                                                        |
 |---------------|--------------------------------------------------------------|
-| 404 Not Found | No report with the requested ID exists.                      |
 | 403 Forbidden | The client lacks the required privileges to view the report. |
 
 ### PATCH
-Re-opens or closes a report.
+Re-opens or closes the report.
 #### Request
 ```typescript
 {
@@ -127,17 +130,15 @@ Re-opens or closes a report.
 }
 ```
 #### Response
-The modified Report.
+The updated Report object.
 #### Errors
 | Response Code | Cause                                                          |
 |---------------|----------------------------------------------------------------|
-| 404 Not Found | No report with the requested ID exists.                        |
 | 403 Forbidden | The client lacks the required privileges to update the report. |
 
 ### DELETE
-Deletes a report.
+Deletes the report.
 #### Errors
 | Response Code | Cause                                                          |
 |---------------|----------------------------------------------------------------|
-| 404 Not Found | No report with the requested ID exists.                        |
 | 403 Forbidden | The client lacks the required privileges to delete the report. |

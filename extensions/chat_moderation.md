@@ -36,29 +36,26 @@ Messages were deleted by a moderator.
 --------------------------------------------------------------------------------
 
 
-## /chat/rooms/{room_id}/messages
+## {chatroom_uri}/messages
 ### DELETE
 Deletes all specified messages.
 #### Request
 ```typescript
 {
-	messages: Array<number | string>;
+	messages: string[];
 }
 ```
 #### Errors
 | Response Code | Cause                                                                |
 |---------------|----------------------------------------------------------------------|
 | 403 Forbidden | The client does not have the required privileges to delete messages. |
-| 404 Not Found | No chat room with the specified ID exists.                           |
-| 404 Not Found | At least one of the IDs provided has no associated message.          |
+| 404 Not Found | At least one of the URIs does not reference a valid message.         |
 
 
-## /chat/rooms/{room_id}/messages/{message_id}
+## {message_uri}
 ### DELETE
-Deletes the specified message.
+Deletes the Message.
 #### Errors
 | Response Code | Cause                                                                |
 |---------------|----------------------------------------------------------------------|
 | 403 Forbidden | The client does not have the required privileges to delete messages. |
-| 404 Not Found | No chat room with the specified ID exists.                           |
-| 404 Not Found | No messages with the specified ID exists.                            |
