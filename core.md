@@ -14,9 +14,9 @@ To solve this, all list endpoints return paginated responses.
 For an object type X, a Paginated List of X can be defined by the following type:
 ```typescript
 {
-	items: X[];
-	next?: string;
-	previous?: string;
+	"items": X[];
+	"next"?: string;
+	"previous"?: string;
 }
 ```
 Where `next` and `previous` are URIs pointing to the continuations in their respective directions of the list.
