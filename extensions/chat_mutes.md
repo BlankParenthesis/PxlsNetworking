@@ -52,7 +52,7 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 ## /users/{user_id}/mutes
 ### GET
 Information on every mute that has been issued to the specified user.
-Returns an array of Mute objects.
+Returns a Paginated List of Mute objects.
 ##### Errors
 | Response Code            | Cause                                                           |
 |--------------------------|-----------------------------------------------------------------|

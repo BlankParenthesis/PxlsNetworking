@@ -65,7 +65,7 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 ## /reports
 ### GET 
 Information on all reports.
-Returns an array of Report objects.
+Returns a Paginated List of Report objects.
 #### Errors
 | Response Code | Cause                                                     |
 |---------------|-----------------------------------------------------------|
@@ -89,7 +89,7 @@ The created Report object.
 
 ## /reports/open
 Information on all Reports with a status of "OPENED".
-Returns an array of Report objects.
+Returns a Paginated List of Report objects.
 #### Errors
 | Response Code | Cause                                                     |
 |---------------|-----------------------------------------------------------|
@@ -99,7 +99,7 @@ Returns an array of Report objects.
 
 ## /reports/closed
 Information on all Reports with a status of "CLOSED".
-Returns an array of Report objects.
+Returns a Paginated List of Report objects.
 #### Errors
 | Response Code | Cause                                                     |
 |---------------|-----------------------------------------------------------|

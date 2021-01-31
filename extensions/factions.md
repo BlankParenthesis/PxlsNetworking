@@ -72,7 +72,7 @@ Perhaps both options are the correct approach - there should be a sensible way t
 ## /factions
 ### GET
 Information on all factions.
-Returns an array of Faction objects.
+Returns a Paginated List of Faction objects.
 #### Errors
 | Response Code | Cause                                                      |
 |---------------|------------------------------------------------------------|
@@ -141,7 +141,7 @@ Deletes a faction.
 ## /factions/{faction_id}/members
 ### GET
 Information on all members of a faction.
-Returns the all Member objects of the Faction object with the ID matching `faction_id`.
+Returns a Paginated List of Member objects.
 #### Errors
 | Response Code | Cause                                                                 |
 |---------------|-----------------------------------------------------------------------|

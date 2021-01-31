@@ -8,6 +8,23 @@ Within these extensions, endpoints declared either here or in other extensions m
 These **duplicate response type definitions should be treated as the union of implemented definitions**.
 This allows extensions to add new fields to responses in a flexible way.
 
+Some endpoints return a list of objects rather that a single one.
+Sometimes, too many objects will exist in this list to be reasonably sent in a single request.
+To solve this, all list endpoints return paginated responses.
+For an object type X, a Paginated List of X can be defined by the following type:
+```typescript
+{
+	items: X[];
+	next?: string;
+	previous?: string;
+}
+```
+Where `next` and `previous` are URIs pointing to the continuations in their respective directions of the list.
+The presence of these fields should be used to determine if the request completes or starts a list.
+
+In requesting a Paginated list, clients may specify an upper limit of responses in a single page with the `limit` query parameter.
+Server implementations must not return more items than this number but may return less even if the list is not completed by the current page.
+
 --------------------------------------------------------------------------------
 
 ## /info
@@ -154,6 +171,17 @@ Information on the active and idle user counts.
 | Response Code | Cause                                                             |
 |---------------|-------------------------------------------------------------------|
 | 403 Forbidden | The client lacks the required privileges to fetch the user count. |
+
+--------------------------------------------------------------------------------
+
+## /board/pixels
+### GET
+Information on all placements.
+Returns a Paginated List of pixel placements.
+#### Errors
+| Response Code            | Cause                                                        |
+|--------------------------|--------------------------------------------------------------|
+| 403 Forbidden            | The client lacks the required privileges to list placements. |
 
 --------------------------------------------------------------------------------
 

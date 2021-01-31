@@ -44,7 +44,7 @@ Server implementations may forgo implementing any of these modifying permissions
 ## /auth/methods
 ### GET
 Information about how and where clients can authenticate.
-Returns an array of Methods.
+Returns a Paginated List of Methods.
 
 ### POST
 Add a new method which clients can use to to authenticate.

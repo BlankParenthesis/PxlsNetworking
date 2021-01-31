@@ -53,7 +53,7 @@ Undoes the last place action at the given coordinate.
 --------------------------------------------------------------------------------
 
 If the [board moderation extension](./board_moderation.md) is implemented, then the mass-place endpoint defined there also gets an undo timestamp sent back:
-## /board/pixels/
+## /board/pixels
 ### PATCH
 #### Response
 ```typescript

@@ -49,7 +49,7 @@ The client user has changed.
 
 ## /users
 ### GET
-Returns a list of User objects.
+Returns a Paginated List of User objects.
 #### Errors
 | Response Code | Cause                                                           |
 |---------------|-----------------------------------------------------------------|

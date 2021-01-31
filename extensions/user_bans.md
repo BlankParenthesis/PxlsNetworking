@@ -49,7 +49,7 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 ## /users/{user_id}/bans
 ### GET
 Information on every ban that has been issued to the specified user.
-Returns an array of Ban objects.
+Returns a Paginated List of Ban objects.
 ##### Errors
 | Response Code            | Cause                                                          |
 |--------------------------|----------------------------------------------------------------|

@@ -30,6 +30,7 @@ These cover the core protocol:
 | `socket.board`      | Allows connecting to the websocket at `/ws` with `core` in the extensions list. |
 | `board.data`        | Allows GET requests to `/board/data` endpoints and `/board/info`.               |
 | `board.users`       | Allows GET requests to `/board/users`.                                          |
+| `board.pixels.list` | Allows GET requests to `/board/pixels`.                                         |
 | `board.pixels.get`  | Allows GET requests to `/board/pixels/{x}/{y}`.                                 |
 | `board.pixels.post` | Allows POST requests to `/board/pixels/{x}/{y}`.                                |
 
@@ -60,7 +61,7 @@ Server implementations may forgo implementing any of these modifying permissions
 ## /roles
 ### GET
 Information on all roles.
-Returns an array of Role objects.
+Returns a Paginated List of Role objects.
 #### Errors
 | Response Code | Cause                                                   |
 |---------------|---------------------------------------------------------|

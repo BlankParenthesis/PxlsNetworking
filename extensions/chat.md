@@ -121,7 +121,7 @@ General information on chatrooms.
 ## /chat/rooms
 ### GET
 Information on all chatrooms.
-Returns an array of Chatroom objects.
+Returns a Paginated List of Chatroom objects.
 #### Errors
 | Response Code | Cause                                                       |
 |---------------|-------------------------------------------------------------|
@@ -143,7 +143,7 @@ Returns the Chatroom object with the ID specified by `room_id`.
 ## /chat/rooms/{room_id}/messages
 ### GET
 Previously sent messages.
-Returns an array of Message objects.
+Returns a Paginated List of Message objects.
 #### Errors
 | Response Code | Cause                                                            |
 |---------------|------------------------------------------------------------------|
