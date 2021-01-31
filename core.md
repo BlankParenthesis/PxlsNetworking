@@ -25,6 +25,19 @@ The presence of these fields should be used to determine if the request complete
 In requesting a Paginated list, clients may specify an upper limit of responses in a single page with the `limit` query parameter.
 Server implementations must not return more items than this number but may return less even if the list is not completed by the current page.
 
+
+At the core of pxls is the ability to modify the board with Placements.
+A Placement object represents a change of board state at a particular time and is defined by the following type:
+```typescript
+{
+	"x": number;
+	"y": number;
+	"color": number;
+	"modified": Timestamp;
+}
+```
+Placements are often not functional distinguishable from pixels on the board and the two concepts are mostly treated interchangeably.
+
 --------------------------------------------------------------------------------
 
 ## /info
@@ -177,33 +190,27 @@ Information on the active and idle user counts.
 ## /board/pixels
 ### GET
 Information on all placements.
-Returns a Paginated List of pixel placements.
+Returns a Paginated List of Placement objects.
 #### Errors
-| Response Code            | Cause                                                        |
-|--------------------------|--------------------------------------------------------------|
-| 403 Forbidden            | The client lacks the required privileges to list placements. |
+| Response Code | Cause                                                        |
+|---------------|--------------------------------------------------------------|
+| 403 Forbidden | The client lacks the required privileges to list placements. |
 
 --------------------------------------------------------------------------------
 
 ## /board/pixels/{x}/{y}
 ### GET
-Information for a given board position.
-```typescript
-{
-	"x": number;
-	"y": number;
-	"color": number;
-	"modified": Timestamp;
-}
-```
+Information on the most recent placement for a given board position.
+Returns a Placement object.
 #### Errors
 | Response Code            | Cause                                                        |
 |--------------------------|--------------------------------------------------------------|
+| 404 Not Found            | Not placement action has occurred at the specified position. |
 | 404 Not Found            | The specified position is outside of the board dimensions.   |
 | 403 Forbidden            | The client lacks the required privileges to read pixel data. |
 
 ### POST
-Replace the pixel at a given board coordinate.
+Create a Placement for a given board coordinate.
 #### Request
 ```typescript
 {

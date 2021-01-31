@@ -12,6 +12,13 @@ User objects are represented with the following type:
 }
 ```
 
+Placement objects gain an additional field due to this extension:
+```typescript
+{
+	"user"?: User;
+}
+```
+
 If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
 
 | Permission         | Purpose                                                                                            |
@@ -77,14 +84,3 @@ The updated User object.
 |---------------|---------------------------------------------------------------------------|
 | 404 Not Found | No user with the requested ID exists.                                     |
 | 403 Forbidden | The client does not have the required privileges to edit the user's data. |
-
-
---------------------------------------------------------------------------------
-
-## /board/pixels/{x}/{y}
-### GET
-```typescript
-{
-	"user"?: User;
-}
-```
