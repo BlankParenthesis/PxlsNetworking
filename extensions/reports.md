@@ -74,7 +74,7 @@ Returns an array of Report objects.
 ### POST
 Create a new Report.
 #### Request
-A Report object without an ID, history, or status.
+A Report object without an ID, history, or status (or reporter if the [users extension](./users.md) is implemented).
 #### Response
 The created Report object.
 #### Errors

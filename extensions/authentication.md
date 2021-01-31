@@ -21,11 +21,11 @@ Authentication options are given by Methods which are defined by the following t
 
 If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
 
-| Permission     | Purpose                                                |
-|----------------|--------------------------------------------------------|
-| `roles.post`   | Allows POST requests to `/auth/methods`.               |
-| `roles.patch`  | Allows PATCH requests to `/auth/methods/{method_id}`.  |
-| `roles.delete` | Allows DELETE requests to `/auth/methods/{method_id}`. |
+| Permission    | Purpose                                                |
+|---------------|--------------------------------------------------------|
+| `auth.post`   | Allows POST requests to `/auth/methods`.               |
+| `auth.patch`  | Allows PATCH requests to `/auth/methods/{method_id}`.  |
+| `auth.delete` | Allows DELETE requests to `/auth/methods/{method_id}`. |
 
 Server implementations may forgo implementing any of these modifying permissions and do not need to implement the associated modifying endpoints.
 
@@ -67,7 +67,7 @@ Returns a Method object.
 ### PATCH
 Updates an authentication method.
 #### Request
-A partial Method object with an ID.
+A partial Method object without an ID.
 #### Response
 The modified Method object.
 #### Errors

@@ -22,7 +22,7 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
-## /chat/ws
+## /ws?extensions[]=chat_moderation
 ### Server packets
 #### Delete
 Messages were deleted by a moderator.

@@ -16,6 +16,7 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 | Permission         | Purpose                                                                                            |
 |--------------------|----------------------------------------------------------------------------------------------------|
+| `socket.users`     | Allows connecting to the websocket at `/ws` with `users` in the extensions list.                   |
 | `users.list`       | Allows GET requests to `/users`.                                                                   |
 | `users.get`        | Allows GET requests to `/users/{user_id}`.                                                         |
 | `users.patch`      | Allows PATCH requests to `/users/{user_id}`.                                                       |
@@ -33,7 +34,7 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
-## /board/ws
+## /ws?extensions[]=users
 ### Server packets
 #### UserUpdate
 The client user has changed.

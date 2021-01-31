@@ -26,8 +26,11 @@ Implementations should return the union of all lists defined by every implemente
 
 --------------------------------------------------------------------------------
 
-## /board/ws
+## /ws?extensions[]={extensions_list}
 Websocket connection point.
+A connecting client may specify which extensions it wishes to be enabled on the websocket using the `extensions_list` query parameter.
+Extension names are the same as those in `/info`.
+To receive the events defined here, the list should contain the value `core`.
 ### Server packets
 These packets are sent by the server to inform the client of something.
 #### BoardUpdate
@@ -52,9 +55,10 @@ How many pixels may be placed by the current user without encountering a cooldow
 }
 ```
 #### Errors
-| Response Code | Cause                                                                 |
-|---------------|-----------------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to connect to the websocket. |
+| Response Code            | Cause                                                                                                    |
+|--------------------------|----------------------------------------------------------------------------------------------------------|
+| 403 Forbidden            | The client lacks the required privileges to connect to the websocket with the specified extensions list. |
+| 422 Unprocessable Entity | The server does not support all of the requested extensions.                                             |
 
 --------------------------------------------------------------------------------
 
@@ -104,7 +108,7 @@ Binary data.
 ### GET
 Binary data. 
 32-bit timestamp for every pixel. 
-Timestamp is seconds since board creation.
+Timestamp is seconds since `createdAt` as defined in `/board/info`.
 Each timestamp represents the last-modified time for a pixel.
 
 #### Errors
@@ -158,6 +162,8 @@ Information on the active and idle user counts.
 Information for a given board position.
 ```typescript
 {
+	"x": number;
+	"y": number;
 	"color": number;
 	"modified": Timestamp;
 }

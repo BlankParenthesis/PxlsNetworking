@@ -34,13 +34,14 @@ If the [users extension](./users.md) is implemented, Message objects may also sp
 
 If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
 
-| Permission                 | Purpose                                                               |
-|----------------------------|-----------------------------------------------------------------------|
-| `chat.rooms.list`          | Allows GET requests to `/chat/rooms`.                                 |
-| `chat.rooms.get`           | Allows GET requests to `/chat/rooms/{room_id}`.                       |
-| `chat.rooms.messages.list` | Allows GET requests to `/chat/rooms/{room_id}/messages`.              |
-| `chat.rooms.messages.get`  | Allows GET requests to `/chat/rooms/{room_id}/messages/{message_id}`. |
-| `chat.rooms.messages.post` | Allows POST requests to `/chat/rooms/{room_id}/messages`.             |
+| Permission                 | Purpose                                                                         |
+|----------------------------|---------------------------------------------------------------------------------|
+| `socket.chat`              | Allows connecting to the websocket at `/ws` with `chat` in the extensions list. |
+| `chat.rooms.list`          | Allows GET requests to `/chat/rooms`.                                           |
+| `chat.rooms.get`           | Allows GET requests to `/chat/rooms/{room_id}`.                                 |
+| `chat.rooms.messages.list` | Allows GET requests to `/chat/rooms/{room_id}/messages`.                        |
+| `chat.rooms.messages.get`  | Allows GET requests to `/chat/rooms/{room_id}/messages/{message_id}`.           |
+| `chat.rooms.messages.post` | Allows POST requests to `/chat/rooms/{room_id}/messages`.                       |
 
 --------------------------------------------------------------------------------
 
@@ -54,22 +55,21 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
-## /chat/ws
-Websocket connection point for chat messages.
+## /ws?extensions[]=chat
 ### Client packets
-#### Subscribe
+#### ChatSubscribe
 Request that the server send events from the specified chatrooms.
 ```typescript
 {
-	"type": "subscribe";
+	"type": "chat-subscribe";
 	"rooms": Array<number | string>;
 }
 ```
-#### Unsubscribe
+#### ChatUnsubscribe
 Request that the server no longer send events from the specified chatrooms.
 ```typescript
 {
-	"type": "unsubscribe";
+	"type": "chat-unsubscribe";
 	"rooms": Array<number | string>;
 }
 ```

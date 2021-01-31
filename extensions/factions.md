@@ -141,7 +141,7 @@ Deletes a faction.
 ## /factions/{faction_id}/members
 ### GET
 Information on all members of a faction.
-Returns the all User objects who are members of the Faction object with the ID matching `faction_id`.
+Returns the all Member objects of the Faction object with the ID matching `faction_id`.
 #### Errors
 | Response Code | Cause                                                                 |
 |---------------|-----------------------------------------------------------------------|
