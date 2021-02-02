@@ -94,6 +94,13 @@ How many pixels may be placed by the current user without encountering a cooldow
 	"next"?: Timestamp; 
 }
 ```
+#### Permissions
+The client's permissions have changed.
+```typescript
+{
+	"permissions": string[];
+}
+```
 ### Errors
 | Response Code            | Cause                                                        |
 |--------------------------|--------------------------------------------------------------|
