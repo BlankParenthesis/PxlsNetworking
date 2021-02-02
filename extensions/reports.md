@@ -57,9 +57,9 @@ If the [users extension](./users.md) is implemented, Artifacts may additionally 
 Information on all reports.
 Returns a Paginated List of Report objects.
 #### Errors
-| Response Code | Cause                                           |
-|---------------|-------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `reports.list`. |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `reports.list`. |
 
 ### POST
 Create a new Report.
@@ -68,12 +68,12 @@ A Report object without an ID, history, or status (or reporter if the [users ext
 #### Response
 The created Report object.
 #### Errors
-| Response Code | Cause                                             |
-|---------------|---------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `reports.post`    |
-| 422 Forbidden | The provided message is invalid.                  |
-| 422 Forbidden | No artifacts were provided.                       |
-| 422 Forbidden | One or more of the artifacts provided is invalid. |
+| Response Code | Cause                                       |
+|---------------|---------------------------------------------|
+| 403 Forbidden | Missing permission `reports.post`.          |
+| 422 Forbidden | Invalid message.                            |
+| 422 Forbidden | No artifacts provided.                      |
+| 422 Forbidden | One or more provided artifacts are invalid. |
 
 --------------------------------------------------------------------------------
 
@@ -81,18 +81,18 @@ The created Report object.
 Information on all Reports with a status of "OPENED".
 Returns a Paginated List of Report objects.
 #### Errors
-| Response Code | Cause                                           |
-|---------------|-------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `reports.list`. |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `reports.list`. |
 --------------------------------------------------------------------------------
 
 ## /reports/closed
 Information on all Reports with a status of "CLOSED".
 Returns a Paginated List of Report objects.
 #### Errors
-| Response Code | Cause                                           |
-|---------------|-------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `reports.list`. |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `reports.list`. |
 
 --------------------------------------------------------------------------------
 
@@ -101,10 +101,10 @@ Returns a Paginated List of Report objects.
 Information on a specified report.
 Returns the Report object with the ID matching `report_id`.
 #### Errors
-| Response Code | Cause                                          |
-|---------------|------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `reports.get`. |
-| 404 Not Found | No report with the requested ID exists.        |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `reports.get`. |
+| 404 Not Found | No such Report exists.            |
 
 ### PATCH
 Re-opens or closes a report.
@@ -118,15 +118,15 @@ Re-opens or closes a report.
 #### Response
 The modified Report.
 #### Errors
-| Response Code | Cause                                            |
-|---------------|--------------------------------------------------|
-| 404 Not Found | No report with the requested ID exists.          |
-| 403 Forbidden | The client lacks the permission `reports.patch`. |
+| Response Code | Cause                               |
+|---------------|-------------------------------------|
+| 404 Not Found | No such Report exists.              |
+| 403 Forbidden | Missing permission `reports.patch`. |
 
 ### DELETE
 Deletes a report.
 #### Errors
-| Response Code | Cause                                             |
-|---------------|---------------------------------------------------|
-| 404 Not Found | No report with the requested ID exists.           |
-| 403 Forbidden | The client lacks the permission `reports.delete`. |
+| Response Code | Cause                                |
+|---------------|--------------------------------------|
+| 404 Not Found | No such Report exists.               |
+| 403 Forbidden | Missing permission `reports.delete`. |

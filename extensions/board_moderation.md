@@ -27,11 +27,11 @@ Implementing this extension provides users with the tools necessary to moderate 
 }
 ```
 #### Errors
-| Response Code | Cause                                                                                                               |
-|---------------|---------------------------------------------------------------------------------------------------------------------|
-| 403 Forbidden | The client does not have the permission `board.pixels.override.cooldown` and the cooldown override was set to true. |
-| 403 Forbidden | The client does not have the permission `board.pixels.override.color` and the color override was set to true.       |
-| 403 Forbidden | The client does not have the permission `board.pixels.override.mask` and the mask override was set to true.         |
+| Response Code | Cause                                                |
+|---------------|------------------------------------------------------|
+| 403 Forbidden | Missing permission `board.pixels.override.cooldown`. |
+| 403 Forbidden | Missing permission `board.pixels.override.color`.    |
+| 403 Forbidden | Missing permission `board.pixels.override.mask`.     |
 
 --------------------------------------------------------------------------------
 
@@ -65,14 +65,14 @@ If a user has not specified a cooldown override and has some but not all of the 
 }
 ```
 #### Errors
-| Response Code            | Cause                                                                                                               |
-|--------------------------|---------------------------------------------------------------------------------------------------------------------|
-| 403 Forbidden            | The client does not have the permission `board.pixels.patch`.                                                       |
-| 404 Not Found            | The specified position is outside of the board dimensions.                                                          |
-| 403 Forbidden            | The client does not have the permission `board.pixels.override.cooldown` and the cooldown override was set to true. |
-| 403 Forbidden            | The client does not have the permission `board.pixels.override.color` and the color override was set to true.       |
-| 403 Forbidden            | The client does not have the permission `board.pixels.override.mask` and the mask override was set to true.         |
-| 403 Forbidden            | The specified position is not placable according to the board mask and mask override was not enabled.               |
-| 409 Conflict             | The change would have no effect.                                                                                    |
-| 422 Unprocessable Entity | The supplied color does not exist on the palette.                                                                   |
-| 429 Too Many Requests    | The client user has less pixels available than needed to fulfil the request and cooldown override was not enabled.  |
+| Response Code            | Cause                                                |
+|--------------------------|------------------------------------------------------|
+| 403 Forbidden            | Missing permission `board.pixels.patch`.             |
+| 404 Not Found            | Position outside of board dimensions.                |
+| 403 Forbidden            | Missing permission `board.pixels.override.cooldown`. |
+| 403 Forbidden            | Missing permission `board.pixels.override.color`.    |
+| 403 Forbidden            | Missing permission `board.pixels.override.mask`.     |
+| 403 Forbidden            | Position is not placable according to board mask.    |
+| 409 Conflict             | Placement would have no effect.                      |
+| 422 Unprocessable Entity | Color does not exist on the palette.                 |
+| 429 Too Many Requests    | No available pixels to place.                        |

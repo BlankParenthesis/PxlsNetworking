@@ -40,9 +40,9 @@ Role objects are defined by the following type:
 Information on all roles.
 Returns a Paginated List of Role objects.
 #### Errors
-| Response Code | Cause                                         |
-|---------------|-----------------------------------------------|
-| 403 Forbidden | The client lacks the permission `roles.list`. |
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `roles.list`. |
 
 --------------------------------------------------------------------------------
 
@@ -51,10 +51,10 @@ Returns a Paginated List of Role objects.
 Information on a specified role.
 Returns the Role object with the id matching `role_id`.
 #### Errors
-| Response Code | Cause                                        |
-|---------------|----------------------------------------------|
-| 403 Forbidden | The client lacks the permission `roles.get`. |
-| 404 Not Found | No role with the requested ID exists.        |
+| Response Code | Cause                           |
+|---------------|---------------------------------|
+| 403 Forbidden | Missing permission `roles.get`. |
+| 404 Not Found | No such Role exists.            |
 
 ### PATCH
 Updates the Role object with the ID specified by `role_id`.
@@ -63,15 +63,15 @@ A partial Role object without the ID.
 #### Response
 The updated Role object.
 #### Errors
-| Response Code | Cause                                          |
-|---------------|------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `roles.patch`. |
-| 404 Not Found | No role with the requested ID exists.          |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `roles.patch`. |
+| 404 Not Found | No such Role exists.              |
 
 ### DELETE
 Deletes the Role object with the ID specified by `role_id`.
 #### Errors
-| Response Code | Cause                                           |
-|---------------|-------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `roles.delete`. |
-| 404 Not Found | No role with the requested ID exists.           |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `roles.delete`. |
+| 404 Not Found | No such Role exists.               |

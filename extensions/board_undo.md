@@ -36,12 +36,12 @@ Undoes the last place action at the given coordinate.
 }
 ```
 #### Errors
-| Response Code | Cause                                                      |
-|---------------|------------------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `board.pixels.undo`.       |
-| 404 Not Found | The specified position is outside of the board dimensions. |
-| 403 Forbidden | The pixel specified was not placed by the client user.     | 
-| 409 Conflict  | The `undoDeadline` for this pixel is in the past.          |
+| Response Code | Cause                                   |
+|---------------|-----------------------------------------|
+| 403 Forbidden | Missing permission `board.pixels.undo`. |
+| 404 Not Found | Position outside of board dimensions.   |
+| 403 Forbidden | Pixel not placed by the client user.    | 
+| 409 Conflict  | `undoDeadline` for this pixel expired.  |
 
 --------------------------------------------------------------------------------
 

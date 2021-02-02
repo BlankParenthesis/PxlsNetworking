@@ -89,9 +89,9 @@ If multiple rooms were invalid, the server need only mention one.
 }
 ```
 ### Errors
-| Response Code            | Cause                                          |
-|--------------------------|------------------------------------------------|
-| 403 Forbidden            | The client lacks the permission `socket.chat`. |
+| Response Code | Cause                                          |
+|---------------|------------------------------------------------|
+| 403 Forbidden | Missing permission `socket.chat`.              |
 
 --------------------------------------------------------------------------------
 
@@ -116,9 +116,9 @@ General information on chatrooms.
 Information on all chatrooms.
 Returns a Paginated List of Chatroom objects.
 #### Errors
-| Response Code | Cause                                              |
-|---------------|----------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `chat.rooms.list`. |
+| Response Code | Cause                                 |
+|---------------|---------------------------------------|
+| 403 Forbidden | Missing permission `chat.rooms.list`. |
 
 --------------------------------------------------------------------------------
 
@@ -126,10 +126,10 @@ Returns a Paginated List of Chatroom objects.
 ### GET
 Returns the Chatroom object with the ID specified by `room_id`.
 #### Errors
-| Response Code | Cause                                             |
-|---------------|---------------------------------------------------|
-| 404 Not Found | No chatroom with the requested ID exists.         |
-| 403 Forbidden | The client lacks the permission `chat.rooms.get`. |
+| Response Code | Cause                                |
+|---------------|--------------------------------------|
+| 404 Not Found | No such Chatroom exists.             |
+| 403 Forbidden | Missing permission `chat.rooms.get`. |
 
 --------------------------------------------------------------------------------
 
@@ -138,11 +138,11 @@ Returns the Chatroom object with the ID specified by `room_id`.
 Previously sent messages.
 Returns a Paginated List of Message objects.
 #### Errors
-| Response Code | Cause                                                       |
-|---------------|-------------------------------------------------------------|
-| 404 Not Found | No chatroom with the requested ID exists.                   |
-| 403 Forbidden | The client lacks the permission `chat.rooms.get`.           |
-| 403 Forbidden | The client lacks the permission `chat.rooms.messages.list`. |
+| Response Code | Cause                                          |
+|---------------|------------------------------------------------|
+| 404 Not Found | No such Chatroom exists.                       |
+| 403 Forbidden | Missing permission `chat.rooms.get`.           |
+| 403 Forbidden | Missing permission `chat.rooms.messages.list`. |
 
 ### POST
 Creates a new chat message and sends it to the chatroom.
@@ -155,11 +155,11 @@ Creates a new chat message and sends it to the chatroom.
 #### Response
 The created message object.
 #### Errors
-| Response Code | Cause                                                       |
-|---------------|-------------------------------------------------------------|
-| 404 Not Found | No chatroom with the requested ID exists.                   |
-| 403 Forbidden | The client lacks the permission `chat.rooms.get`.           |
-| 403 Forbidden | The client lacks the permission `chat.rooms.messages.post`. |
+| Response Code | Cause                                          |
+|---------------|------------------------------------------------|
+| 404 Not Found | No such Chatroom exists.                       |
+| 403 Forbidden | Missing permission `chat.rooms.get`.           |
+| 403 Forbidden | Missing permission `chat.rooms.messages.post`. |
 
 --------------------------------------------------------------------------------
 
@@ -168,9 +168,9 @@ The created message object.
 A chat message.
 Returns a Message object.
 #### Errors
-| Response Code | Cause                                                      |
-|---------------|------------------------------------------------------------|
-| 404 Not Found | No chatroom with the requested ID exists.                  |
-| 403 Forbidden | The client lacks the permission `chat.rooms.get`.          |
-| 404 Not Found | No message with the requested ID exists.                   |
-| 403 Forbidden | The client lacks the permission `chat.rooms.messages.get`. |
+| Response Code | Cause                                         |
+|---------------|-----------------------------------------------|
+| 404 Not Found | No such Chatroom exists.                      |
+| 403 Forbidden | Missing permission `chat.rooms.get`.          |
+| 404 Not Found | No such Message exists.                       |
+| 403 Forbidden | Missing permission `chat.rooms.messages.get`. |

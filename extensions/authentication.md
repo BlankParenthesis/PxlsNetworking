@@ -43,9 +43,9 @@ A Method object without an ID.
 #### Response
 The created Method object.
 #### Errors
-| Response Code | Cause                                        |
-|---------------|----------------------------------------------|
-| 403 Forbidden | The client lacks the permission `auth.post`. |
+| Response Code | Cause                           |
+|---------------|---------------------------------|
+| 403 Forbidden | Missing permission `auth.post`. |
 
 --------------------------------------------------------------------------------
 
@@ -61,18 +61,18 @@ A partial Method object without an ID.
 #### Response
 The modified Method object.
 #### Errors
-| Response Code | Cause                                       |
-|---------------|---------------------------------------------|
-| 404 Not Found | No Method with the requested ID exists.     |
-| 403 Forbidden | The client lacks the permission `auth.get`. |
+| Response Code | Cause                          |
+|---------------|--------------------------------|
+| 404 Not Found | No such Method exists.         |
+| 403 Forbidden | Missing permission `auth.get`. |
 
 ### DELETE
 Removes an authentication method.
 #### Errors
-| Response Code | Cause                                          |
-|---------------|------------------------------------------------|
-| 404 Not Found | No Method with the requested ID exists.        |
-| 403 Forbidden | The client lacks the permission `auth.delete`. |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 404 Not Found | No such Method exists.            |
+| 403 Forbidden | Missing permission `auth.delete`. |
 
 
 **TODO:** "Methods" is not a great name, perhaps come up with a good alternative. Ideally, it would fit in the url and as the object name.

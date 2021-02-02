@@ -42,9 +42,9 @@ The client user has changed.
 }
 ```
 ### Errors
-| Response Code | Cause                                           |
-|---------------|-------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `socket.users`. |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `socket.users`. |
 
 --------------------------------------------------------------------------------
 
@@ -52,9 +52,9 @@ The client user has changed.
 ### GET
 Returns a Paginated List of User objects.
 #### Errors
-| Response Code | Cause                                         |
-|---------------|-----------------------------------------------|
-| 403 Forbidden | The client lacks the permission `users.list`. |
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `users.list`. |
 
 --------------------------------------------------------------------------------
 
@@ -62,10 +62,10 @@ Returns a Paginated List of User objects.
 ### GET
 Returns the User object with the ID specified by `user_id`.
 #### Errors
-| Response Code | Cause                                        |
-|---------------|----------------------------------------------|
-| 403 Forbidden | The client lacks the permission `users.get`. |
-| 404 Not Found | No user with the requested ID exists.        |
+| Response Code | Cause                           |
+|---------------|---------------------------------|
+| 403 Forbidden | Missing permission `users.get`. |
+| 404 Not Found | No such User exists.            |
 
 ### PATCH
 Updates the User object with the ID specified by `user_id`.
@@ -74,18 +74,18 @@ A partial User object without the id or createdAt fields.
 #### Response
 The updated User object.
 #### Errors
-| Response Code | Cause                                          |
-|---------------|------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `users.patch`. |
-| 404 Not Found | No user with the requested ID exists.          |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `users.patch`. |
+| 404 Not Found | No such User exists.              |
 
 ### DELETE
 Deletes the User with the ID specified by `user_id`.
 #### Errors
-| Response Code | Cause                                           |
-|---------------|-------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `users.delete`. |
-| 404 Not Found | No user with the requested ID exists.           |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `users.delete`. |
+| 404 Not Found | No such User exists.               |
 
 --------------------------------------------------------------------------------
 

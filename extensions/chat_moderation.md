@@ -38,21 +38,21 @@ Deletes all specified messages.
 }
 ```
 #### Errors
-| Response Code | Cause                                                                 |
-|---------------|-----------------------------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `chat.rooms.get`.                     |
-| 404 Not Found | No chatroom with the requested ID exists.                             |
-| 403 Forbidden | The client does not have the permission `chat.rooms.messages.delete`. |
-| 404 Not Found | At least one of the IDs provided has no associated message.           |
+| Response Code | Cause                                               |
+|---------------|-----------------------------------------------------|
+| 403 Forbidden | Missing permission `chat.rooms.get`.                |
+| 404 Not Found | No such Chatroom exists.                            |
+| 403 Forbidden | Missing permission `chat.rooms.messages.delete`.    |
+| 404 Not Found | At least one ID provided has no associated message. |
 
 
 ## /chat/rooms/{room_id}/messages/{message_id}
 ### DELETE
 Deletes the specified message.
 #### Errors
-| Response Code | Cause                                                                 |
-|---------------|-----------------------------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `chat.rooms.get`.                     |
-| 404 Not Found | No chatroom with the requested ID exists.                             |
-| 403 Forbidden | The client does not have the permission `chat.rooms.messages.delete`. |
-| 404 Not Found | No message with the specified ID exists.                              |
+| Response Code | Cause                                            |
+|---------------|--------------------------------------------------|
+| 403 Forbidden | Missing permission `chat.rooms.get`.             |
+| 404 Not Found | No such Chatroom exists.                         |
+| 403 Forbidden | Missing permission `chat.rooms.messages.delete`. |
+| 404 Not Found | No such Message exists.                          |

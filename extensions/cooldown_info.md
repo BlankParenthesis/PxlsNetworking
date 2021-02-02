@@ -117,9 +117,9 @@ Information about the cooldown for placing a pixel and the factors affecting it.
 }
 ```
 #### Errors
-| Response Code | Cause                                             |
-|---------------|---------------------------------------------------|
-| 403 Forbidden | The client lacks the permission `board.cooldown`. |
+| Response Code | Cause                                |
+|---------------|--------------------------------------|
+| 403 Forbidden | Missing permission `board.cooldown`. |
 
 #### Example
 This example shows the current pxls reference implementation formula.
