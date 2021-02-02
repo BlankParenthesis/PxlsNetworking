@@ -5,12 +5,6 @@ Servers may choose to limit when an undo action can take place.
 This extension accommodates specifying a time-deadline for undo actions but does not consider required order of retractions or counted limits.
 Clients are expected to keep track of which actions can be retracted.
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission           | Purpose                                           |
-|----------------------|---------------------------------------------------|
-| `board.pixels.undo`  | Allows DELETE requests to `/board/pixels/{x}/{y}` |
-
 --------------------------------------------------------------------------------
 
 ## /info
@@ -44,9 +38,8 @@ Undoes the last place action at the given coordinate.
 #### Errors
 | Response Code | Cause                                                      |
 |---------------|------------------------------------------------------------|
+| 403 Forbidden | The client lacks the permission `board.pixels.undo`.       |
 | 404 Not Found | The specified position is outside of the board dimensions. |
-| 403 Forbidden | The client user is banned from placing.                    |
-| 403 Forbidden | The client lacks the required privileges to undo.          |
 | 403 Forbidden | The pixel specified was not placed by the client user.     | 
 | 409 Conflict  | The `undoDeadline` for this pixel is in the past.          |
 

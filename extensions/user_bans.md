@@ -14,17 +14,6 @@ This extension adds Ban objects which are described by following type:
 }
 ```
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission          | Purpose                                                     |
-|---------------------|-------------------------------------------------------------|
-| `users.bans.list`   | Allows GET requests to `/users/{user_id}/bans`.             |
-| `users.bans.get`    | Allows GET requests to `/users/{user_id}/bans/{ban_id}`.    |
-| `users.bans.post`   | Allows POST requests to `/users/{user_id}/bans`.            |
-| `users.bans.patch`  | Allows PATCH requests to `/users/{user_id}/bans/{ban_id}`.  |
-| `users.bans.delete` | Allows DELETE requests to `/users/{user_id}/bans/{ban_id}`. |
-
-
 --------------------------------------------------------------------------------
 
 ## /info
@@ -44,6 +33,23 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 |---------------|---------------------------------------------------------|
 | 403 Forbidden | One or more bans affect the client at the current time. |
 
+If the [board undo extension](./board_undo.md) is implemented, then undos are also unavailable due to bans:
+### DELETE
+#### Errors
+| Response Code | Cause                                                   |
+|---------------|---------------------------------------------------------|
+| 403 Forbidden | One or more bans affect the client at the current time. |
+
+--------------------------------------------------------------------------------
+
+If the [board moderation extension](./board_undo.md) is implemented, then mass-place events are also unavailable due to bans:
+## /board/pixels
+### PATCH
+#### Errors
+| Response Code | Cause                                                   |
+|---------------|---------------------------------------------------------|
+| 403 Forbidden | One or more bans affect the client at the current time. |
+
 --------------------------------------------------------------------------------
 
 ## /users/{user_id}/bans
@@ -51,10 +57,11 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 Information on every ban that has been issued to the specified user.
 Returns a Paginated List of Ban objects.
 ##### Errors
-| Response Code            | Cause                                                          |
-|--------------------------|----------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                          |
-| 403 Forbidden            | The client does not have the required privileges to list bans. |
+| Response Code            | Cause                                             |
+|--------------------------|---------------------------------------------------|
+| 403 Forbidden            | The client lacks the permission `users.get`.      |
+| 404 Not Found            | No user with the specified ID exists.             |
+| 403 Forbidden            | The client lacks the permission `users.bans.list`.|
 
 ### POST
 Bans the specified user.
@@ -68,11 +75,12 @@ Bans the specified user.
 ##### Response
 The created Ban object.
 ##### Errors
-| Response Code            | Cause                                                             |
-|--------------------------|-------------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                             |
-| 403 Forbidden            | The client does not have the required privileges to ban the user. |
-| 422 Unprocessable Entity | The ban reason is invalid.                                        |
+| Response Code            | Cause                                             |
+|--------------------------|---------------------------------------------------|
+| 403 Forbidden            | The client lacks the permission `users.get`.      |
+| 404 Not Found            | No user with the specified ID exists.             |
+| 403 Forbidden            | The client lacks the permission `users.bans.post`.|
+| 422 Unprocessable Entity | The ban reason is invalid.                        |
 
 --------------------------------------------------------------------------------
 
@@ -81,11 +89,12 @@ The created Ban object.
 Information on a specific ban that has been issued to the specified user.
 Returns a Ban object.
 ##### Errors
-| Response Code | Cause                                                          |
-|---------------|----------------------------------------------------------------|
-| 404 Not Found | No user with the specified ID exists.                          |
-| 404 Not Found | No ban with the specified ID exists.                           |
-| 403 Forbidden | The client does not have the required privileges view the ban. |
+| Response Code | Cause                                            |
+|---------------|--------------------------------------------------|
+| 403 Forbidden | The client lacks the permission `users.get`.     |
+| 404 Not Found | No user with the specified ID exists.            |
+| 403 Forbidden | The client lacks the permission `users.bans.get`.|
+| 404 Not Found | No ban with the specified ID exists.             |
 
 ### PATCH
 Updates a specific ban that has been issued to the specified user.
@@ -99,18 +108,20 @@ Updates a specific ban that has been issued to the specified user.
 ##### Response
 The created Ban object.
 ##### Errors
-| Response Code            | Cause                                                             |
-|--------------------------|-------------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                             |
-| 404 Not Found            | No ban with the specified ID exists.                              |
-| 403 Forbidden            | The client does not have the required privileges to ban the user. |
-| 422 Unprocessable Entity | The ban reason is invalid.                                        |
+| Response Code            | Cause                                              |
+|--------------------------|----------------------------------------------------|
+| 403 Forbidden            | The client lacks the permission `users.get`.       |
+| 404 Not Found            | No user with the specified ID exists.              |
+| 403 Forbidden            | The client lacks the permission `users.bans.patch`.|
+| 404 Not Found            | No ban with the specified ID exists.               |
+| 422 Unprocessable Entity | The ban reason is invalid.                         |
 
 ### DELETE
 Removes a specific ban that has been issued to the specified user.
 ##### Errors
-| Response Code | Cause                                                               |
-|---------------|---------------------------------------------------------------------|
-| 404 Not Found | No user with the specified ID exists.                               |
-| 404 Not Found | No ban with the specified ID exists.                                |
-| 403 Forbidden | The client does not have the required privileges to unban the user. |
+| Response Code | Cause                                               |
+|---------------|-----------------------------------------------------|
+| 403 Forbidden | The client lacks the permission `users.get`.        |
+| 404 Not Found | No user with the specified ID exists.               |
+| 403 Forbidden | The client lacks the permission `users.bans.delete`.|
+| 404 Not Found | No ban with the specified ID exists.                |

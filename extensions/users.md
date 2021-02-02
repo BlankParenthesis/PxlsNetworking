@@ -19,18 +19,6 @@ Placement objects gain an additional field due to this extension:
 }
 ```
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission          | Purpose                                                                                  |
-|---------------------|------------------------------------------------------------------------------------------|
-| `socket.users`      | Allows connecting to the websocket at `/ws` with `users` in the extensions list.         |
-| `users.list`        | Allows GET requests to `/users`.                                                         |
-| `users.get`         | Allows GET requests to `/users/{user_id}`.                                               |
-| `users.patch`       | Allows PATCH requests to `/users/{user_id}`.                                             |
-| `users.delete`      | Allows DELETE requests `/users/{user_id}`.                                               |
-| `users.self.patch`  | Allows PATCH requests to `/users/{user_id}` where `{user_id}` is the current user's ID.  |
-| `users.self.delete` | Allows DELETE requests to `/users/{user_id}` where `{user_id}` is the current user's ID. |
-
 --------------------------------------------------------------------------------
 
 ## /info
@@ -53,6 +41,10 @@ The client user has changed.
 	"user": Partial<User>;
 }
 ```
+### Errors
+| Response Code | Cause                                           |
+|---------------|-------------------------------------------------|
+| 403 Forbidden | The client lacks the permission `socket.users`. |
 
 --------------------------------------------------------------------------------
 
@@ -60,9 +52,9 @@ The client user has changed.
 ### GET
 Returns a Paginated List of User objects.
 #### Errors
-| Response Code | Cause                                                           |
-|---------------|-----------------------------------------------------------------|
-| 403 Forbidden | The client does not have the required privileges to list users. |
+| Response Code | Cause                                         |
+|---------------|-----------------------------------------------|
+| 403 Forbidden | The client lacks the permission `users.list`. |
 
 --------------------------------------------------------------------------------
 
@@ -70,10 +62,10 @@ Returns a Paginated List of User objects.
 ### GET
 Returns the User object with the ID specified by `user_id`.
 #### Errors
-| Response Code | Cause                                                                     |
-|---------------|---------------------------------------------------------------------------|
-| 404 Not Found | No user with the requested ID exists.                                     |
-| 403 Forbidden | The client does not have the required privileges to view the user's data. |
+| Response Code | Cause                                        |
+|---------------|----------------------------------------------|
+| 403 Forbidden | The client lacks the permission `users.get`. |
+| 404 Not Found | No user with the requested ID exists.        |
 
 ### PATCH
 Updates the User object with the ID specified by `user_id`.
@@ -82,18 +74,18 @@ A partial User object without the id or createdAt fields.
 #### Response
 The updated User object.
 #### Errors
-| Response Code | Cause                                                                     |
-|---------------|---------------------------------------------------------------------------|
-| 404 Not Found | No user with the requested ID exists.                                     |
-| 403 Forbidden | The client does not have the required privileges to edit the user's data. |
+| Response Code | Cause                                          |
+|---------------|------------------------------------------------|
+| 403 Forbidden | The client lacks the permission `users.patch`. |
+| 404 Not Found | No user with the requested ID exists.          |
 
 ### DELETE
 Deletes the User with the ID specified by `user_id`.
 #### Errors
-| Response Code | Cause                                                                |
-|---------------|----------------------------------------------------------------------|
-| 404 Not Found | No user with the requested ID exists.                                |
-| 403 Forbidden | The client does not have the required privileges to delete the user. |
+| Response Code | Cause                                           |
+|---------------|-------------------------------------------------|
+| 403 Forbidden | The client lacks the permission `users.delete`. |
+| 404 Not Found | No user with the requested ID exists.           |
 
 --------------------------------------------------------------------------------
 

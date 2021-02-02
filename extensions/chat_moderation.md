@@ -3,13 +3,6 @@ Chat Moderation
 Implementing this extension provides users with the tools necessary to moderate the content of chat rooms.
 Since this concerns chat directly, implementing this extension requires implementing the [chat extension](./chat.md).
 
-
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission                   | Purpose                                                                                                       |
-|------------------------------|---------------------------------------------------------------------------------------------------------------|
-| `chat.rooms.messages.delete` | Allows DELETE requests to `/chat/rooms/{room_id}/messages` and `/chat/rooms/{room_id}/messages/{message_id}`. |
-
 --------------------------------------------------------------------------------
 
 ## /info
@@ -35,7 +28,6 @@ Messages were deleted by a moderator.
 ```
 --------------------------------------------------------------------------------
 
-
 ## /chat/rooms/{room_id}/messages
 ### DELETE
 Deletes all specified messages.
@@ -46,19 +38,21 @@ Deletes all specified messages.
 }
 ```
 #### Errors
-| Response Code | Cause                                                                |
-|---------------|----------------------------------------------------------------------|
-| 403 Forbidden | The client does not have the required privileges to delete messages. |
-| 404 Not Found | No chat room with the specified ID exists.                           |
-| 404 Not Found | At least one of the IDs provided has no associated message.          |
+| Response Code | Cause                                                                 |
+|---------------|-----------------------------------------------------------------------|
+| 403 Forbidden | The client lacks the permission `chat.rooms.get`.                     |
+| 404 Not Found | No chatroom with the requested ID exists.                             |
+| 403 Forbidden | The client does not have the permission `chat.rooms.messages.delete`. |
+| 404 Not Found | At least one of the IDs provided has no associated message.           |
 
 
 ## /chat/rooms/{room_id}/messages/{message_id}
 ### DELETE
 Deletes the specified message.
 #### Errors
-| Response Code | Cause                                                                |
-|---------------|----------------------------------------------------------------------|
-| 403 Forbidden | The client does not have the required privileges to delete messages. |
-| 404 Not Found | No chat room with the specified ID exists.                           |
-| 404 Not Found | No messages with the specified ID exists.                            |
+| Response Code | Cause                                                                 |
+|---------------|-----------------------------------------------------------------------|
+| 403 Forbidden | The client lacks the permission `chat.rooms.get`.                     |
+| 404 Not Found | No chatroom with the requested ID exists.                             |
+| 403 Forbidden | The client does not have the permission `chat.rooms.messages.delete`. |
+| 404 Not Found | No message with the specified ID exists.                              |

@@ -18,16 +18,6 @@ This extension adds Mute objects which are described by following type:
 
 This object appears identical to the Ban object described in the [bans extension](./user_bans.md).
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission           | Purpose                                                       |
-|----------------------|---------------------------------------------------------------|
-| `users.mutes.list`   | Allows GET requests to `/users/{user_id}/mutes`.              |
-| `users.mutes.get`    | Allows GET requests to `/users/{user_id}/mutes/{mute_id}`.    |
-| `users.mutes.post`   | Allows POST requests to `/users/{user_id}/mutes`.             |
-| `users.mutes.patch`  | Allows PATCH requests to `/users/{user_id}/mutes/{mute_id}`.  |
-| `users.mutes.delete` | Allows DELETE requests to `/users/{user_id}/mutes/{mute_id}`. |
-
 --------------------------------------------------------------------------------
 
 ## /info
@@ -54,10 +44,10 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 Information on every mute that has been issued to the specified user.
 Returns a Paginated List of Mute objects.
 ##### Errors
-| Response Code            | Cause                                                           |
-|--------------------------|-----------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                           |
-| 403 Forbidden            | The client does not have the required privileges to list mutes. |
+| Response Code            | Cause                                                       |
+|--------------------------|-------------------------------------------------------------|
+| 404 Not Found            | No user with the specified ID exists.                       |
+| 403 Forbidden            | The client does not have the permission `users.mutes.list`. |
 
 ### POST
 Mutes the specified user.
@@ -74,7 +64,7 @@ The created Mute object.
 | Response Code            | Cause                                                              |
 |--------------------------|--------------------------------------------------------------------|
 | 404 Not Found            | No user with the specified ID exists.                              |
-| 403 Forbidden            | The client does not have the required privileges to mute the user. |
+| 403 Forbidden            | The client does not have the permission `users.mutes.post`.        |
 | 422 Unprocessable Entity | The mute reason is invalid.                                        |
 
 --------------------------------------------------------------------------------
@@ -84,11 +74,11 @@ The created Mute object.
 Information on a specific mute that has been issued to the specified user.
 Returns a Mute object.
 ##### Errors
-| Response Code | Cause                                                           |
-|---------------|-----------------------------------------------------------------|
-| 404 Not Found | No user with the specified ID exists.                           |
-| 404 Not Found | No mute with the specified ID exists.                           |
-| 403 Forbidden | The client does not have the required privileges view the mute. |
+| Response Code | Cause                                                      |
+|---------------|------------------------------------------------------------|
+| 404 Not Found | No user with the specified ID exists.                      |
+| 404 Not Found | No mute with the specified ID exists.                      |
+| 403 Forbidden | The client does not have the permission `users.mutes.get`. |
 
 ### PATCH
 Updates a specific mute that has been issued to the specified user.
@@ -102,18 +92,18 @@ Updates a specific mute that has been issued to the specified user.
 ##### Response
 The created Mute object.
 ##### Errors
-| Response Code            | Cause                                                              |
-|--------------------------|--------------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                              |
-| 404 Not Found            | No mute with the specified ID exists.                              |
-| 403 Forbidden            | The client does not have the required privileges to mute the user. |
-| 422 Unprocessable Entity | The mute reason is invalid.                                        |
+| Response Code            | Cause                                                        |
+|--------------------------|--------------------------------------------------------------|
+| 404 Not Found            | No user with the specified ID exists.                        |
+| 404 Not Found            | No mute with the specified ID exists.                        |
+| 403 Forbidden            | The client does not have the permission `users.mutes.patch`. |
+| 422 Unprocessable Entity | The mute reason is invalid.                                  |
 
 ### DELETE
 Removes a specific mute that has been issued to the specified user.
 ##### Errors
-| Response Code | Cause                                                                |
-|---------------|----------------------------------------------------------------------|
-| 404 Not Found | No user with the specified ID exists.                                |
-| 404 Not Found | No mute with the specified ID exists.                                |
-| 403 Forbidden | The client does not have the required privileges to unmute the user. |
+| Response Code | Cause                                                         |
+|---------------|---------------------------------------------------------------|
+| 404 Not Found | No user with the specified ID exists.                         |
+| 404 Not Found | No mute with the specified ID exists.                         |
+| 403 Forbidden | The client does not have the permission `users.mutes.delete`. |

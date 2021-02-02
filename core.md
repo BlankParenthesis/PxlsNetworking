@@ -38,19 +38,29 @@ A Placement object represents a change of board state at a particular time and i
 ```
 Placements are often not functional distinguishable from pixels on the board and the two concepts are mostly treated interchangeably.
 
+Nearly all requests by the client can be rejected by the server implementation.
+It is useful for the client to know before making such requests if it will be allowed to do so.
+For this reason, each method of each endpoint is associated with a string denoting the permission to use that endpoint.
+A list of these strings is sent to the client in the `/info` endpoint.
+
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
 Information about the server implementation.
+
 Extension definitions redefine the `extensions` field in this request.
 Implementations should return the union of all lists defined by every implemented extensions as a set.
+
+The `permissions` field  contains a list of permissions strings.
+It represents the actions the client can take without encountering a permissions error.
 ```typescript
 {
 	"name"?: string;
 	"version"?: string;
 	"source"?: string;
 	"extensions": string[];
+	"permissions": string[];
 }
 ```
 
@@ -84,11 +94,11 @@ How many pixels may be placed by the current user without encountering a cooldow
 	"next"?: Timestamp; 
 }
 ```
-#### Errors
-| Response Code            | Cause                                                                                                    |
-|--------------------------|----------------------------------------------------------------------------------------------------------|
-| 403 Forbidden            | The client lacks the required privileges to connect to the websocket with the specified extensions list. |
-| 422 Unprocessable Entity | The server does not support all of the requested extensions.                                             |
+### Errors
+| Response Code            | Cause                                                        |
+|--------------------------|--------------------------------------------------------------|
+| 403 Forbidden            | The client lacks the permission `socket.core`.               |
+| 422 Unprocessable Entity | The server does not support all of the requested extensions. |
 
 --------------------------------------------------------------------------------
 
@@ -98,9 +108,9 @@ Binary data.
 8-bit palette index for every pixel.
 Represents the initial state of the board.
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to read board data. |
+| Response Code | Cause                                         |
+|---------------|-----------------------------------------------|
+| 403 Forbidden | The client lacks the permission `board.data`. |
 
 --------------------------------------------------------------------------------
 
@@ -110,9 +120,9 @@ Binary data.
 8-bit palette index for every pixel.
 Represents the current state of the board.
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to read board data. |
+| Response Code | Cause                                         |
+|---------------|-----------------------------------------------|
+| 403 Forbidden | The client lacks the permission `board.data`. |
 
 --------------------------------------------------------------------------------
 
@@ -128,9 +138,9 @@ Binary data.
  |   2   | Placement allowed if an adjacent pixel has been modified. |
 
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to read board data. |
+| Response Code | Cause                                         |
+|---------------|-----------------------------------------------|
+| 403 Forbidden | The client lacks the permission `board.data`. |
 
 --------------------------------------------------------------------------------
 
@@ -142,9 +152,9 @@ Timestamp is seconds since `createdAt` as defined in `/board/info`.
 Each timestamp represents the last-modified time for a pixel.
 
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to read board data. |
+| Response Code | Cause                                         |
+|---------------|-----------------------------------------------|
+| 403 Forbidden | The client lacks the permission `board.data`. |
 
 --------------------------------------------------------------------------------
 
@@ -164,9 +174,9 @@ Metadata for the current board.
 }
 ```
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to read board data. |
+| Response Code | Cause                                         |
+|---------------|-----------------------------------------------|
+| 403 Forbidden | The client lacks the permission `board.data`. |
 
 --------------------------------------------------------------------------------
 
@@ -181,9 +191,9 @@ Information on the active and idle user counts.
 }
 ```
 #### Errors
-| Response Code | Cause                                                             |
-|---------------|-------------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to fetch the user count. |
+| Response Code | Cause                                          |
+|---------------|------------------------------------------------|
+| 403 Forbidden | The client lacks the permission `board.users`. |
 
 --------------------------------------------------------------------------------
 
@@ -192,9 +202,9 @@ Information on the active and idle user counts.
 Information on all placements.
 Returns a Paginated List of Placement objects.
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to list placements. |
+| Response Code | Cause                                                |
+|---------------|------------------------------------------------------|
+| 403 Forbidden | The client lacks the permission `board.pixels.list`. |
 
 --------------------------------------------------------------------------------
 
@@ -203,11 +213,11 @@ Returns a Paginated List of Placement objects.
 Information on the most recent placement for a given board position.
 Returns a Placement object.
 #### Errors
-| Response Code            | Cause                                                        |
-|--------------------------|--------------------------------------------------------------|
-| 404 Not Found            | Not placement action has occurred at the specified position. |
-| 404 Not Found            | The specified position is outside of the board dimensions.   |
-| 403 Forbidden            | The client lacks the required privileges to read pixel data. |
+| Response Code | Cause                                                        |
+|---------------|--------------------------------------------------------------|
+| 404 Not Found | Not placement action has occurred at the specified position. |
+| 404 Not Found | The specified position is outside of the board dimensions.   |
+| 403 Forbidden | The client lacks the permission `board.pixels.get`.          |
 
 ### POST
 Create a Placement for a given board coordinate.
@@ -228,8 +238,7 @@ Create a Placement for a given board coordinate.
 | Response Code            | Cause                                                               |
 |--------------------------|---------------------------------------------------------------------|
 | 404 Not Found            | The specified position is outside of the board dimensions.          |
-| 403 Forbidden            | The client is banned from placing.                                  |
-| 403 Forbidden            | The client does not have the required privileges to post pixels.    |
+| 403 Forbidden            | The client lacks the permission `board.pixels.post`.                |
 | 403 Forbidden            | The specified position is not placable according to the board mask. |
 | 409 Conflict             | The change would have no effect.                                    |
 | 422 Unprocessable Entity | The supplied color does not exist on the palette.                   |
