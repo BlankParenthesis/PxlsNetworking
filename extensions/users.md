@@ -94,3 +94,9 @@ Deletes the User with the ID specified by `user_id`.
 |---------------|----------------------------------------------------------------------|
 | 404 Not Found | No user with the requested ID exists.                                |
 | 403 Forbidden | The client does not have the required privileges to delete the user. |
+
+--------------------------------------------------------------------------------
+
+## /users/current
+Requests made to this endpoint should be redirected using HTTP status 307 to the user object of the currently authenticated user.
+If the client is not authenticated, then the server should respond with a status of 401 - unauthorized.
