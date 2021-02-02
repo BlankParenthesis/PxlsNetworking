@@ -77,25 +77,6 @@ The created Report object.
 
 --------------------------------------------------------------------------------
 
-## /reports/open
-Information on all Reports with a status of "OPENED".
-Returns a Paginated List of Report objects.
-#### Errors
-| Response Code | Cause                              |
-|---------------|------------------------------------|
-| 403 Forbidden | Missing permission `reports.list`. |
---------------------------------------------------------------------------------
-
-## /reports/closed
-Information on all Reports with a status of "CLOSED".
-Returns a Paginated List of Report objects.
-#### Errors
-| Response Code | Cause                              |
-|---------------|------------------------------------|
-| 403 Forbidden | Missing permission `reports.list`. |
-
---------------------------------------------------------------------------------
-
 ## /reports/{report_id}
 ### GET
 Information on a specified report.
