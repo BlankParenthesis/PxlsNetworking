@@ -105,6 +105,7 @@ The client's permissions have changed.
 | Response Code            | Cause                               |
 |--------------------------|-------------------------------------|
 | 403 Forbidden            | Missing permission `socket.core`.   |
+| 422 Unprocessable Entity | No extensions specified.            |
 | 422 Unprocessable Entity | Requested extensions not supported. |
 
 --------------------------------------------------------------------------------
