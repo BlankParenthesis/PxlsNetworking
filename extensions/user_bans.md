@@ -18,6 +18,7 @@ This extension adds Ban objects which are described by following type:
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["user_moderation"];
@@ -55,7 +56,8 @@ If the [board moderation extension](./board_undo.md) is implemented, then mass-p
 ## /users/{user_id}/bans
 ### GET
 Information on every ban that has been issued to the specified user.
-Returns a Paginated List of Ban objects.
+#### Response
+A Paginated List of Ban objects.
 ##### Errors
 | Response Code            | Cause                                 |
 |--------------------------|---------------------------------------|
@@ -87,7 +89,8 @@ The created Ban object.
 ## /users/{user_id}/bans/{ban_id}
 ### GET
 Information on a specific ban that has been issued to the specified user.
-Returns a Ban object.
+#### Response
+A Ban object.
 ##### Errors
 | Response Code | Cause                                |
 |---------------|--------------------------------------|

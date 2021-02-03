@@ -23,6 +23,7 @@ Placement objects gain an additional field due to this extension:
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["users"];
@@ -50,7 +51,9 @@ The client user has changed.
 
 ## /users
 ### GET
-Returns a Paginated List of User objects.
+Information on all users.
+#### Response
+A Paginated List of User objects.
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -60,7 +63,9 @@ Returns a Paginated List of User objects.
 
 ## /users/{user_id}
 ### GET
-Returns the User object with the ID specified by `user_id`.
+Information on a specified user.
+#### Response
+A User object.
 #### Errors
 | Response Code | Cause                           |
 |---------------|---------------------------------|
@@ -68,7 +73,7 @@ Returns the User object with the ID specified by `user_id`.
 | 404 Not Found | No such User exists.            |
 
 ### PATCH
-Updates the User object with the ID specified by `user_id`.
+Updates the specified user.
 #### Request
 A partial User object without the id or createdAt fields.
 #### Response
@@ -80,7 +85,7 @@ The updated User object.
 | 404 Not Found | No such User exists.              |
 
 ### DELETE
-Deletes the User with the ID specified by `user_id`.
+Deletes the specified user.
 #### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|

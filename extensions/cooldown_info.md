@@ -100,6 +100,7 @@ The following table provides variable names and where their value can be sourced
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["cooldown_info"];
@@ -111,6 +112,7 @@ The following table provides variable names and where their value can be sourced
 ## /board/cooldown
 ### GET
 Information about the cooldown for placing a pixel and the factors affecting it.
+#### Response
 ```typescript
 {
 	"formula": Formula;

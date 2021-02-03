@@ -43,6 +43,7 @@ If the [users extension](./users.md) is implemented, Member objects will also co
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["factions"];
@@ -54,7 +55,8 @@ If the [users extension](./users.md) is implemented, Member objects will also co
 ## /factions
 ### GET
 Information on all factions.
-Returns a Paginated List of Faction objects.
+#### Response
+A Paginated List of Faction objects.
 #### Errors
 | Response Code | Cause                               |
 |---------------|-------------------------------------|
@@ -85,7 +87,8 @@ The created Faction object.
 ## /factions/{faction_id}
 ### GET
 Information on a specified faction.
-Returns the Faction object with the ID matching `faction_id`.
+#### Response
+A Faction object.
 #### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
@@ -93,7 +96,7 @@ Returns the Faction object with the ID matching `faction_id`.
 | 404 Not Found | No such Faction exists.            |
 
 ### PATCH
-Updates the Faction object with the ID specified by `faction_id`.
+Updates the specified faction.
 #### Request
 ```typescript
 Partial<{
@@ -122,8 +125,9 @@ Deletes a faction.
 
 ## /factions/{faction_id}/members
 ### GET
-Information on all members of a faction.
-Returns a Paginated List of Member objects.
+Information on all members of a specified faction.
+#### Response
+A Paginated List of Member objects.
 #### Errors
 | Response Code | Cause                                      |
 |---------------|--------------------------------------------|
@@ -156,8 +160,9 @@ The created Member object.
 
 ## /factions/{faction_id}/members/{member_id}
 ### GET
-Information on a faction member.
-Returns the Member specified by `member_id` in the faction specified by `faction_id`.
+Information on a specified faction member.
+#### Response
+A Member object.
 #### Errors
 | Response Code | Cause                                      |
 |---------------|--------------------------------------------|

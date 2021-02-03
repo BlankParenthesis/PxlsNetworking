@@ -6,6 +6,7 @@ Implementing this extension provides users with the tools necessary to moderate 
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["board_moderation"];

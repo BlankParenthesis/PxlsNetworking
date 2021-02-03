@@ -17,6 +17,7 @@ Ranges include both the start and end numbers.
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["list_filtering"];

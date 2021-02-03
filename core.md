@@ -48,12 +48,7 @@ A list of these strings is sent to the client in the `/info` endpoint.
 ## /info
 ### GET
 Information about the server implementation.
-
-Extension definitions redefine the `extensions` field in this request.
-Implementations should return the union of all lists defined by every implemented extensions as a set.
-
-The `permissions` field  contains a list of permissions strings.
-It represents the actions the client can take without encountering a permissions error.
+#### Response
 ```typescript
 {
 	"name"?: string;
@@ -63,6 +58,11 @@ It represents the actions the client can take without encountering a permissions
 	"permissions": string[];
 }
 ```
+Extension definitions redefine the `extensions` field in this request.
+Implementations should return the union of all lists defined by every implemented extensions as a set.
+
+The `permissions` field  contains a list of permissions strings.
+It represents the actions the client can take without encountering a permissions error.
 
 --------------------------------------------------------------------------------
 
@@ -112,9 +112,10 @@ The client's permissions have changed.
 
 ## /board/data/initial
 ### GET
+Represents the initial state of the board.
+#### Response
 Binary data. 
 8-bit palette index for every pixel.
-Represents the initial state of the board.
 Board data is ordered left-to-right, top-to-bottom.
 #### Errors
 | Response Code | Cause                            |
@@ -125,9 +126,10 @@ Board data is ordered left-to-right, top-to-bottom.
 
 ## /board/data/colors
 ### GET
+Represents the current state of the board.
+#### Response
 Binary data. 
 8-bit palette index for every pixel.
-Represents the current state of the board.
 Board data is ordered left-to-right, top-to-bottom.
 #### Errors
 | Response Code | Cause                            |
@@ -138,16 +140,18 @@ Board data is ordered left-to-right, top-to-bottom.
 
 ## /board/data/mask
 ### GET
+Represents where placements can be made withing the board dimensions.
+Values correspond to the following behaviors:
+| Value | Placement Behavior                                        |
+|:-----:|-----------------------------------------------------------|
+|   0   | No placement allowed.                                     |
+|   1   | Placement allowed.                                        |
+|   2   | Placement allowed if an adjacent pixel has been modified. |
+
+#### Response
 Binary data. 
 8-bit mask identifier for every pixel.
 Board data is ordered left-to-right, top-to-bottom.
-
- | Value | Placement Behavior                                        |
- |:-----:|-----------------------------------------------------------|
- |   0   | No placement allowed.                                     |
- |   1   | Placement allowed.                                        |
- |   2   | Placement allowed if an adjacent pixel has been modified. |
-
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -157,13 +161,13 @@ Board data is ordered left-to-right, top-to-bottom.
 
 ## /board/data/modified
 ### GET
+Represents the last-modified time for all pixels on the board.
+#### Response
 Binary data. 
 32-bit timestamp for every pixel. 
 Bytes are little-endian ordered.
 Board data is ordered left-to-right, top-to-bottom.
 Timestamp is seconds since `createdAt` as defined in `/board/info`.
-Each timestamp represents the last-modified time for a pixel.
-
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -174,6 +178,7 @@ Each timestamp represents the last-modified time for a pixel.
 ## /board/info
 ### GET
 Metadata for the current board.
+#### Response
 ```typescript
 {
 	"name": string;
@@ -196,6 +201,7 @@ Metadata for the current board.
 ## /board/users
 ### GET
 Information on the active and idle user counts.
+#### Response
 ```typescript
 {
 	"active": number;
@@ -213,7 +219,8 @@ Information on the active and idle user counts.
 ## /board/pixels
 ### GET
 Information on all placements.
-Returns a Paginated List of Placement objects.
+#### Response
+A Paginated List of Placement objects.
 #### Errors
 | Response Code | Cause                                   |
 |---------------|-----------------------------------------|
@@ -224,7 +231,8 @@ Returns a Paginated List of Placement objects.
 ## /board/pixels/{x}/{y}
 ### GET
 Information on the most recent placement for a given board position.
-Returns a Placement object.
+#### Response
+A Placement object.
 #### Errors
 | Response Code | Cause                                  |
 |---------------|----------------------------------------|

@@ -27,6 +27,7 @@ Role objects are defined by the following type:
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["roles"];
@@ -38,7 +39,8 @@ Role objects are defined by the following type:
 ## /roles
 ### GET
 Information on all roles.
-Returns a Paginated List of Role objects.
+#### Response
+A Paginated List of Role objects.
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -49,7 +51,8 @@ Returns a Paginated List of Role objects.
 ## /roles/{role_id}
 ### GET
 Information on a specified role.
-Returns the Role object with the id matching `role_id`.
+#### Response
+A Role object.
 #### Errors
 | Response Code | Cause                           |
 |---------------|---------------------------------|
@@ -57,7 +60,7 @@ Returns the Role object with the id matching `role_id`.
 | 404 Not Found | No such Role exists.            |
 
 ### PATCH
-Updates the Role object with the ID specified by `role_id`.
+Updates the specified role.
 #### Request
 A partial Role object without the ID.
 #### Response
@@ -69,7 +72,7 @@ The updated Role object.
 | 404 Not Found | No such Role exists.              |
 
 ### DELETE
-Deletes the Role object with the ID specified by `role_id`.
+Deletes the specified role.
 #### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|

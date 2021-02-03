@@ -7,6 +7,7 @@ Since this concerns chat directly, implementing this extension requires implemen
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["chat_moderation"];

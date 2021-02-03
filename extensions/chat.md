@@ -36,6 +36,7 @@ If the [users extension](./users.md) is implemented, Message objects may also sp
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["chat"];
@@ -98,6 +99,7 @@ If multiple rooms were invalid, the server need only mention one.
 ## /chat/info
 ### GET
 General information on chatrooms.
+#### Response
 ```typescript
 {
 	"defaultRoom"?: number | string;
@@ -114,7 +116,8 @@ General information on chatrooms.
 ## /chat/rooms
 ### GET
 Information on all chatrooms.
-Returns a Paginated List of Chatroom objects.
+#### Response
+A Paginated List of Chatroom objects.
 #### Errors
 | Response Code | Cause                                 |
 |---------------|---------------------------------------|
@@ -124,7 +127,9 @@ Returns a Paginated List of Chatroom objects.
 
 ## /chat/rooms/{room_id}
 ### GET
-Returns the Chatroom object with the ID specified by `room_id`.
+Information on a specified chatroom.
+#### Response
+A Chatroom object.
 #### Errors
 | Response Code | Cause                                |
 |---------------|--------------------------------------|
@@ -136,7 +141,8 @@ Returns the Chatroom object with the ID specified by `room_id`.
 ## /chat/rooms/{room_id}/messages
 ### GET
 Previously sent messages.
-Returns a Paginated List of Message objects.
+#### Response
+A Paginated List of Message objects.
 #### Errors
 | Response Code | Cause                                          |
 |---------------|------------------------------------------------|
@@ -165,8 +171,9 @@ The created message object.
 
 ## /chat/rooms/{room_id}/messages/{message_id}
 ### GET
-A chat message.
-Returns a Message object.
+Information on a specified message.
+#### Response
+A Message object.
 #### Errors
 | Response Code | Cause                                         |
 |---------------|-----------------------------------------------|

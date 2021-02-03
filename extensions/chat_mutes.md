@@ -22,6 +22,7 @@ This object appears identical to the Ban object described in the [bans extension
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["chat_mutes"];
@@ -42,7 +43,8 @@ This object appears identical to the Ban object described in the [bans extension
 ## /users/{user_id}/mutes
 ### GET
 Information on every mute that has been issued to the specified user.
-Returns a Paginated List of Mute objects.
+#### Response
+A Paginated List of Mute objects.
 ##### Errors
 | Response Code | Cause                                 |
 |---------------|---------------------------------------|
@@ -72,7 +74,8 @@ The created Mute object.
 ## /users/{user_id}/mutes/{mute_id}
 ### GET
 Information on a specific mute that has been issued to the specified user.
-Returns a Mute object.
+#### Response
+A Mute object.
 ##### Errors
 | Response Code | Cause                                 |
 |---------------|---------------------------------------|

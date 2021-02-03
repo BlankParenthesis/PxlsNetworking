@@ -23,6 +23,7 @@ Authentication options are given by Methods which are defined by the following t
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["authentication"];
@@ -34,7 +35,8 @@ Authentication options are given by Methods which are defined by the following t
 ## /auth/methods
 ### GET
 Information about how and where clients can authenticate.
-Returns a Paginated List of Methods.
+#### Response
+A Paginated List of Methods.
 
 ### POST
 Add a new method which clients can use to to authenticate.
@@ -52,7 +54,8 @@ The created Method object.
 ## /auth/methods/{method_id}
 ### GET
 Information on the method with ID equal to `method_id`.
-Returns a Method object.
+#### Response
+A Method object.
 
 ### PATCH
 Updates an authentication method.

@@ -44,6 +44,7 @@ If the [users extension](./users.md) is implemented, Artifacts may additionally 
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["reports"];
@@ -55,7 +56,8 @@ If the [users extension](./users.md) is implemented, Artifacts may additionally 
 ## /reports
 ### GET 
 Information on all reports.
-Returns a Paginated List of Report objects.
+#### Response
+A Paginated List of Report objects.
 #### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
@@ -80,7 +82,8 @@ The created Report object.
 ## /reports/{report_id}
 ### GET
 Information on a specified report.
-Returns the Report object with the ID matching `report_id`.
+#### Response
+A Report object.
 #### Errors
 | Response Code | Cause                             |
 |---------------|-----------------------------------|

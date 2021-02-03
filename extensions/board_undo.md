@@ -9,6 +9,7 @@ Clients are expected to keep track of which actions can be retracted.
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["undo"];
