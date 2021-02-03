@@ -21,21 +21,19 @@ Clients are expected to keep track of which actions can be retracted.
 ## /board/pixels/{x}/{y}
 ### POST
 #### Response
-```typescript
-{
-	"undoDeadline": Timestamp;
-}
-```
+##### Headers
+| Header        | Value                                                                      |
+|---------------|----------------------------------------------------------------------------|
+| Undo-Deadline | Timestamp of when DELETE actions can no longer be sent for this placement. |
 
 ### DELETE
 Undoes the last place action at the given coordinate.
 #### Response
-```typescript
-{
-	"pixelsAvailable": number;
-	"nextAvailable"?: Timestamp; 
-}
-```
+##### Headers
+| Header           | Value                                                                          |
+|------------------|--------------------------------------------------------------------------------|
+| Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
+| Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
 #### Errors
 | Response Code | Cause                                   |
 |---------------|-----------------------------------------|

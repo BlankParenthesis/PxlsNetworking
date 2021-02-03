@@ -191,6 +191,11 @@ Metadata for the current board.
 	}>;
 }
 ```
+##### Headers
+| Header           | Value                                                                          |
+|------------------|--------------------------------------------------------------------------------|
+| Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
+| Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -249,12 +254,12 @@ Create a Placement for a given board coordinate.
 }
 ```
 #### Response
-```typescript
-{
-	"pixelsAvailable": number;
-	"nextAvailable"?: Timestamp; 
-}
-```
+The created Placement object.
+##### Headers
+| Header           | Value                                                                          |
+|------------------|--------------------------------------------------------------------------------|
+| Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
+| Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
 #### Errors
 | Response Code            | Cause                                             |
 |--------------------------|---------------------------------------------------|
