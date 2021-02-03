@@ -189,6 +189,7 @@ Metadata for the current board.
 		"name": string;
 		"value": string;
 	}>;
+	"maxPixelsAvailable": number;
 }
 ```
 ##### Headers
