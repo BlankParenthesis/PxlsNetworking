@@ -11,13 +11,21 @@ Authentication options are given by Methods which are defined by the following t
 ```typescript
 {
 	"id": number | string;
-	"type": "OAUTH" | "BASIC";
+	"type": "OAUTH" | "FORM";
 	"name": string;
 	"description"?: string;
 	"url": string;
 	"registration": boolean;
 }
 ```
+Methods that use the "OAUTH" type of authentication provide a URL which will initiate an OAuth flow.
+Client implementations have no control over this flow.
+Web clients served from the same origin as the server can simply redirect the page to the chosen flow and can expect to eventually be revisited at the completion of the flow with authentication in place.
+Other clients cannot expect this and should not use this type of method.
+
+Methods that use the "FORM" type of authentication provide a URL to which a client can POST a `username` and `password`.
+Responses from the provided URL should return a response with the Set-Cookie header when successful.
+Clients should send the indicated cookies back to the server for any future requests and should expect to be authenticated when they do so.
 
 --------------------------------------------------------------------------------
 
