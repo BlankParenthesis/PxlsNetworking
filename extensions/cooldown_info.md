@@ -114,7 +114,7 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
-## /board/cooldown
+## /boards/{board_id}/cooldown
 ### GET
 Information about the cooldown for placing a pixel and the factors affecting it.
 ```typescript
