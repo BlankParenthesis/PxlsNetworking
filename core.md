@@ -115,6 +115,7 @@ The client's permissions have changed.
 Binary data. 
 8-bit palette index for every pixel.
 Represents the initial state of the board.
+Board data is ordered left-to-right, top-to-bottom.
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -127,6 +128,7 @@ Represents the initial state of the board.
 Binary data. 
 8-bit palette index for every pixel.
 Represents the current state of the board.
+Board data is ordered left-to-right, top-to-bottom.
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -138,6 +140,7 @@ Represents the current state of the board.
 ### GET
 Binary data. 
 8-bit mask identifier for every pixel.
+Board data is ordered left-to-right, top-to-bottom.
 
  | Value | Placement Behavior                                        |
  |:-----:|-----------------------------------------------------------|
@@ -156,6 +159,8 @@ Binary data.
 ### GET
 Binary data. 
 32-bit timestamp for every pixel. 
+Bytes are little-endian ordered.
+Board data is ordered left-to-right, top-to-bottom.
 Timestamp is seconds since `createdAt` as defined in `/board/info`.
 Each timestamp represents the last-modified time for a pixel.
 
