@@ -13,6 +13,34 @@ This is done by joining the start number followed by the end number in a range w
 For example, to search for all Placements that occurred within the first minute of the Unix epoch, the client could perform a GET request to `/board/pixels?modified=0..60`.
 Ranges include both the start and end numbers.
 
+Ranges may be unbounded.
+This is indicated by not specifying the start or end of the range.
+For example, to search for all Placements that occurred after the first minute of the Unix epoch, the client could perform a GET request to `/board/pixels?modified=60..`.
+
+Some objects have nested fields.
+For example, Member objects from the [factions extension](./factions.md) have an approval field.
+This approval field does not contain a simple value but an object with the following type:
+```typescript
+{
+	"member": boolean;
+	"faction": boolean;
+}
+```
+These fields can still be filtered by their values.
+An object fields inner fields can be accessed by joining the field path from outermost to innermost with a period character.
+In order to get all members of a faction which have approval from the faction, the client could perform a GET request to `/factions/0/members?approval.faction=true`.
+
+Some fields have an array value.
+These fields may not be directly filtered, but may be filtered on their length.
+Arrays can be considered as an object with the following type:
+```typescript
+{
+	"length": number;
+}
+```
+We can access the length of an array using what was previously defined regarding nested fields.
+For example, in order to get all reports (see the [reports extension](./reports.md)) which have been modified more than twice, the client could perform a GET request to `/reports?history.length=2..`
+
 --------------------------------------------------------------------------------
 
 ## /info
