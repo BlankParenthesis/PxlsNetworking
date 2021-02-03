@@ -53,6 +53,39 @@ If the [users extension](./users.md) is implemented, Artifacts may additionally 
 
 --------------------------------------------------------------------------------
 
+## /ws?extensions[]=reports
+### Server packets
+#### ReportCreated
+There is a new report.
+```typescript
+{
+	"type": "report-created";
+	"report": Report;
+}
+```
+#### ReportUpdated
+A report has been updated.
+```typescript
+{
+	"type": "report-updated";
+	"report": Report;
+}
+```
+#### ReportRemoved
+A report has been removed.
+```typescript
+{
+	"type": "report-removed";
+	"id": number | string;
+}
+```
+### Errors
+| Response Code | Cause                                |
+|---------------|--------------------------------------|
+| 403 Forbidden | Missing permission `socket.reports`. |
+
+--------------------------------------------------------------------------------
+
 ## /reports
 ### GET 
 Information on all reports.
