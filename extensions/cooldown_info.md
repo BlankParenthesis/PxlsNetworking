@@ -111,7 +111,7 @@ The following table provides variable names and where their value can be sourced
 
 ## /board/cooldown
 ### GET
-Information about the cooldown for placing a pixel and the factors affecting it.
+Gets the cooldown formula of the board.
 #### Response
 ```typescript
 {

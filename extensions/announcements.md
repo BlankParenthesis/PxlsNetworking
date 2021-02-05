@@ -71,7 +71,7 @@ An announcement has been removed.
 
 ## /board/announcements
 ### GET
-Information on all announcements.
+Lists all announcements.
 #### Response
 A Paginated List of Announcement objects.
 #### Errors
@@ -80,7 +80,7 @@ A Paginated List of Announcement objects.
 | 403 Forbidden | Missing permission `board.announcements.list`. |
 
 ### POST
-Create a new announcement.
+Creates an announcement.
 #### Request
 An Announcement object without an ID (or author if the [users extension](./users.md) is implemented).
 #### Response
@@ -94,7 +94,7 @@ The created Announcement object.
 
 ## /board/announcements/{announcements_id}
 ### GET
-Information on the specified announcement.
+Gets an announcement.
 #### Response
 An Announcement object.
 #### Errors
@@ -104,7 +104,7 @@ An Announcement object.
 | 404 Not Found | No such Announcement exists.                  |
 
 ### PATCH
-Updates the specified announcement.
+Updates an announcement.
 #### Request
 A partial Announcement object without an ID (or author if the [users extension](./users.md) is implemented).
 #### Response
@@ -116,7 +116,7 @@ The updated Announcement object.
 | 404 Not Found | No such Announcement exists.                    |
 
 ### DELETE
-Deletes the specified announcement.
+Deletes an announcement.
 #### Errors
 | Response Code | Cause                                            |
 |---------------|--------------------------------------------------|

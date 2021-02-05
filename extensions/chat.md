@@ -98,7 +98,7 @@ If multiple rooms were invalid, the server need only mention one.
 
 ## /chat/info
 ### GET
-General information on chatrooms.
+Gets general information on chatrooms.
 #### Response
 ```typescript
 {
@@ -115,7 +115,7 @@ General information on chatrooms.
 
 ## /chat/rooms
 ### GET
-Information on all chatrooms.
+Lists all chatrooms.
 #### Response
 A Paginated List of Chatroom objects.
 #### Errors
@@ -127,7 +127,7 @@ A Paginated List of Chatroom objects.
 
 ## /chat/rooms/{room_id}
 ### GET
-Information on a specified chatroom.
+Gets a chatroom.
 #### Response
 A Chatroom object.
 #### Errors
@@ -140,7 +140,7 @@ A Chatroom object.
 
 ## /chat/rooms/{room_id}/messages
 ### GET
-Previously sent messages.
+Lists messages in a chatroom.
 #### Response
 A Paginated List of Message objects.
 #### Errors
@@ -151,7 +151,7 @@ A Paginated List of Message objects.
 | 403 Forbidden | Missing permission `chat.rooms.messages.list`. |
 
 ### POST
-Creates a new chat message and sends it to the chatroom.
+Creates a chat message.
 #### Request
 ```typescript
 {
@@ -171,7 +171,7 @@ The created message object.
 
 ## /chat/rooms/{room_id}/messages/{message_id}
 ### GET
-Information on a specified message.
+Gets a message in a chatroom.
 #### Response
 A Message object.
 #### Errors

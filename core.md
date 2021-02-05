@@ -51,7 +51,7 @@ Such permissions should be used if the specified object belongs to the client us
 
 ## /info
 ### GET
-Information about the server implementation.
+Gets information about the server implementation.
 #### Response
 ```typescript
 {
@@ -210,7 +210,7 @@ Metadata for the current board.
 
 ## /board/users
 ### GET
-Information on the active and idle user counts.
+Gets the active and idle user counts.
 #### Response
 ```typescript
 {
@@ -228,7 +228,7 @@ Information on the active and idle user counts.
 
 ## /board/pixels
 ### GET
-Information on all placements.
+Lists all placements.
 #### Response
 A Paginated List of Placement objects.
 #### Errors
@@ -240,7 +240,7 @@ A Paginated List of Placement objects.
 
 ## /board/pixels/{x}/{y}
 ### GET
-Information on the most recent placement for a given board position.
+Gets the most recent placement for the specified board position.
 #### Response
 A Placement object.
 #### Errors
@@ -251,7 +251,7 @@ A Placement object.
 | 403 Forbidden | Missing permission `board.pixels.get`. |
 
 ### POST
-Create a Placement for a given board coordinate.
+Creates a placement.
 #### Request
 ```typescript
 {

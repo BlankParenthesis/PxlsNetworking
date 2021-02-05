@@ -88,7 +88,7 @@ A report has been removed.
 
 ## /reports
 ### GET 
-Information on all reports.
+Lists all reports.
 #### Response
 A Paginated List of Report objects.
 #### Errors
@@ -97,7 +97,7 @@ A Paginated List of Report objects.
 | 403 Forbidden | Missing permission `reports.list`. |
 
 ### POST
-Create a new Report.
+Creates a Report.
 #### Request
 A Report object without an ID, history, or status (or reporter if the [users extension](./users.md) is implemented).
 #### Response
@@ -116,7 +116,7 @@ If the [authentication extension](./authentication.md) is implemented, any creat
 
 ## /reports/owned
 ### GET
-Information on all reports owned by the client's user.
+Lists all reports owned by the client's user.
 #### Response
 A Paginated List of Report objects.
 #### Errors
@@ -128,7 +128,7 @@ A Paginated List of Report objects.
 
 ## /reports/{report_id}
 ### GET
-Information on a specified report.
+Gets a report.
 #### Response
 A Report object.
 #### Errors

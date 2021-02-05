@@ -55,7 +55,7 @@ If the [board moderation extension](./board_undo.md) is implemented, then mass-p
 
 ## /users/{user_id}/bans
 ### GET
-Information on every ban that has been issued to the specified user.
+Lists all bans issued to a user.
 #### Response
 A Paginated List of Ban objects.
 ##### Errors
@@ -66,7 +66,7 @@ A Paginated List of Ban objects.
 | 403 Forbidden | Missing permission `users.bans.list` or `users.current.bans.list`. |
 
 ### POST
-Bans the specified user.
+Bans a user.
 #### Request
 ```typescript
 {
@@ -88,7 +88,7 @@ The created Ban object.
 
 ## /users/{user_id}/bans/{ban_id}
 ### GET
-Information on a specific ban that has been issued to the specified user.
+Gets a ban issued to a user.
 #### Response
 A Ban object.
 ##### Errors
@@ -100,7 +100,7 @@ A Ban object.
 | 404 Not Found | No such Ban exists.                                              |
 
 ### PATCH
-Updates a specific ban that has been issued to the specified user.
+Updates a ban issued to a user.
 #### Request
 ```typescript
 {
@@ -120,7 +120,7 @@ The created Ban object.
 | 422 Unprocessable Entity | The ban reason is invalid.                             |
 
 ### DELETE
-Removes a specific ban that has been issued to the specified user.
+Deletes a ban issued to a user.
 ##### Errors
 | Response Code | Cause                                                  |
 |---------------|--------------------------------------------------------|

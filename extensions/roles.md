@@ -45,7 +45,7 @@ Role objects are defined by the following type:
 
 ## /roles
 ### GET
-Information on all roles.
+Lists all roles.
 #### Response
 A Paginated List of Role objects.
 #### Errors
@@ -57,7 +57,7 @@ A Paginated List of Role objects.
 
 ## /roles/{role_id}
 ### GET
-Information on a specified role.
+Gets a role.
 #### Response
 A Role object.
 #### Errors
@@ -67,7 +67,7 @@ A Role object.
 | 404 Not Found | No such Role exists.            |
 
 ### PATCH
-Updates the specified role.
+Updates a role.
 #### Request
 A partial Role object without the ID.
 #### Response
@@ -79,7 +79,7 @@ The updated Role object.
 | 404 Not Found | No such Role exists.              |
 
 ### DELETE
-Deletes the specified role.
+Deletes a role.
 #### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|

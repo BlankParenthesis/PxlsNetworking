@@ -49,7 +49,7 @@ Deletes all specified messages.
 
 ## /chat/rooms/{room_id}/messages/{message_id}
 ### DELETE
-Deletes the specified message.
+Deletes a message.
 #### Errors
 | Response Code | Cause                                            |
 |---------------|--------------------------------------------------|

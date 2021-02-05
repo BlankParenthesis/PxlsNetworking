@@ -54,7 +54,7 @@ If the [users extension](./users.md) is implemented, Member objects will also co
 
 ## /factions
 ### GET
-Information on all factions.
+Lists all factions.
 #### Response
 A Paginated List of Faction objects.
 #### Errors
@@ -63,7 +63,7 @@ A Paginated List of Faction objects.
 | 403 Forbidden | Missing permission `factions.list`. |
 
 ### POST
-Create a new Faction.
+Creates a faction.
 #### Request
 ```typescript
 {
@@ -86,7 +86,7 @@ The created Faction object.
 
 ## /factions/{faction_id}
 ### GET
-Information on a specified faction.
+Gets a faction.
 #### Response
 A Faction object.
 #### Errors
@@ -96,7 +96,7 @@ A Faction object.
 | 404 Not Found | No such Faction exists.            |
 
 ### PATCH
-Updates the specified faction.
+Updates a faction.
 #### Request
 ```typescript
 Partial<{
@@ -125,7 +125,7 @@ Deletes a faction.
 
 ## /factions/{faction_id}/members
 ### GET
-Information on all members of a specified faction.
+Lists all members of a faction.
 #### Response
 A Paginated List of Member objects.
 #### Errors
@@ -136,7 +136,7 @@ A Paginated List of Member objects.
 | 403 Forbidden | Missing permission `factions.members.get`. |
 
 ### POST
-Adds a new member to the Faction with the ID matching `faction_id`.
+Adds a new member to a faction.
 #### Request
 Empty unless the [users extension](./users.md) is implemented in which case, an optional User ID may be specified:
 ```typescript
@@ -160,7 +160,7 @@ The created Member object.
 
 ## /factions/{faction_id}/members/{member_id}
 ### GET
-Information on a specified faction member.
+Gets a faction member.
 #### Response
 A Member object.
 #### Errors

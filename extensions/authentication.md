@@ -42,12 +42,12 @@ Clients should send the indicated cookies back to the server for any future requ
 
 ## /auth/methods
 ### GET
-Information about how and where clients can authenticate.
+Lists authentication methods.
 #### Response
 A Paginated List of Methods.
 
 ### POST
-Add a new method which clients can use to to authenticate.
+Creates an authentication method.
 #### Request
 A Method object without an ID.
 #### Response
@@ -61,7 +61,7 @@ The created Method object.
 
 ## /auth/methods/{method_id}
 ### GET
-Information on the method with ID equal to `method_id`.
+Gets an authentication method.
 #### Response
 A Method object.
 
@@ -78,7 +78,7 @@ The modified Method object.
 | 403 Forbidden | Missing permission `auth.get`. |
 
 ### DELETE
-Removes an authentication method.
+Deletes an authentication method.
 #### Errors
 | Response Code | Cause                             |
 |---------------|-----------------------------------|

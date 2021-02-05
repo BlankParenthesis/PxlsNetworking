@@ -51,7 +51,7 @@ The client user's placement statistics have changed.
 
 ## /users/stats
 ### GET
-Information on the stats placement statistics of all users.
+Lists the placement statistics for all users.
 #### Response
 A Paginated List of the following type:
 ```typescript
@@ -73,7 +73,7 @@ A Paginated List of the following type:
 
 ## /users/{user_id}/stats
 ### GET
-Information on the placement statistics of the specified user.
+Gets the placement statistics for a user.
 #### Response
 ```typescript
 {

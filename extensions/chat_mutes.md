@@ -42,7 +42,7 @@ This object appears identical to the Ban object described in the [bans extension
 
 ## /users/{user_id}/mutes
 ### GET
-Information on every mute that has been issued to the specified user.
+Lists all mutes issued to a user.
 #### Response
 A Paginated List of Mute objects.
 ##### Errors
@@ -52,7 +52,7 @@ A Paginated List of Mute objects.
 | 403 Forbidden | Missing permission `users.mutes.list` or `users.current.mutes.list`. |
 
 ### POST
-Mutes the specified user.
+Mutes a user.
 #### Request
 ```typescript
 {
@@ -73,7 +73,7 @@ The created Mute object.
 
 ## /users/{user_id}/mutes/{mute_id}
 ### GET
-Information on a specific mute that has been issued to the specified user.
+Gets a mute issued to a user.
 #### Response
 A Mute object.
 ##### Errors
@@ -84,7 +84,7 @@ A Mute object.
 | 403 Forbidden | Missing permission `users.mutes.get` or `users.current.mutes.get`. |
 
 ### PATCH
-Updates a specific mute that has been issued to the specified user.
+Updates a mute issued to a user.
 #### Request
 ```typescript
 {
@@ -103,7 +103,7 @@ The created Mute object.
 | 422 Unprocessable Entity | Invalid reason.                         |
 
 ### DELETE
-Removes a specific mute that has been issued to the specified user.
+Removes a mute issued to a user.
 ##### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|

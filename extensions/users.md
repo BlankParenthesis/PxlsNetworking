@@ -51,7 +51,7 @@ The client user has changed.
 
 ## /users
 ### GET
-Information on all users.
+Lists all users.
 #### Response
 A Paginated List of User objects.
 #### Errors
@@ -63,7 +63,7 @@ A Paginated List of User objects.
 
 ## /users/{user_id}
 ### GET
-Information on a specified user.
+Gets a user.
 #### Response
 A User object.
 #### Errors
@@ -73,7 +73,7 @@ A User object.
 | 404 Not Found | No such User exists.                                   |
 
 ### PATCH
-Updates the specified user.
+Updates a user.
 #### Request
 A partial User object without the id or createdAt fields.
 #### Response
@@ -85,7 +85,7 @@ The updated User object.
 | 404 Not Found | No such User exists.                                       |
 
 ### DELETE
-Deletes the specified user.
+Deletes a user.
 #### Errors
 | Response Code | Cause                                                        |
 |---------------|--------------------------------------------------------------|
