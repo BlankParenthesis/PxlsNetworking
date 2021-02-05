@@ -59,11 +59,11 @@ Information on every ban that has been issued to the specified user.
 #### Response
 A Paginated List of Ban objects.
 ##### Errors
-| Response Code            | Cause                                 |
-|--------------------------|---------------------------------------|
-| 403 Forbidden            | Missing permission `users.get`.       |
-| 404 Not Found            | No such User exists.                  |
-| 403 Forbidden            | Missing permission `users.bans.list`. |
+| Response Code | Cause                                                              |
+|---------------|--------------------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.get` or `users.current.get`.             |
+| 404 Not Found | No such User exists.                                               |
+| 403 Forbidden | Missing permission `users.bans.list` or `users.current.bans.list`. |
 
 ### POST
 Bans the specified user.
@@ -77,12 +77,12 @@ Bans the specified user.
 ##### Response
 The created Ban object.
 ##### Errors
-| Response Code            | Cause                                 |
-|--------------------------|---------------------------------------|
-| 403 Forbidden            | Missing permission `users.get`.       |
-| 404 Not Found            | No such User exists.                  |
-| 403 Forbidden            | Missing permission `users.bans.post`. |
-| 422 Unprocessable Entity | Invalid reason.                       |
+| Response Code            | Cause                                                  |
+|--------------------------|--------------------------------------------------------|
+| 403 Forbidden            | Missing permission `users.get` or `users.current.get`. |
+| 404 Not Found            | No such User exists.                                   |
+| 403 Forbidden            | Missing permission `users.bans.post`.                  |
+| 422 Unprocessable Entity | Invalid reason.                                        |
 
 --------------------------------------------------------------------------------
 
@@ -92,12 +92,12 @@ Information on a specific ban that has been issued to the specified user.
 #### Response
 A Ban object.
 ##### Errors
-| Response Code | Cause                                |
-|---------------|--------------------------------------|
-| 403 Forbidden | Missing permission `users.get`.      |
-| 404 Not Found | No such User exists.                 |
-| 403 Forbidden | Missing permission `users.bans.get`. |
-| 404 Not Found | No such Ban exists.                  |
+| Response Code | Cause                                                            |
+|---------------|------------------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.get` or `users.current.get`.           |
+| 404 Not Found | No such User exists.                                             |
+| 403 Forbidden | Missing permission `users.bans.get` or `users.current.bans.get`. |
+| 404 Not Found | No such Ban exists.                                              |
 
 ### PATCH
 Updates a specific ban that has been issued to the specified user.
@@ -111,20 +111,20 @@ Updates a specific ban that has been issued to the specified user.
 ##### Response
 The created Ban object.
 ##### Errors
-| Response Code            | Cause                                  |
-|--------------------------|----------------------------------------|
-| 403 Forbidden            | Missing permission `users.get`.        |
-| 404 Not Found            | No such User exists.                   |
-| 403 Forbidden            | Missing permission `users.bans.patch`. |
-| 404 Not Found            | No such Ban exists.                    |
-| 422 Unprocessable Entity | The ban reason is invalid.             |
+| Response Code            | Cause                                                  |
+|--------------------------|--------------------------------------------------------|
+| 403 Forbidden            | Missing permission `users.get` or `users.current.get`. |
+| 404 Not Found            | No such User exists.                                   |
+| 403 Forbidden            | Missing permission `users.bans.patch`.                 |
+| 404 Not Found            | No such Ban exists.                                    |
+| 422 Unprocessable Entity | The ban reason is invalid.                             |
 
 ### DELETE
 Removes a specific ban that has been issued to the specified user.
 ##### Errors
-| Response Code | Cause                                   |
-|---------------|-----------------------------------------|
-| 403 Forbidden | Missing permission `users.get`.         |
-| 404 Not Found | No such User exists.                    |
-| 403 Forbidden | Missing permission `users.bans.delete`. |
-| 404 Not Found | No such Ban exists.                     |
+| Response Code | Cause                                                  |
+|---------------|--------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.get` or `users.current.get`. |
+| 404 Not Found | No such User exists.                                   |
+| 403 Forbidden | Missing permission `users.bans.delete`.                |
+| 404 Not Found | No such Ban exists.                                    |

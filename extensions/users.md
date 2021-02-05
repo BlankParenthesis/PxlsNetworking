@@ -67,10 +67,10 @@ Information on a specified user.
 #### Response
 A User object.
 #### Errors
-| Response Code | Cause                           |
-|---------------|---------------------------------|
-| 403 Forbidden | Missing permission `users.get`. |
-| 404 Not Found | No such User exists.            |
+| Response Code | Cause                                                  |
+|---------------|--------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.get` or `users.current.get`. |
+| 404 Not Found | No such User exists.                                   |
 
 ### PATCH
 Updates the specified user.
@@ -79,18 +79,18 @@ A partial User object without the id or createdAt fields.
 #### Response
 The updated User object.
 #### Errors
-| Response Code | Cause                             |
-|---------------|-----------------------------------|
-| 403 Forbidden | Missing permission `users.patch`. |
-| 404 Not Found | No such User exists.              |
+| Response Code | Cause                                                      |
+|---------------|------------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.patch` or `users.current.patch`. |
+| 404 Not Found | No such User exists.                                       |
 
 ### DELETE
 Deletes the specified user.
 #### Errors
-| Response Code | Cause                              |
-|---------------|------------------------------------|
-| 403 Forbidden | Missing permission `users.delete`. |
-| 404 Not Found | No such User exists.               |
+| Response Code | Cause                                                        |
+|---------------|--------------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.delete` or `users.current.delete`. |
+| 404 Not Found | No such User exists.                                         |
 
 --------------------------------------------------------------------------------
 

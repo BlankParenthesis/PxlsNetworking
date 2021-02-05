@@ -46,10 +46,10 @@ Information on every mute that has been issued to the specified user.
 #### Response
 A Paginated List of Mute objects.
 ##### Errors
-| Response Code | Cause                                 |
-|---------------|---------------------------------------|
-| 404 Not Found | No such User exists.                  | 
-| 403 Forbidden | Missing permission `users.mutes.list`.|
+| Response Code | Cause                                                                |
+|---------------|----------------------------------------------------------------------|
+| 404 Not Found | No such User exists.                                                 | 
+| 403 Forbidden | Missing permission `users.mutes.list` or `users.current.mutes.list`. |
 
 ### POST
 Mutes the specified user.
@@ -77,11 +77,11 @@ Information on a specific mute that has been issued to the specified user.
 #### Response
 A Mute object.
 ##### Errors
-| Response Code | Cause                                 |
-|---------------|---------------------------------------|
-| 404 Not Found | No such User exists.                  |
-| 404 Not Found | No such Mute exists.                  |
-| 403 Forbidden | Missing permission `users.mutes.get`. |
+| Response Code | Cause                                                              |
+|---------------|--------------------------------------------------------------------|
+| 404 Not Found | No such User exists.                                               |
+| 404 Not Found | No such Mute exists.                                               |
+| 403 Forbidden | Missing permission `users.mutes.get` or `users.current.mutes.get`. |
 
 ### PATCH
 Updates a specific mute that has been issued to the specified user.

@@ -38,10 +38,14 @@ A Placement object represents a change of board state at a particular time and i
 ```
 Placements are often not functional distinguishable from pixels on the board and the two concepts are mostly treated interchangeably.
 
+
 Nearly all requests by the client can be rejected by the server implementation.
 It is useful for the client to know before making such requests if it will be allowed to do so.
 For this reason, each method of each endpoint is associated with a string denoting the permission to use that endpoint.
 A list of these strings is sent to the client in the `/info` endpoint.
+Some permissions are context sensitive.
+These usually have "current" or "owned" somewhere in their string.
+Such permissions should be used if the specified object belongs to the client user in some way and the client lacks the general permission.
 
 --------------------------------------------------------------------------------
 

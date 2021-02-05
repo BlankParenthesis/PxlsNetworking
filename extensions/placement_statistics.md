@@ -87,7 +87,7 @@ This might mean they provide information on all previous boards, only provide in
 For the field "totals", the entry represents the internal sum of all known statistics for the user.
 Notably, the sum of all other entries do not need to sum to the total provided.
 #### Errors
-| Response Code | Cause                                 |
-|---------------|---------------------------------------|
-| 403 Forbidden | Missing permission `users.stats.get`. |
-| 404 Not Found | No such User exists.                  |
+| Response Code | Cause                                                            |
+|---------------|------------------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.stats.get` or users.current.stats.get. |
+| 404 Not Found | No such User exists.                                             |

@@ -112,16 +112,30 @@ The created Report object.
 
 --------------------------------------------------------------------------------
 
+If the [authentication extension](./authentication.md) is implemented, any created reports become owned by their poster.
+
+## /reports/owned
+### GET
+Information on all reports owned by the client's user.
+#### Response
+A Paginated List of Report objects.
+#### Errors
+| Response Code | Cause                                                      |
+|---------------|------------------------------------------------------------|
+| 403 Forbidden | Missing permission `reports.list` or `reports.owned.list`. |
+
+--------------------------------------------------------------------------------
+
 ## /reports/{report_id}
 ### GET
 Information on a specified report.
 #### Response
 A Report object.
 #### Errors
-| Response Code | Cause                             |
-|---------------|-----------------------------------|
-| 403 Forbidden | Missing permission `reports.get`. |
-| 404 Not Found | No such Report exists.            |
+| Response Code | Cause                                                    |
+|---------------|----------------------------------------------------------|
+| 403 Forbidden | Missing permission `reports.get` or `reports.owned.get`. |
+| 404 Not Found | No such Report exists.                                   |
 
 ### PATCH
 Re-opens or closes a report.
@@ -135,15 +149,15 @@ Re-opens or closes a report.
 #### Response
 The modified Report.
 #### Errors
-| Response Code | Cause                               |
-|---------------|-------------------------------------|
-| 404 Not Found | No such Report exists.              |
-| 403 Forbidden | Missing permission `reports.patch`. |
+| Response Code | Cause                                                        |
+|---------------|--------------------------------------------------------------|
+| 404 Not Found | No such Report exists.                                       |
+| 403 Forbidden | Missing permission `reports.patch` or `reports.owned.patch`. |
 
 ### DELETE
 Deletes a report.
 #### Errors
-| Response Code | Cause                                |
-|---------------|--------------------------------------|
-| 404 Not Found | No such Report exists.               |
-| 403 Forbidden | Missing permission `reports.delete`. |
+| Response Code | Cause                                                          |
+|---------------|----------------------------------------------------------------|
+| 404 Not Found | No such Report exists.                                         |
+| 403 Forbidden | Missing permission `reports.delete` or `reports.owned.delete`. |
