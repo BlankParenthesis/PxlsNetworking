@@ -5,6 +5,12 @@ Roles group users similar to factions (see the [factions extension](./factions.m
 Roles differ from factions in their complexity.
 While a faction might have a hierarchy, roles are uniform.
 
+Roles also govern which permissions its members have.
+*Implementations lose the ability to arbitrarily decide a users permissions set by implementing this extensions.*
+Instead, a user's permissions are determined entirely based on roles.
+Each role defines a set of permission keys and a user's permissions keys should be the union of the permissions for all roles they hold.
+Granting a role the permission to edit roles *effectively grants all permissions to that role.*
+
 Since roles help users distinguish other users, implementing this extension requires implementing the [users extension](./users.md).
 User objects are given a new field to represent the roles associated with a user:
 ```typescript
@@ -20,6 +26,7 @@ Role objects are defined by the following type:
 	"id": number | string;
 	"name": string;
 	"icon"?: string;
+	"permissions": string[];
 }
 ```
 
