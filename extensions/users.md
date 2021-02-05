@@ -97,3 +97,7 @@ Deletes a user.
 ## /users/current
 Requests made to this endpoint should be redirected using HTTP status 307 to the user object of the currently authenticated user.
 If the client is not authenticated, then the server should respond with a status of 401 - unauthorized.
+
+Some extensions define endpoints which being with the specific user endpoint (`/users/{user_id}`).
+For each such definition, a client should be redirected to the appropriate endpoint when accessing the definitions URI with this endpoint as the base.
+For example, `/users/current/mutes` would redirect to `/users/0/mutes` if the current user's ID was 0.
