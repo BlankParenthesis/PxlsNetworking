@@ -197,10 +197,10 @@ Metadata for the current board.
 }
 ```
 ##### Headers
-| Header           | Value                                                                          |
-|------------------|--------------------------------------------------------------------------------|
-| Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
-| Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
+| Header                | Value                                                                          |
+|-----------------------|--------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|

@@ -22,18 +22,18 @@ Clients are expected to keep track of which actions can be retracted.
 ### POST
 #### Response
 ##### Headers
-| Header        | Value                                                                      |
-|---------------|----------------------------------------------------------------------------|
-| Undo-Deadline | Timestamp of when DELETE actions can no longer be sent for this placement. |
+| Header             | Value                                                                      |
+|--------------------|----------------------------------------------------------------------------|
+| Pxls-Undo-Deadline | Timestamp of when DELETE actions can no longer be sent for this placement. |
 
 ### DELETE
 Undoes the last place action at the given coordinate.
 #### Response
 ##### Headers
-| Header           | Value                                                                          |
-|------------------|--------------------------------------------------------------------------------|
-| Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
-| Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
+| Header                | Value                                                                          |
+|-----------------------|--------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
 #### Errors
 | Response Code | Cause                                   |
 |---------------|-----------------------------------------|
@@ -48,8 +48,7 @@ If the [board moderation extension](./board_moderation.md) is implemented, then 
 ## /board/pixels
 ### PATCH
 #### Response
-```typescript
-{
-	"undoDeadline": Timestamp;
-}
-```
+##### Headers
+| Header             | Value                                                                      |
+|--------------------|----------------------------------------------------------------------------|
+| Pxls-Undo-Deadline | Timestamp of when DELETE actions can no longer be sent for this placement. |
