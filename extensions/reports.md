@@ -12,11 +12,6 @@ Reports are represented with Report objects which are described by the type belo
 	}>;
 	"status": "OPENED" | "CLOSED";
 	"reason": string;
-	"history": Array<{
-		"status": "OPENED" | "CLOSED";
-		"reason"?: string;
-		"time": Timestamp;
-	}>;
 }
 ```
 
@@ -30,13 +25,10 @@ These artifacts need not stay correct (due to deletion of an object) and clients
 
 The status and reason in the root of the object reflect the most recent entry in the history field.
 
-If the [users extension](./users.md) is implemented, Artifacts may additionally contain information on the user responsible for a history event:
+If the [users extension](./users.md) is implemented, Reports may additionally specify the user who created them:
 ```typescript
 {
-	"reporter": User;
-	"history": Array<{
-		"user"?: User;
-	}>;
+	"reporter"?: User;
 }
 ```
 
@@ -151,13 +143,40 @@ The modified Report.
 #### Errors
 | Response Code | Cause                                                        |
 |---------------|--------------------------------------------------------------|
-| 404 Not Found | No such Report exists.                                       |
 | 403 Forbidden | Missing permission `reports.patch` or `reports.owned.patch`. |
+| 404 Not Found | No such Report exists.                                       |
 
 ### DELETE
 Deletes a report.
 #### Errors
 | Response Code | Cause                                                          |
 |---------------|----------------------------------------------------------------|
-| 404 Not Found | No such Report exists.                                         |
 | 403 Forbidden | Missing permission `reports.delete` or `reports.owned.delete`. |
+| 404 Not Found | No such Report exists.                                         |
+
+--------------------------------------------------------------------------------
+
+## /reports/{report_id}/history
+### GET
+Lists all changes to a report.
+#### Response
+A Paginated List of the following type:
+```typescript
+{
+	"status": "OPENED" | "CLOSED";
+	"reason"?: string;
+	"time": Timestamp;
+}
+```
+If the [users extension](./users.md) is implemented, history entries may additionally contain information on the user responsible for a history event:
+```typescript
+{
+	"user"?: User;
+}
+```
+#### Errors
+| Response Code | Cause                                                                      |
+|---------------|----------------------------------------------------------------------------|
+| 403 Forbidden | Missing permission `reports.get` or `reports.owned.get`.                   |
+| 404 Not Found | No such Report exists.                                                     |
+| 403 Forbidden | Missing permission `reports.history.list` or `reports.owned.history.list`. |
