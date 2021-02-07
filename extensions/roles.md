@@ -5,20 +5,13 @@ Roles group users similar to factions (see the [factions extension](./factions.m
 Roles differ from factions in their complexity.
 While a faction might have a hierarchy, roles are uniform.
 
+Since roles help users distinguish other users, implementing this extension requires implementing the [users extension](./users.md).
+
 Roles also govern which permissions its members have.
 *Implementations lose the ability to arbitrarily decide a users permissions set by implementing this extensions.*
 Instead, a user's permissions are determined entirely based on roles.
 Each role defines a set of permission keys and a user's permissions keys should be the union of the permissions for all roles they hold.
 Granting a role the permission to edit roles *effectively grants all permissions to that role.*
-
-Since roles help users distinguish other users, implementing this extension requires implementing the [users extension](./users.md).
-User objects are given a new field to represent the roles associated with a user:
-```typescript
-{
-	"roles": Array<number | string>;
-}
-```
-This field contains a list of Role object IDs.
 
 Role objects are defined by the following type:
 ```typescript
@@ -43,6 +36,43 @@ Role objects are defined by the following type:
 
 --------------------------------------------------------------------------------
 
+## /users/{user_id}/roles
+### GET
+Lists all roles a user has.
+#### Response
+A Paginated List of Role objects.
+#### Errors
+| Response Code | Cause                                  |
+|---------------|----------------------------------------|
+| 403 Forbidden | Missing permission `users.roles.post`. |
+
+### POST
+Adds a role to a user.
+#### Request
+```typescript
+{
+	"role": number | string;
+}
+```
+#### Response
+A Paginated List of Role objects.
+#### Errors
+| Response Code | Cause                                  |
+|---------------|----------------------------------------|
+| 403 Forbidden | Missing permission `users.roles.post`. |
+
+--------------------------------------------------------------------------------
+
+## /users/{user_id}/roles/{role_id}
+### DELETE
+Removes a role from a user.
+#### Errors
+| Response Code | Cause                                    |
+|---------------|------------------------------------------|
+| 403 Forbidden | Missing permission `users.roles.delete`. |
+
+--------------------------------------------------------------------------------
+
 ## /roles
 ### GET
 Lists all roles.
@@ -52,6 +82,17 @@ A Paginated List of Role objects.
 | Response Code | Cause                            |
 |---------------|----------------------------------|
 | 403 Forbidden | Missing permission `roles.list`. |
+
+### POST
+Creates a role.
+#### Request
+A Role object without an ID.
+#### Response
+The created Role object.
+#### Errors
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `roles.post`. |
 
 --------------------------------------------------------------------------------
 
