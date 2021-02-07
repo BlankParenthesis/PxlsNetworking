@@ -44,6 +44,8 @@ A Paginated List of Role objects.
 #### Errors
 | Response Code | Cause                                  |
 |---------------|----------------------------------------|
+| 403 Forbidden | Missing permission `users.get`.        |
+| 404 Forbidden | No such User exists.                   |
 | 403 Forbidden | Missing permission `users.roles.post`. |
 
 ### POST
@@ -59,6 +61,8 @@ A Paginated List of Role objects.
 #### Errors
 | Response Code | Cause                                  |
 |---------------|----------------------------------------|
+| 403 Forbidden | Missing permission `users.get`.        |
+| 404 Forbidden | No such User exists.                   |
 | 403 Forbidden | Missing permission `users.roles.post`. |
 
 --------------------------------------------------------------------------------
@@ -69,7 +73,10 @@ Removes a role from a user.
 #### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|
+| 403 Forbidden | Missing permission `users.get`.          |
+| 404 Forbidden | No such User exists.                     |
 | 403 Forbidden | Missing permission `users.roles.delete`. |
+| 404 Forbidden | No such Role exists.                     |
 
 --------------------------------------------------------------------------------
 
