@@ -1,8 +1,8 @@
-Announcements
-=============
-Implementing this extension provides a way for server administrators to make long-term announcements which inform users of something.
+Board Announcements
+===================
+Implementing this extension provides a way for board administrators to make long-term announcements which inform users of something.
 
-Announcements are related to the current board primarily but may also be marked as global to indicate their relation more to the state of the host site or server.
+For site-related announcements, see the [site announcements extension](./site_announcements.md).
 
 Announcement objects represent announcements and are defined by the following type:
 ```typescript
@@ -12,7 +12,6 @@ Announcement objects represent announcements and are defined by the following ty
 	"content": string;
 	"createdAt": Timestamp;
 	"expiresAt": Timestamp;
-	"global": boolean;
 }
 ```
 
@@ -30,48 +29,48 @@ If the [users extension](./users.md) is implemented, Announcement objects gain a
 #### Response
 ```typescript
 {
-	"extensions": ["announcements"];
+	"extensions": ["board_announcements"];
 }
 ```
 
 --------------------------------------------------------------------------------
 
-## /ws?extensions[]=announcements
+## /ws?extensions[]=board_announcements
 ### Server packets
-#### AnnouncementCreated
-There is a new announcement.
+#### BoardAnnouncementCreated
+There is a new board announcement.
 ```typescript
 {
-	"type": "announcement-created";
+	"type": "board-announcement-created";
 	"announcement": Announcement;
 }
 ```
 #### AnnouncementUpdated
-An announcement has been updated.
+A board announcement has been updated.
 ```typescript
 {
-	"type": "announcement-updated";
+	"type": "board-announcement-updated";
 	"announcement": Announcement;
 }
 ```
 #### AnnouncementRemoved
-An announcement has been removed.
+A board announcement has been removed.
 ```typescript
 {
-	"type": "announcement-removed";
+	"type": "board-announcement-removed";
 	"id": number | string;
 }
 ```
 ### Errors
 | Response Code | Cause                                      |
 |---------------|--------------------------------------------|
-| 403 Forbidden | Missing permission `socket.announcements`. |
+| 403 Forbidden | Missing permission `socket.board.announcements`. |
 
 --------------------------------------------------------------------------------
 
 ## /board/announcements
 ### GET
-Lists all announcements.
+Lists all board announcements.
 #### Response
 A Paginated List of Announcement objects.
 #### Errors
@@ -80,7 +79,7 @@ A Paginated List of Announcement objects.
 | 403 Forbidden | Missing permission `board.announcements.list`. |
 
 ### POST
-Creates an announcement.
+Creates a board announcement.
 #### Request
 An Announcement object without an ID (or author if the [users extension](./users.md) is implemented).
 #### Response
@@ -94,7 +93,7 @@ The created Announcement object.
 
 ## /board/announcements/{announcements_id}
 ### GET
-Gets an announcement.
+Gets a board announcement.
 #### Response
 An Announcement object.
 #### Errors
@@ -104,7 +103,7 @@ An Announcement object.
 | 404 Not Found | No such Announcement exists.                  |
 
 ### PATCH
-Updates an announcement.
+Updates a board announcement.
 #### Request
 A partial Announcement object without an ID (or author if the [users extension](./users.md) is implemented).
 #### Response
@@ -116,7 +115,7 @@ The updated Announcement object.
 | 404 Not Found | No such Announcement exists.                    |
 
 ### DELETE
-Deletes an announcement.
+Deletes a board announcement.
 #### Errors
 | Response Code | Cause                                            |
 |---------------|--------------------------------------------------|
