@@ -103,7 +103,7 @@ The created Mute object.
 | 422 Unprocessable Entity | Invalid reason.                         |
 
 ### DELETE
-Removes a mute issued to a user.
+Deletes a mute issued to a user.
 ##### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|
