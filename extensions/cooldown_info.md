@@ -96,16 +96,11 @@ The following table provides variable names and where their value can be sourced
 | isBackgroundPixel | True if the last pixel placed was not modified previously                               |
 | stackTarget       | The cooldown will reflect how long it takes to accumulate this number of pixels from 0. |
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission       | Purpose                                  |
-|------------------|------------------------------------------|
-| `board.cooldown` | Allows GET requests to `/board/cooldown` |
-
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["cooldown_info"];
@@ -116,16 +111,17 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 ## /boards/{board_id}/cooldown
 ### GET
-Information about the cooldown for placing a pixel and the factors affecting it.
+Gets the cooldown formula of the board.
+#### Response
 ```typescript
 {
 	"formula": Formula;
 }
 ```
 #### Errors
-| Response Code | Cause                                                                   |
-|---------------|-------------------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to fetch the cooldown formula. |
+| Response Code | Cause                                |
+|---------------|--------------------------------------|
+| 403 Forbidden | Missing permission `board.cooldown`. |
 
 #### Example
 This example shows the current pxls reference implementation formula.

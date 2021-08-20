@@ -39,28 +39,11 @@ If the [users extension](./users.md) is implemented, Member objects will also co
 }
 ```
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission                | Purpose                                                                 |
-|---------------------------|-------------------------------------------------------------------------|
-| `factions.list`           | Allows GET requests to `/factions`.                                     |
-| `factions.get`            | Allows GET requests to `/factions/{faction_id}`.                        |
-| `factions.post`           | Allows POST requests to `/factions`.                                    |
-| `factions.patch`          | Allows PATCH requests to `/factions/{faction_id}`.                      |
-| `factions.delete`         | Allows DELETE requests to `/factions/{faction_id}`.                     |
-| `factions.members.list`   | Allows GET requests to `/factions/{faction_id}/members`.                |
-| `factions.members.get`    | Allows GET requests to `/factions/{faction_id}/members/{member_id}`     |
-| `factions.members.post`   | Allows POST requests to `/factions/{faction_id}/members`.               |
-| `factions.members.patch`  | Allows PATCH requests to `/factions/{faction_id}/members/{member_id}`.  |
-| `factions.members.delete` | Allows DELETE requests to `/factions/{faction_id}/members/{member_id}`. |
-
-*DISCUSS:** Should there be automatically defined permissions for specific cases or should there be a factions roles extension?
-Perhaps both options are the correct approach - there should be a sensible way to implement this extension without the other after all.
-
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["factions"];
@@ -71,15 +54,16 @@ Perhaps both options are the correct approach - there should be a sensible way t
 
 ## /factions
 ### GET
-Information on all factions.
-Returns an array of Faction objects.
+Lists all factions.
+#### Response
+A Paginated List of Faction objects.
 #### Errors
-| Response Code | Cause                                                      |
-|---------------|------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to list factions. |
+| Response Code | Cause                               |
+|---------------|-------------------------------------|
+| 403 Forbidden | Missing permission `factions.list`. |
 
 ### POST
-Create a new Faction.
+Creates a faction.
 #### Request
 ```typescript
 {
@@ -91,27 +75,28 @@ Create a new Faction.
 #### Response
 The created Faction object.
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to create factions. |
-| 422 Forbidden | The provided name is invalid.                                |
-| 422 Forbidden | The provided tag is invalid.                                 |
-| 422 Forbidden | The provided color is invalid.                               |
+| Response Code | Cause                               |
+|---------------|-------------------------------------|
+| 403 Forbidden | Missing permission `factions.post`. |
+| 422 Forbidden | Invalid name.                       |
+| 422 Forbidden | Invalid tag.                        |
+| 422 Forbidden | Invalid color.                      |
 
 --------------------------------------------------------------------------------
 
 ## /factions/{faction_id}
 ### GET
-Information on a specified faction.
-Returns the Faction object with the ID matching `faction_id`.
+Gets a faction.
+#### Response
+A Faction object.
 #### Errors
-| Response Code | Cause                                                         |
-|---------------|---------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                      |
-| 403 Forbidden | The client lacks the required privileges to view the faction. |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `factions.get`. |
+| 404 Not Found | No such Faction exists.            |
 
 ### PATCH
-Updates the Faction object with the ID specified by `faction_id`.
+Updates a faction.
 #### Request
 ```typescript
 Partial<{
@@ -123,33 +108,35 @@ Partial<{
 #### Response
 The modified Faction.
 #### Errors
-| Response Code | Cause                                                           |
-|---------------|-----------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                        |
-| 403 Forbidden | The client lacks the required privileges to update the faction. |
+| Response Code | Cause                                |
+|---------------|--------------------------------------|
+| 403 Forbidden | Missing permission `factions.patch`. |
+| 404 Not Found | No such Faction exists.              |
 
 ### DELETE
 Deletes a faction.
 #### Errors
-| Response Code | Cause                                                           |
-|---------------|-----------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                        |
-| 403 Forbidden | The client lacks the required privileges to delete the faction. |
+| Response Code | Cause                                 |
+|---------------|---------------------------------------|
+| 403 Forbidden | Missing permission `factions.delete`. |
+| 404 Not Found | No such Faction exists.               |
 
 --------------------------------------------------------------------------------
 
 ## /factions/{faction_id}/members
 ### GET
-Information on all members of a faction.
-Returns the all User objects who are members of the Faction object with the ID matching `faction_id`.
+Lists all members of a faction.
+#### Response
+A Paginated List of Member objects.
 #### Errors
-| Response Code | Cause                                                                 |
-|---------------|-----------------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                              |
-| 403 Forbidden | The client lacks the required privileges to view the faction members. |
+| Response Code | Cause                                      |
+|---------------|--------------------------------------------|
+| 403 Forbidden | Missing permission `factions.get`.         |
+| 404 Not Found | No such Faction exists.                    |
+| 403 Forbidden | Missing permission `factions.members.get`. |
 
 ### POST
-Adds a new member to the Faction with the ID matching `faction_id`.
+Adds a new member to a faction.
 #### Request
 Empty unless the [users extension](./users.md) is implemented in which case, an optional User ID may be specified:
 ```typescript
@@ -161,25 +148,28 @@ If unspecified, the user added will be the currently authenticated one.
 #### Response
 The created Member object.
 #### Errors
-| Response Code | Cause                                                           |
-|---------------|-----------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                        |
-| 404 Not Found | No user with the specified ID exists.                           |
-| 403 Forbidden | The client lacks the required privileges to join the user.      |
-| 409 Conflict  | The user is already a member of the requested faction.          |
+| Response Code | Cause                                                  |
+|---------------|--------------------------------------------------------|
+| 403 Forbidden | Missing permission `factions.get`.                     |
+| 404 Not Found | No such Faction exists.                                |
+| 403 Forbidden | Missing permission `factions.members.post`.            |
+| 404 Not Found | No such User exists.                                   |
+| 409 Conflict  | The user is already a member of the requested faction. |
 
 --------------------------------------------------------------------------------
 
 ## /factions/{faction_id}/members/{member_id}
 ### GET
-Information on a faction member.
-Returns the Member specified by `member_id` in the faction specified by `faction_id`.
+Gets a faction member.
+#### Response
+A Member object.
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                     |
-| 404 Not Found | No member with the requested ID exists in the faction.       |
-| 403 Forbidden | The client lacks the required privileges to view the member. |
+| Response Code | Cause                                      |
+|---------------|--------------------------------------------|
+| 403 Forbidden | Missing permission `factions.get`.         |
+| 404 Not Found | No such Faction exists.                    |
+| 403 Forbidden | Missing permission `factions.members.get`. |
+| 404 Not Found | No such Member exists.                     |
 
 ### PATCH
 Edits a faction member.
@@ -188,17 +178,19 @@ A partial Member object without ID (or User) specified.
 #### Response
 The updated Member object.
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                     |
-| 404 Not Found | No member with the requested ID exists in the faction.       |
-| 403 Forbidden | The client lacks the required privileges to edit the member. |
+| Response Code | Cause                                        |
+|---------------|----------------------------------------------|
+| 403 Forbidden | Missing permission `factions.get`.           |
+| 404 Not Found | No such Faction exists.                      |
+| 403 Forbidden | Missing permission `factions.members.patch`. |
+| 404 Not Found | No such Member exists.                       |
 
 ### DELETE
 Removes a faction member.
 #### Errors
-| Response Code | Cause                                                          |
-|---------------|----------------------------------------------------------------|
-| 404 Not Found | No faction with the requested ID exists.                       |
-| 404 Not Found | No member with the requested ID exists in the faction.         |
-| 403 Forbidden | The client lacks the required privileges to remove the member. |
+| Response Code | Cause                                         |
+|---------------|-----------------------------------------------|
+| 403 Forbidden | Missing permission `factions.get`.            |
+| 404 Not Found | No such Faction exists.                       |
+| 403 Forbidden | Missing permission `factions.members.delete`. |
+| 404 Not Found | No such Member exists.                        |

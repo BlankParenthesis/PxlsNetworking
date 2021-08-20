@@ -14,21 +14,11 @@ This extension adds Ban objects which are described by following type:
 }
 ```
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission          | Purpose                                                     |
-|---------------------|-------------------------------------------------------------|
-| `users.bans.list`   | Allows GET requests to `/users/{user_id}/bans`.             |
-| `users.bans.get`    | Allows GET requests to `/users/{user_id}/bans/{ban_id}`.    |
-| `users.bans.post`   | Allows POST requests to `/users/{user_id}/bans`.            |
-| `users.bans.patch`  | Allows PATCH requests to `/users/{user_id}/bans/{ban_id}`.  |
-| `users.bans.delete` | Allows DELETE requests to `/users/{user_id}/bans/{ban_id}`. |
-
-
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["user_moderation"];
@@ -40,24 +30,43 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 ## /board/pixels/{x}/{y}
 ### POST
 #### Errors
-| Response Code | Cause                                                   |
-|---------------|---------------------------------------------------------|
-| 403 Forbidden | One or more bans affect the client at the current time. |
+| Response Code | Cause   |
+|---------------|---------|
+| 403 Forbidden | Banned. |
+
+If the [board undo extension](./board_undo.md) is implemented, then undos are also unavailable due to bans:
+### DELETE
+#### Errors
+| Response Code | Cause   |
+|---------------|---------|
+| 403 Forbidden | Banned. |
+
+--------------------------------------------------------------------------------
+
+If the [board moderation extension](./board_undo.md) is implemented, then mass-place events are also unavailable due to bans:
+## /board/pixels
+### PATCH
+#### Errors
+| Response Code | Cause   |
+|---------------|---------|
+| 403 Forbidden | Banned. |
 
 --------------------------------------------------------------------------------
 
 ## /users/{user_id}/bans
 ### GET
-Information on every ban that has been issued to the specified user.
-Returns an array of Ban objects.
+Lists all bans issued to a user.
+#### Response
+A Paginated List of Ban objects.
 ##### Errors
-| Response Code            | Cause                                                          |
-|--------------------------|----------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                          |
-| 403 Forbidden            | The client does not have the required privileges to list bans. |
+| Response Code | Cause                                                              |
+|---------------|--------------------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.get` or `users.current.get`.             |
+| 404 Not Found | No such User exists.                                               |
+| 403 Forbidden | Missing permission `users.bans.list` or `users.current.bans.list`. |
 
 ### POST
-Bans the specified user.
+Bans a user.
 #### Request
 ```typescript
 {
@@ -68,27 +77,30 @@ Bans the specified user.
 ##### Response
 The created Ban object.
 ##### Errors
-| Response Code            | Cause                                                             |
-|--------------------------|-------------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                             |
-| 403 Forbidden            | The client does not have the required privileges to ban the user. |
-| 422 Unprocessable Entity | The ban reason is invalid.                                        |
+| Response Code            | Cause                                                  |
+|--------------------------|--------------------------------------------------------|
+| 403 Forbidden            | Missing permission `users.get` or `users.current.get`. |
+| 404 Not Found            | No such User exists.                                   |
+| 403 Forbidden            | Missing permission `users.bans.post`.                  |
+| 422 Unprocessable Entity | Invalid reason.                                        |
 
 --------------------------------------------------------------------------------
 
 ## /users/{user_id}/bans/{ban_id}
 ### GET
-Information on a specific ban that has been issued to the specified user.
-Returns a Ban object.
+Gets a ban issued to a user.
+#### Response
+A Ban object.
 ##### Errors
-| Response Code | Cause                                                          |
-|---------------|----------------------------------------------------------------|
-| 404 Not Found | No user with the specified ID exists.                          |
-| 404 Not Found | No ban with the specified ID exists.                           |
-| 403 Forbidden | The client does not have the required privileges view the ban. |
+| Response Code | Cause                                                            |
+|---------------|------------------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.get` or `users.current.get`.           |
+| 404 Not Found | No such User exists.                                             |
+| 403 Forbidden | Missing permission `users.bans.get` or `users.current.bans.get`. |
+| 404 Not Found | No such Ban exists.                                              |
 
 ### PATCH
-Updates a specific ban that has been issued to the specified user.
+Updates a ban issued to a user.
 #### Request
 ```typescript
 {
@@ -99,18 +111,20 @@ Updates a specific ban that has been issued to the specified user.
 ##### Response
 The created Ban object.
 ##### Errors
-| Response Code            | Cause                                                             |
-|--------------------------|-------------------------------------------------------------------|
-| 404 Not Found            | No user with the specified ID exists.                             |
-| 404 Not Found            | No ban with the specified ID exists.                              |
-| 403 Forbidden            | The client does not have the required privileges to ban the user. |
-| 422 Unprocessable Entity | The ban reason is invalid.                                        |
+| Response Code            | Cause                                                  |
+|--------------------------|--------------------------------------------------------|
+| 403 Forbidden            | Missing permission `users.get` or `users.current.get`. |
+| 404 Not Found            | No such User exists.                                   |
+| 403 Forbidden            | Missing permission `users.bans.patch`.                 |
+| 404 Not Found            | No such Ban exists.                                    |
+| 422 Unprocessable Entity | The ban reason is invalid.                             |
 
 ### DELETE
-Removes a specific ban that has been issued to the specified user.
+Deletes a ban issued to a user.
 ##### Errors
-| Response Code | Cause                                                               |
-|---------------|---------------------------------------------------------------------|
-| 404 Not Found | No user with the specified ID exists.                               |
-| 404 Not Found | No ban with the specified ID exists.                                |
-| 403 Forbidden | The client does not have the required privileges to unban the user. |
+| Response Code | Cause                                                  |
+|---------------|--------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.get` or `users.current.get`. |
+| 404 Not Found | No such User exists.                                   |
+| 403 Forbidden | Missing permission `users.bans.delete`.                |
+| 404 Not Found | No such Ban exists.                                    |

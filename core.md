@@ -8,29 +8,85 @@ Within these extensions, endpoints declared either here or in other extensions m
 These **duplicate response type definitions should be treated as the union of implemented definitions**.
 This allows extensions to add new fields to responses in a flexible way.
 
+
 At the core of Pxls is the board on which pixels are placed.
-This is represented here as the Board objected defined by the following type:
+This is represented here as the Board object defined by the following type:
 ```typescript
 {
-	"id": number | string;
 	"name": string;
 	"createdAt": Timestamp;
-	"width": number;
-	"height": number;
+	"shape": number[][]
 	"palette": Array<{
 		"name": string;
 		"value": string;
 	}>;
+	"maxPixelsAvailable": number;
 }
 ```
+`shape` indicates the ordering of data for the board.
+It usually contains a single array of size 2 with its elements representing width and height respectively.
+However, it may contain multiple arrays in which case each array indicates the dimensions of a virtual grid with each grid entry being the next item in the array.
+This allows effective chunking of board contents using only range requests to board data endpoints.
+
+As an example, a shape of `[[2, 2], [500, 500]]` represents a 1000 by 1000 area, broken into 4 subareas.
+The first 250,000 pixels are entirely contained in the first 500 by 500 area.
+A shape of `[[2, 2], [2, 2], [250, 250]]` would again have the same size and even the same first 250,000 pixels.
+It would differ by orienting the first 62,500 pixels in the first 250 by 250 area rather than the first 500 by 125 area as the previous shape would.
+
+All dimensions should be interpreted as being of the same length by padding any entries smaller than others with 1s at the end.
+
+Clients must be allowed to make valid requests with a range size equal to the product of the final array's elements, aligned to the same size.
+If the server allows it, however, clients may request different ranges as they see fit.
+
+For orientation purposes, the default board orientation is left→right, then top→bottom, then back→front.
+Higher order boards are up to client interpretation.
+
+
+Some endpoints return a list of objects rather that a single one.
+Sometimes, too many objects will exist in this list to be reasonably sent in a single request.
+To solve this, all list endpoints return paginated responses.
+For an object type X, a Paginated List of X can be defined by the following type:
+```typescript
+{
+	"items": X[];
+	"next"?: string;
+	"previous"?: string;
+}
+```
+Where `next` and `previous` are URIs pointing to the continuations in their respective directions of the list.
+The presence of these fields should be used to determine if the request completes or starts a list.
+
+In requesting a Paginated list, clients may specify an upper limit of responses in a single page with the `limit` query parameter.
+Server implementations must not return more items than this number but may return less even if the list is not completed by the current page.
+
+
+At the core of pxls is the ability to modify the board with Placements.
+A Placement object represents a change of board state at a particular time and is defined by the following type:
+```typescript
+{
+	"x": number;
+	"y": number;
+	"color": number;
+	"modified": Timestamp;
+}
+```
+Placements are often not functional distinguishable from pixels on the board and the two concepts are mostly treated interchangeably.
+
+
+Nearly all requests by the client can be rejected by the server implementation.
+It is useful for the client to know before making such requests if it will be allowed to do so.
+For this reason, each method of each endpoint is associated with a string denoting the permission to use that endpoint.
+A list of these strings is sent to the client in the `/info` endpoint.
+Some permissions are context sensitive.
+These usually have "current" or "owned" somewhere in their string.
+Such permissions should be used if the specified object belongs to the client user in some way and the client lacks the general permission.
 
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
-Information about the server implementation.
-Extension definitions redefine the `extensions` field in this request.
-Implementations should return the union of all lists defined by every implemented extensions as a set.
+Gets information about the server implementation.
+#### Response
 ```typescript
 {
 	"name"?: string;
@@ -40,6 +96,29 @@ Implementations should return the union of all lists defined by every implemente
 	"defaultBoard": number | string;
 }
 ```
+Extension definitions redefine the `extensions` field in this request.
+Implementations should return the union of all lists defined by every implemented extensions as a set.
+#### Errors
+| Response Code | Cause                      |
+|---------------|----------------------------|
+| 403 Forbidden | Missing permission `info`. |
+
+*NOTE: Missing this permission effectively prevents the client from functioning.*
+
+--------------------------------------------------------------------------------
+
+## /access
+### GET
+Gets information about what this client can do without encountering a permissions error.
+#### Response
+```typescript
+{
+	"permissions": string[];
+}
+```
+
+The `permissions` field  contains a list of permissions strings.
+It represents the actions the client can take without encountering a permissions error.
 
 --------------------------------------------------------------------------------
 
@@ -48,9 +127,9 @@ Implementations should return the union of all lists defined by every implemente
 #### Response
 An array of Board objects.
 #### Errors
-| Response Code | Cause                                                    |
-|---------------|----------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to list boards. |
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `boards.list` |
 
 --------------------------------------------------------------------------------
 
@@ -58,16 +137,24 @@ An array of Board objects.
 ### GET
 #### Response
 The Board object.
+##### Headers
+| Header                | Value                                                                          |
+|-----------------------|--------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
 #### Errors
-| Response Code | Cause                                                       |
-|---------------|-------------------------------------------------------------|
-| 404 Not Found | No board with the requested ID exists.                      |
-| 403 Forbidden | The client lacks the required privileges to view the board. |
+| Response Code | Cause                                  |
+|---------------|----------------------------------------|
+| 404 Not Found | No board with the requested ID exists. |
+| 403 Forbidden | Missing permission `boards.get`        |
 
 --------------------------------------------------------------------------------
 
-## /boards/{board_id}/ws
+## /boards/{board_id}/ws?extensions[]={extensions_list}
 Websocket connection point.
+A connecting client may specify which extensions it wishes to be enabled on the websocket using the `extensions_list` query parameter.
+Extension names are the same as those in `/info`.
+To receive the events defined here, the list should contain the value `core`.
 ### Server packets
 These packets are sent by the server to inform the client of something.
 #### BoardUpdate
@@ -91,72 +178,87 @@ How many pixels may be placed by the current user without encountering a cooldow
 	"next"?: Timestamp; 
 }
 ```
-#### Errors
-| Response Code | Cause                                                                 |
-|---------------|-----------------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to connect to the websocket. |
+#### Permissions
+The client's permissions have changed.
+```typescript
+{
+	"permissions": string[];
+}
+```
+### Errors
+| Response Code            | Cause                               |
+|--------------------------|-------------------------------------|
+| 403 Forbidden            | Missing permission `socket.core`.   |
+| 422 Unprocessable Entity | No extensions specified.            |
+| 422 Unprocessable Entity | Requested extensions not supported. |
 
 --------------------------------------------------------------------------------
 
 ## /boards/{board_id}/data/initial
 ### GET
+Represents the initial state of the board.
+#### Response
 Binary data. 
 8-bit palette index for every pixel.
-Represents the initial state of the board.
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to read board data. |
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `board.data`. |
 
 --------------------------------------------------------------------------------
 
 ## /boards/{board_id}/data/colors
 ### GET
+Represents the current state of the board.
+#### Response
 Binary data. 
 8-bit palette index for every pixel.
-Represents the current state of the board.
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to read board data. |
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `board.data`. |
 
 --------------------------------------------------------------------------------
 
 ## /boards/{board_id}/data/mask
 ### GET
+Represents where placements can be made withing the board dimensions.
+Values correspond to the following behaviors:
+| Value | Placement Behavior                                        |
+|:-----:|-----------------------------------------------------------|
+|   0   | No placement allowed.                                     |
+|   1   | Placement allowed.                                        |
+|   2   | Placement allowed if an adjacent pixel has been modified. |
+
+#### Response
 Binary data. 
 8-bit mask identifier for every pixel.
-
- | Value | Placement Behavior                                        |
- |:-----:|-----------------------------------------------------------|
- |   0   | No placement allowed.                                     |
- |   1   | Placement allowed.                                        |
- |   2   | Placement allowed if an adjacent pixel has been modified. |
-
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to read board data. |
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `board.data`. |
 
 --------------------------------------------------------------------------------
 
 ## /boards/{board_id}/data/modified
 ### GET
+Represents the last-modified time for all pixels on the board.
+#### Response
 Binary data. 
 32-bit timestamp for every pixel. 
-Timestamp is seconds since board creation.
-Each timestamp represents the last-modified time for a pixel.
-
+Bytes are little-endian ordered.
+Timestamp is seconds since `createdAt` as defined in `/board/info`.
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to read board data. |
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `board.data`. |
 
 --------------------------------------------------------------------------------
 
 ## /boards/{board_id}/users
 ### GET
-Information on the active and idle user counts.
+Gets the active and idle user counts.
+#### Response
 ```typescript
 {
 	"active": number;
@@ -165,29 +267,38 @@ Information on the active and idle user counts.
 }
 ```
 #### Errors
-| Response Code | Cause                                                             |
-|---------------|-------------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to fetch the user count. |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `board.users`. |
+
+--------------------------------------------------------------------------------
+
+## /board/pixels
+### GET
+Lists all placements.
+#### Response
+A Paginated List of Placement objects.
+#### Errors
+| Response Code | Cause                                   |
+|---------------|-----------------------------------------|
+| 403 Forbidden | Missing permission `board.pixels.list`. |
 
 --------------------------------------------------------------------------------
 
 ## /boards/{board_id}/pixels/{x}/{y}
 ### GET
-Information for a given board position.
-```typescript
-{
-	"color": number;
-	"modified": Timestamp;
-}
-```
+Gets the most recent placement for the specified board position.
+#### Response
+A Placement object.
 #### Errors
-| Response Code            | Cause                                                        |
-|--------------------------|--------------------------------------------------------------|
-| 404 Not Found            | The specified position is outside of the board dimensions.   |
-| 403 Forbidden            | The client lacks the required privileges to read pixel data. |
+| Response Code | Cause                                  |
+|---------------|----------------------------------------|
+| 404 Not Found | Position has no placements.            |
+| 404 Not Found | Position outside of board dimensions.  |
+| 403 Forbidden | Missing permission `board.pixels.get`. |
 
 ### POST
-Replace the pixel at a given board coordinate.
+Creates a placement.
 #### Request
 ```typescript
 {
@@ -195,19 +306,18 @@ Replace the pixel at a given board coordinate.
 }
 ```
 #### Response
-```typescript
-{
-	"pixelsAvailable": number;
-	"nextAvailable"?: Timestamp; 
-}
-```
+The created Placement object.
+##### Headers
+| Header                | Value                                                                          |
+|-----------------------|--------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
 #### Errors
-| Response Code            | Cause                                                               |
-|--------------------------|---------------------------------------------------------------------|
-| 404 Not Found            | The specified position is outside of the board dimensions.          |
-| 403 Forbidden            | The client is banned from placing.                                  |
-| 403 Forbidden            | The client does not have the required privileges to post pixels.    |
-| 403 Forbidden            | The specified position is not placable according to the board mask. |
-| 409 Conflict             | The change would have no effect.                                    |
-| 422 Unprocessable Entity | The supplied color does not exist on the palette.                   |
-| 429 Too Many Requests    | The client user has no available pixels to place.                   |
+| Response Code            | Cause                                             |
+|--------------------------|---------------------------------------------------|
+| 404 Not Found            | Position outside of board dimensions.             |
+| 403 Forbidden            | Missing permission `board.pixels.post`.           |
+| 403 Forbidden            | Position is not placable according to board mask. |
+| 409 Conflict             | Placement would have no effect.                   |
+| 422 Unprocessable Entity | Color does not exist on the palette.              |
+| 429 Too Many Requests    | No available pixels to place.                     |

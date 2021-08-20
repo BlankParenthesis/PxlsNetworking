@@ -12,11 +12,6 @@ Reports are represented with Report objects which are described by the type belo
 	}>;
 	"status": "OPENED" | "CLOSED";
 	"reason": string;
-	"history": Array<{
-		"status": "OPENED" | "CLOSED";
-		"reason"?: string;
-		"time": Timestamp;
-	}>;
 }
 ```
 
@@ -30,30 +25,18 @@ These artifacts need not stay correct (due to deletion of an object) and clients
 
 The status and reason in the root of the object reflect the most recent entry in the history field.
 
-If the [users extension](./users.md) is implemented, Artifacts may additionally contain information on the user responsible for a history event:
+If the [users extension](./users.md) is implemented, Reports may additionally specify the user who created them:
 ```typescript
 {
-	"reporter": User;
-	"history": Array<{
-		"user"?: User;
-	}>;
+	"reporter"?: User;
 }
 ```
-
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission       | Purpose                                           |
-|------------------|---------------------------------------------------|
-| `reports.list`   | Allows GET requests to `/reports`.                |
-| `reports.get`    | Allows GET requests to `/reports/{report_id}`.    |
-| `reports.post`   | Allows POST requests to `/reports`.               |
-| `reports.patch`  | Allows PATCH requests to `/reports/{report_id}`.  |
-| `reports.delete` | Allows DELETE requests to `/reports/{report_id}`. |
 
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["reports"];
@@ -62,60 +45,89 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
+## /ws?extensions[]=reports
+### Server packets
+#### ReportCreated
+There is a new report.
+```typescript
+{
+	"type": "report-created";
+	"report": Report;
+}
+```
+#### ReportUpdated
+A report has been updated.
+```typescript
+{
+	"type": "report-updated";
+	"report": Report;
+}
+```
+#### ReportRemoved
+A report has been removed.
+```typescript
+{
+	"type": "report-removed";
+	"id": number | string;
+}
+```
+### Errors
+| Response Code | Cause                                |
+|---------------|--------------------------------------|
+| 403 Forbidden | Missing permission `socket.reports`. |
+
+--------------------------------------------------------------------------------
+
 ## /reports
 ### GET 
-Information on all reports.
-Returns an array of Report objects.
+Lists all reports.
+#### Response
+A Paginated List of Report objects.
 #### Errors
-| Response Code | Cause                                                     |
-|---------------|-----------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to list reports. |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `reports.list`. |
 
 ### POST
-Create a new Report.
+Creates a Report.
 #### Request
-A Report object without an ID, history, or status.
+A Report object without an ID, history, or status (or reporter if the [users extension](./users.md) is implemented).
 #### Response
 The created Report object.
 #### Errors
-| Response Code | Cause                                                       |
-|---------------|-------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to create reports. |
-| 422 Forbidden | The provided message is invalid.                            |
-| 422 Forbidden | No artifacts were provided.                                 |
-| 422 Forbidden | One or more of the artifacts provided is invalid.           |
+| Response Code | Cause                                       |
+|---------------|---------------------------------------------|
+| 403 Forbidden | Missing permission `reports.post`.          |
+| 422 Forbidden | Invalid message.                            |
+| 422 Forbidden | No artifacts provided.                      |
+| 422 Forbidden | One or more provided artifacts are invalid. |
 
 --------------------------------------------------------------------------------
 
-## /reports/open
-Information on all Reports with a status of "OPENED".
-Returns an array of Report objects.
-#### Errors
-| Response Code | Cause                                                     |
-|---------------|-----------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to list reports. |
+If the [authentication extension](./authentication.md) is implemented, any created reports become owned by their poster.
 
---------------------------------------------------------------------------------
-
-## /reports/closed
-Information on all Reports with a status of "CLOSED".
-Returns an array of Report objects.
+## /reports/owned
+### GET
+Lists all reports owned by the client's user.
+#### Response
+A Paginated List of Report objects.
 #### Errors
-| Response Code | Cause                                                     |
-|---------------|-----------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to list reports. |
+| Response Code | Cause                                                      |
+|---------------|------------------------------------------------------------|
+| 403 Forbidden | Missing permission `reports.list` or `reports.owned.list`. |
 
 --------------------------------------------------------------------------------
 
 ## /reports/{report_id}
 ### GET
-Information on a specified report.
-Returns the Report object with the ID matching `report_id`.
+Gets a report.
+#### Response
+A Report object.
 #### Errors
-| Response Code | Cause                                                        |
-|---------------|--------------------------------------------------------------|
-| 404 Not Found | No report with the requested ID exists.                      |
-| 403 Forbidden | The client lacks the required privileges to view the report. |
+| Response Code | Cause                                                    |
+|---------------|----------------------------------------------------------|
+| 403 Forbidden | Missing permission `reports.get` or `reports.owned.get`. |
+| 404 Not Found | No such Report exists.                                   |
 
 ### PATCH
 Re-opens or closes a report.
@@ -129,15 +141,42 @@ Re-opens or closes a report.
 #### Response
 The modified Report.
 #### Errors
-| Response Code | Cause                                                          |
-|---------------|----------------------------------------------------------------|
-| 404 Not Found | No report with the requested ID exists.                        |
-| 403 Forbidden | The client lacks the required privileges to update the report. |
+| Response Code | Cause                                                        |
+|---------------|--------------------------------------------------------------|
+| 403 Forbidden | Missing permission `reports.patch` or `reports.owned.patch`. |
+| 404 Not Found | No such Report exists.                                       |
 
 ### DELETE
 Deletes a report.
 #### Errors
 | Response Code | Cause                                                          |
 |---------------|----------------------------------------------------------------|
-| 404 Not Found | No report with the requested ID exists.                        |
-| 403 Forbidden | The client lacks the required privileges to delete the report. |
+| 403 Forbidden | Missing permission `reports.delete` or `reports.owned.delete`. |
+| 404 Not Found | No such Report exists.                                         |
+
+--------------------------------------------------------------------------------
+
+## /reports/{report_id}/history
+### GET
+Lists all changes to a report.
+#### Response
+A Paginated List of the following type:
+```typescript
+{
+	"status": "OPENED" | "CLOSED";
+	"reason"?: string;
+	"time": Timestamp;
+}
+```
+If the [users extension](./users.md) is implemented, history entries may additionally contain information on the user responsible for a history event:
+```typescript
+{
+	"user"?: User;
+}
+```
+#### Errors
+| Response Code | Cause                                                                      |
+|---------------|----------------------------------------------------------------------------|
+| 403 Forbidden | Missing permission `reports.get` or `reports.owned.get`.                   |
+| 404 Not Found | No such Report exists.                                                     |
+| 403 Forbidden | Missing permission `reports.history.list` or `reports.owned.history.list`. |

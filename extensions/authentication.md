@@ -11,28 +11,27 @@ Authentication options are given by Methods which are defined by the following t
 ```typescript
 {
 	"id": number | string;
-	"type": "OAUTH" | "BASIC";
+	"type": "OAUTH" | "FORM";
 	"name": string;
 	"description"?: string;
 	"url": string;
 	"registration": boolean;
 }
 ```
+Methods that use the "OAUTH" type of authentication provide a URL which will initiate an OAuth flow.
+Client implementations have no control over this flow.
+Web clients served from the same origin as the server can simply redirect the page to the chosen flow and can expect to eventually be revisited at the completion of the flow with authentication in place.
+Other clients cannot expect this and should not use this type of method.
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission     | Purpose                                                |
-|----------------|--------------------------------------------------------|
-| `roles.post`   | Allows POST requests to `/auth/methods`.               |
-| `roles.patch`  | Allows PATCH requests to `/auth/methods/{method_id}`.  |
-| `roles.delete` | Allows DELETE requests to `/auth/methods/{method_id}`. |
-
-Server implementations may forgo implementing any of these modifying permissions and do not need to implement the associated modifying endpoints.
+Methods that use the "FORM" type of authentication provide a URL to which a client can POST a `username` and `password`.
+Responses from the provided URL should return a response with the Set-Cookie header when successful.
+Clients should send the indicated cookies back to the server for any future requests and should expect to be authenticated when they do so.
 
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["authentication"];
@@ -43,46 +42,48 @@ Server implementations may forgo implementing any of these modifying permissions
 
 ## /auth/methods
 ### GET
-Information about how and where clients can authenticate.
-Returns an array of Methods.
+Lists authentication methods.
+#### Response
+A Paginated List of Methods.
 
 ### POST
-Add a new method which clients can use to to authenticate.
+Creates an authentication method.
 #### Request
 A Method object without an ID.
 #### Response
 The created Method object.
 #### Errors
-| Response Code | Cause                                                                          |
-|---------------|--------------------------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to change the authentication methods. |
+| Response Code | Cause                           |
+|---------------|---------------------------------|
+| 403 Forbidden | Missing permission `auth.post`. |
 
 --------------------------------------------------------------------------------
 
 ## /auth/methods/{method_id}
 ### GET
-Information on the method with ID equal to `method_id`.
-Returns a Method object.
+Gets an authentication method.
+#### Response
+A Method object.
 
 ### PATCH
 Updates an authentication method.
 #### Request
-A partial Method object with an ID.
+A partial Method object without an ID.
 #### Response
 The modified Method object.
 #### Errors
-| Response Code | Cause                                                                          |
-|---------------|--------------------------------------------------------------------------------|
-| 404 Not Found | No Method with the requested ID exists.                                        |
-| 403 Forbidden | The client lacks the required privileges to change the authentication methods. |
+| Response Code | Cause                          |
+|---------------|--------------------------------|
+| 404 Not Found | No such Method exists.         |
+| 403 Forbidden | Missing permission `auth.get`. |
 
 ### DELETE
-Removes an authentication method.
+Deletes an authentication method.
 #### Errors
-| Response Code | Cause                                                                          |
-|---------------|--------------------------------------------------------------------------------|
-| 404 Not Found | No Method with the requested ID exists.                                        |
-| 403 Forbidden | The client lacks the required privileges to change the authentication methods. |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 404 Not Found | No such Method exists.            |
+| 403 Forbidden | Missing permission `auth.delete`. |
 
 
 **TODO:** "Methods" is not a great name, perhaps come up with a good alternative. Ideally, it would fit in the url and as the object name.
