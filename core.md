@@ -59,11 +59,28 @@ Gets information about the server implementation.
 	"version"?: string;
 	"source"?: string;
 	"extensions": string[];
-	"permissions": string[];
 }
 ```
 Extension definitions redefine the `extensions` field in this request.
 Implementations should return the union of all lists defined by every implemented extensions as a set.
+#### Errors
+| Response Code | Cause                      |
+|---------------|----------------------------|
+| 403 Forbidden | Missing permission `info`. |
+
+*NOTE: Missing this permission effectively prevents the client from functioning.*
+
+--------------------------------------------------------------------------------
+
+## /access
+### GET
+Gets information about what this client can do without encountering a permissions error.
+#### Response
+```typescript
+{
+	"permissions": string[];
+}
+```
 
 The `permissions` field  contains a list of permissions strings.
 It represents the actions the client can take without encountering a permissions error.
