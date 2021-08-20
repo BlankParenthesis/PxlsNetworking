@@ -93,7 +93,6 @@ Gets information about the server implementation.
 	"version"?: string;
 	"source"?: string;
 	"extensions": string[];
-	"defaultBoard": number | string;
 }
 ```
 Extension definitions redefine the `extensions` field in this request.
@@ -147,6 +146,13 @@ The Board object.
 |---------------|----------------------------------------|
 | 404 Not Found | No board with the requested ID exists. |
 | 403 Forbidden | Missing permission `boards.get`        |
+
+--------------------------------------------------------------------------------
+
+## /boards/default
+### GET
+Requests made to this endpoint should be redirected using HTTP status 307 to the board object of the default board.
+If any sub-endpoints are called on this, the should likewise be redirected, keeping the path.
 
 --------------------------------------------------------------------------------
 
