@@ -137,7 +137,6 @@ Represents the initial state of the board.
 #### Response
 Binary data. 
 8-bit palette index for every pixel.
-Board data is ordered left-to-right, top-to-bottom.
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -151,7 +150,6 @@ Represents the current state of the board.
 #### Response
 Binary data. 
 8-bit palette index for every pixel.
-Board data is ordered left-to-right, top-to-bottom.
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -172,7 +170,6 @@ Values correspond to the following behaviors:
 #### Response
 Binary data. 
 8-bit mask identifier for every pixel.
-Board data is ordered left-to-right, top-to-bottom.
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -187,7 +184,6 @@ Represents the last-modified time for all pixels on the board.
 Binary data. 
 32-bit timestamp for every pixel. 
 Bytes are little-endian ordered.
-Board data is ordered left-to-right, top-to-bottom.
 Timestamp is seconds since `createdAt` as defined in `/board/info`.
 #### Errors
 | Response Code | Cause                            |
@@ -204,8 +200,7 @@ Metadata for the current board.
 {
 	"name": string;
 	"createdAt": Timestamp;
-	"width": number;
-	"height": number;
+	"shape": number[][]
 	"palette": Array<{
 		"name": string;
 		"value": string;
@@ -213,6 +208,24 @@ Metadata for the current board.
 	"maxPixelsAvailable": number;
 }
 ```
+`shape` indicates the ordering of data for the board.
+It usually contains a single array of size 2 with its elements representing width and height respectively.
+However, it may contain multiple arrays in which case each array indicates the dimensions of a virtual grid with each grid entry being the next item in the array.
+This allows effective chunking of board contents using only range requests to board data endpoints.
+
+As an example, a shape of `[[2, 2], [500, 500]]` represents a 1000 by 1000 area, broken into 4 subareas.
+The first 250,000 pixels are entirely contained in the first 500 by 500 area.
+A shape of `[[2, 2], [2, 2], [250, 250]]` would again have the same size and even the same first 250,000 pixels.
+It would differ by orienting the first 62,500 pixels in the first 250 by 250 area rather than the first 500 by 125 area as the previous shape would.
+
+All dimensions should be interpreted as being of the same length by padding any entries smaller than others with 1s at the end.
+
+Clients must be allowed to make valid requests with a range size equal to the product of the final array's elements, aligned to the same size.
+If the server allows it, however, clients may request different ranges as they see fit.
+
+For orientation purposes, the default board orientation is left→right, then top→bottom, then back→front.
+Higher order boards are up to client interpretation.
+
 ##### Headers
 | Header                | Value                                                                          |
 |-----------------------|--------------------------------------------------------------------------------|
