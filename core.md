@@ -8,6 +8,23 @@ Within these extensions, endpoints declared either here or in other extensions m
 These **duplicate response type definitions should be treated as the union of implemented definitions**.
 This allows extensions to add new fields to responses in a flexible way.
 
+Some endpoints return a list of objects rather that a single one.
+Sometimes, too many objects will exist in this list to be reasonably sent in a single request.
+To solve this, all list endpoints return paginated responses.
+For an object type X, a Paginated List of X can be defined by the following type:
+```typescript
+{
+	"items": X[];
+	"next"?: string;
+	"previous"?: string;
+}
+```
+Where `next` and `previous` are URIs pointing to the continuations in their respective directions of the list.
+The presence of these fields should be used to determine if the request completes or starts a list.
+
+In requesting a Paginated list, clients may specify an upper limit of responses in a single page with the `limit` query parameter.
+Server implementations must not return more items than this number but may return less even if the list is not completed by the current page.
+
 
 At the core of Pxls is the board on which pixels are placed.
 This is represented here as the Board object defined by the following type:
@@ -42,41 +59,24 @@ For orientation purposes, the default board orientation is left→right, then to
 Higher order boards are up to client interpretation.
 
 
-Some endpoints return a list of objects rather that a single one.
-Sometimes, too many objects will exist in this list to be reasonably sent in a single request.
-To solve this, all list endpoints return paginated responses.
-For an object type X, a Paginated List of X can be defined by the following type:
-```typescript
-{
-	"items": X[];
-	"next"?: string;
-	"previous"?: string;
-}
-```
-Where `next` and `previous` are URIs pointing to the continuations in their respective directions of the list.
-The presence of these fields should be used to determine if the request completes or starts a list.
-
-In requesting a Paginated list, clients may specify an upper limit of responses in a single page with the `limit` query parameter.
-Server implementations must not return more items than this number but may return less even if the list is not completed by the current page.
-
-
-At the core of pxls is the ability to modify the board with Placements.
+Of equivalent importance to the board is the ability to modify the it with Placements.
 A Placement object represents a change of board state at a particular time and is defined by the following type:
 ```typescript
 {
-	"x": number;
-	"y": number;
+	"position": number[];
 	"color": number;
 	"modified": Timestamp;
 }
 ```
+`position` should match the number of axis for the board it relates to as described by the board's `shape`.
+
 Placements are often not functional distinguishable from pixels on the board and the two concepts are mostly treated interchangeably.
 
 
 Nearly all requests by the client can be rejected by the server implementation.
 It is useful for the client to know before making such requests if it will be allowed to do so.
 For this reason, each method of each endpoint is associated with a string denoting the permission to use that endpoint.
-A list of these strings is sent to the client in the `/info` endpoint.
+A list of these strings is sent to the client in the `/access` endpoint.
 Some permissions are context sensitive.
 These usually have "current" or "owned" somewhere in their string.
 Such permissions should be used if the specified object belongs to the client user in some way and the client lacks the general permission.
@@ -124,7 +124,7 @@ It represents the actions the client can take without encountering a permissions
 ## /boards
 ### GET
 #### Response
-An array of Board objects.
+A Paginated List of Board objects.
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -168,11 +168,7 @@ The board has changed.
 ```typescript
 {
 	"type": "board-update";
-	"pixels": Array<{
-		"x": number;
-		"y": number;
-		"color": number;
-	}>;
+	"pixels": Array<Placement>;
 }
 ```
 #### PixelsAvailable
@@ -291,7 +287,7 @@ A Paginated List of Placement objects.
 
 --------------------------------------------------------------------------------
 
-## /boards/{board_id}/pixels/{x}/{y}
+## /boards/{board_id}/pixels/{x}/{y?}/{z?}/…
 ### GET
 Gets the most recent placement for the specified board position.
 #### Response

@@ -15,7 +15,7 @@ Implementing this extension provides users with the tools necessary to moderate 
 
 --------------------------------------------------------------------------------
 
-## /board/pixels/{x}/{y}
+## /board/pixels/{x}/{y?}/{z?}/…
 ### POST
 #### Request
 ```typescript
@@ -45,11 +45,9 @@ If a user has not specified a cooldown override and has some but not all of the 
 #### Request
 ```typescript
 {
-	"x": number;
-	"y": number;
-	"width": number;
-	"height": number;
-	"colors": string;
+	"from": number[],
+	"to": number[],
+	"colors": number[];
 	"overrides"?:  {
 		"cooldown": boolean;
 		"color": boolean;
@@ -57,6 +55,7 @@ If a user has not specified a cooldown override and has some but not all of the 
 	}
 }
 ```
+`from` and `to` are the start and end positions respectively.
 #### Response
 ```typescript
 {

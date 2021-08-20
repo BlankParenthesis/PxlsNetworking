@@ -18,7 +18,7 @@ Clients are expected to keep track of which actions can be retracted.
 
 --------------------------------------------------------------------------------
 
-## /board/pixels/{x}/{y}
+## /board/pixels/{x}/{y?}/{z?}/…
 ### POST
 #### Response
 ##### Headers
