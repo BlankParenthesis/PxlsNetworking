@@ -109,7 +109,7 @@ The following table provides variable names and where their value can be sourced
 
 --------------------------------------------------------------------------------
 
-## /board/cooldown
+## /boards/{board_id}/cooldown
 ### GET
 Gets the cooldown formula of the board.
 #### Response

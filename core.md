@@ -8,6 +8,40 @@ Within these extensions, endpoints declared either here or in other extensions m
 These **duplicate response type definitions should be treated as the union of implemented definitions**.
 This allows extensions to add new fields to responses in a flexible way.
 
+
+At the core of Pxls is the board on which pixels are placed.
+This is represented here as the Board object defined by the following type:
+```typescript
+{
+	"name": string;
+	"createdAt": Timestamp;
+	"shape": number[][]
+	"palette": Array<{
+		"name": string;
+		"value": string;
+	}>;
+	"maxPixelsAvailable": number;
+}
+```
+`shape` indicates the ordering of data for the board.
+It usually contains a single array of size 2 with its elements representing width and height respectively.
+However, it may contain multiple arrays in which case each array indicates the dimensions of a virtual grid with each grid entry being the next item in the array.
+This allows effective chunking of board contents using only range requests to board data endpoints.
+
+As an example, a shape of `[[2, 2], [500, 500]]` represents a 1000 by 1000 area, broken into 4 subareas.
+The first 250,000 pixels are entirely contained in the first 500 by 500 area.
+A shape of `[[2, 2], [2, 2], [250, 250]]` would again have the same size and even the same first 250,000 pixels.
+It would differ by orienting the first 62,500 pixels in the first 250 by 250 area rather than the first 500 by 125 area as the previous shape would.
+
+All dimensions should be interpreted as being of the same length by padding any entries smaller than others with 1s at the end.
+
+Clients must be allowed to make valid requests with a range size equal to the product of the final array's elements, aligned to the same size.
+If the server allows it, however, clients may request different ranges as they see fit.
+
+For orientation purposes, the default board orientation is left→right, then top→bottom, then back→front.
+Higher order boards are up to client interpretation.
+
+
 Some endpoints return a list of objects rather that a single one.
 Sometimes, too many objects will exist in this list to be reasonably sent in a single request.
 To solve this, all list endpoints return paginated responses.
@@ -59,6 +93,7 @@ Gets information about the server implementation.
 	"version"?: string;
 	"source"?: string;
 	"extensions": string[];
+	"defaultBoard": number | string;
 }
 ```
 Extension definitions redefine the `extensions` field in this request.
@@ -87,7 +122,35 @@ It represents the actions the client can take without encountering a permissions
 
 --------------------------------------------------------------------------------
 
-## /ws?extensions[]={extensions_list}
+## /boards
+### GET
+#### Response
+An array of Board objects.
+#### Errors
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `boards.list` |
+
+--------------------------------------------------------------------------------
+
+## /boards/{board_id}
+### GET
+#### Response
+The Board object.
+##### Headers
+| Header                | Value                                                                          |
+|-----------------------|--------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
+#### Errors
+| Response Code | Cause                                  |
+|---------------|----------------------------------------|
+| 404 Not Found | No board with the requested ID exists. |
+| 403 Forbidden | Missing permission `boards.get`        |
+
+--------------------------------------------------------------------------------
+
+## /boards/{board_id}/ws?extensions[]={extensions_list}
 Websocket connection point.
 A connecting client may specify which extensions it wishes to be enabled on the websocket using the `extensions_list` query parameter.
 Extension names are the same as those in `/info`.
@@ -131,7 +194,7 @@ The client's permissions have changed.
 
 --------------------------------------------------------------------------------
 
-## /board/data/initial
+## /boards/{board_id}/data/initial
 ### GET
 Represents the initial state of the board.
 #### Response
@@ -144,7 +207,7 @@ Binary data.
 
 --------------------------------------------------------------------------------
 
-## /board/data/colors
+## /boards/{board_id}/data/colors
 ### GET
 Represents the current state of the board.
 #### Response
@@ -157,7 +220,7 @@ Binary data.
 
 --------------------------------------------------------------------------------
 
-## /board/data/mask
+## /boards/{board_id}/data/mask
 ### GET
 Represents where placements can be made withing the board dimensions.
 Values correspond to the following behaviors:
@@ -177,7 +240,7 @@ Binary data.
 
 --------------------------------------------------------------------------------
 
-## /board/data/modified
+## /boards/{board_id}/data/modified
 ### GET
 Represents the last-modified time for all pixels on the board.
 #### Response
@@ -192,53 +255,7 @@ Timestamp is seconds since `createdAt` as defined in `/board/info`.
 
 --------------------------------------------------------------------------------
 
-## /board/info
-### GET
-Metadata for the current board.
-#### Response
-```typescript
-{
-	"name": string;
-	"createdAt": Timestamp;
-	"shape": number[][]
-	"palette": Array<{
-		"name": string;
-		"value": string;
-	}>;
-	"maxPixelsAvailable": number;
-}
-```
-`shape` indicates the ordering of data for the board.
-It usually contains a single array of size 2 with its elements representing width and height respectively.
-However, it may contain multiple arrays in which case each array indicates the dimensions of a virtual grid with each grid entry being the next item in the array.
-This allows effective chunking of board contents using only range requests to board data endpoints.
-
-As an example, a shape of `[[2, 2], [500, 500]]` represents a 1000 by 1000 area, broken into 4 subareas.
-The first 250,000 pixels are entirely contained in the first 500 by 500 area.
-A shape of `[[2, 2], [2, 2], [250, 250]]` would again have the same size and even the same first 250,000 pixels.
-It would differ by orienting the first 62,500 pixels in the first 250 by 250 area rather than the first 500 by 125 area as the previous shape would.
-
-All dimensions should be interpreted as being of the same length by padding any entries smaller than others with 1s at the end.
-
-Clients must be allowed to make valid requests with a range size equal to the product of the final array's elements, aligned to the same size.
-If the server allows it, however, clients may request different ranges as they see fit.
-
-For orientation purposes, the default board orientation is left→right, then top→bottom, then back→front.
-Higher order boards are up to client interpretation.
-
-##### Headers
-| Header                | Value                                                                          |
-|-----------------------|--------------------------------------------------------------------------------|
-| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
-| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
-#### Errors
-| Response Code | Cause                            |
-|---------------|----------------------------------|
-| 403 Forbidden | Missing permission `board.data`. |
-
---------------------------------------------------------------------------------
-
-## /board/users
+## /boards/{board_id}/users
 ### GET
 Gets the active and idle user counts.
 #### Response
@@ -268,7 +285,7 @@ A Paginated List of Placement objects.
 
 --------------------------------------------------------------------------------
 
-## /board/pixels/{x}/{y}
+## /boards/{board_id}/pixels/{x}/{y}
 ### GET
 Gets the most recent placement for the specified board position.
 #### Response
