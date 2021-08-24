@@ -59,7 +59,7 @@ If a user has not specified a cooldown override and has some but not all of the 
 #### Response
 ```typescript
 {
-	"pixelsChanged": number;
+	"pixels_changed": number;
 }
 ```
 ##### Headers

@@ -10,8 +10,8 @@ Announcement objects represent announcements and are defined by the following ty
 	"id": number | string;
 	"title": string;
 	"content": string;
-	"createdAt": Timestamp;
-	"expiresAt": Timestamp;
+	"created_at": Timestamp;
+	"expires_at": Timestamp;
 }
 ```
 

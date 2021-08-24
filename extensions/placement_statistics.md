@@ -59,7 +59,7 @@ A Paginated List of the following type:
 	"user": User;
 	"stats": {
 		"totals": PlacementStatistics;
-		[boardId: number | string]: PlacementStatistics;
+		[board_id: number | string]: PlacementStatistics;
 	};
 }
 ```
@@ -78,7 +78,7 @@ Gets the placement statistics for a user.
 ```typescript
 {
 	"totals": PlacementStatistics;
-	[boardId: number | string]: PlacementStatistics;
+	[board_id: number | string]: PlacementStatistics;
 }
 ```
 Implementations may provide information on as many or few boards as they choose.

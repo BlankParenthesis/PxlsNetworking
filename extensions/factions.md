@@ -9,7 +9,7 @@ Factions objects are defined by the following type:
 	"name": string;
 	"tag": string;
 	"color": number;
-	"createdAt": Timestamp;
+	"created_at": Timestamp;
 	"size": number;
 }
 ```
@@ -18,7 +18,7 @@ Factions identify users with Member objects which are defined by the following t
 ```typescript
 {
 	"id": number | string;
-	"displaysFaction": boolean;
+	"displays_faction": boolean;
 	"approval": {
 		"member": boolean;
 		"faction": boolean;

@@ -6,7 +6,7 @@ At the core of chat is the Message object defined as follows:
 ```typescript
 {
 	"id": number | string;
-	"createdAt": Timestamp;
+	"created_at": Timestamp;
 	"raw"?: string;
 	"message": string;
 }
@@ -17,7 +17,7 @@ Messages are grouped by Chatroom objects which are defined below:
 {
 	"id": number | string;
 	"name": string;
-	"createdAt": Timestamp;
+	"created_at": Timestamp;
 }
 ```
 
@@ -102,9 +102,8 @@ Gets general information on chatrooms.
 #### Response
 ```typescript
 {
-	"defaultRoom"?: number | string;
-	"characterLimit": number;
-	"customEmoji": Array<{
+	"character_limit": number;
+	"custom_emoji": Array<{
 		"emoji": string;
 		"name": string;
 	}>;

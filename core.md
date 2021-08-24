@@ -31,13 +31,13 @@ This is represented here as the Board object defined by the following type:
 ```typescript
 {
 	"name": string;
-	"createdAt": Timestamp;
+	"created_at": Timestamp;
 	"shape": number[][]
 	"palette": Array<{
 		"name": string;
 		"value": number;
 	}>;
-	"maxPixelsAvailable": number;
+	"max_pixels_available": number;
 }
 ```
 The value of each entry in `palette` is a 4-byte ARGB color value.
@@ -253,7 +253,7 @@ Represents the last-modified time for all pixels on the board.
 Binary data. 
 32-bit unsigned timestamp for every pixel. 
 Bytes are little-endian ordered.
-Timestamp is seconds since `createdAt` as defined in `/board/info`.
+Timestamp is seconds since `created_at` as defined in `/board/info`.
 #### Errors
 | Response Code | Cause                             |
 |---------------|-----------------------------------|
@@ -269,10 +269,10 @@ Gets the active and idle user counts.
 {
 	"active": number;
 	"idle": number;
-	"idleTimeout": number;
+	"idle_timeout": number;
 }
 ```
-`idleTimeout` is in seconds.
+`idle_timeout` is in seconds.
 #### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|

@@ -90,11 +90,11 @@ type Formula = Sum | Product | Power | Constant | Variable;
 The value of a Variable is determined based on its name.
 The following table provides variable names and where their value can be sourced from:
 
-| Variable Name     | Value Source                                                                            |
-|-------------------|-----------------------------------------------------------------------------------------| 
-| activeUsers       | The count of online users.                                                              |
-| isBackgroundPixel | True if the last pixel placed was not modified previously                               |
-| stackTarget       | The cooldown will reflect how long it takes to accumulate this number of pixels from 0. |
+| Variable Name       | Value Source                                                                            |
+|---------------------|-----------------------------------------------------------------------------------------| 
+| active_users        | The count of online users.                                                              |
+| is_background_pixel | True if the last pixel placed was not modified previously                               |
+| stack_target        | The cooldown will reflect how long it takes to accumulate this number of pixels from 0. |
 
 --------------------------------------------------------------------------------
 
@@ -148,11 +148,11 @@ This example shows the current pxls reference implementation formula.
 									"operands": [
 										{
 											"type": "VARIABLE",
-											"name": "activeUsers"
+											"name": "active_users"
 										},
 										{
 											"type": "CONSTANT",
-											"name": "userOffset",
+											"name": "user_offset",
 											"value": 11.96
 										}
 									]
@@ -167,7 +167,7 @@ This example shows the current pxls reference implementation formula.
 					},
 					{
 						"type": "CONSTANT",
-						"name": "globalOffset",
+						"name": "global_offset",
 						"value": 6.5
 					}
 				]
@@ -184,13 +184,13 @@ This example shows the current pxls reference implementation formula.
 					"operands": [
 						{
 							"type": "VARIABLE",
-							"name": "isBackgroundPixel"
+							"name": "is_background_pixel"
 						},
 						{
 							"type": "GREATER",
 							"left": {
 								"type": "VARIABLE",
-								"name": "stackTarget",
+								"name": "stack_target",
 							},
 							"right": {
 								"type": "CONSTANT",
@@ -207,7 +207,7 @@ This example shows the current pxls reference implementation formula.
 				},
 				"else": {
 					"type": "CONSTANT",
-					"name": "backgroundMultiplier",
+					"name": "background_multiplier",
 					"value": 1.6
 				}
 			},
@@ -217,7 +217,7 @@ This example shows the current pxls reference implementation formula.
 					"type": "GREATER",
 					"left": {
 						"type": "VARIABLE",
-						"name": "stackTarget",
+						"name": "stack_target",
 					},
 					"right": {
 						"type": "CONSTANT",
@@ -230,7 +230,7 @@ This example shows the current pxls reference implementation formula.
 					"operands": [
 						{
 							"type": "CONSTANT",
-							"name": "stackMultiplier",
+							"name": "stack_multiplier",
 							"value": 3
 						},
 						{
@@ -243,7 +243,7 @@ This example shows the current pxls reference implementation formula.
 								},
 								{
 									"type": "VARIABLE",
-									"name": "stackTarget",
+									"name": "stack_target",
 								},
 								{
 									"type": "SUM",
@@ -259,12 +259,12 @@ This example shows the current pxls reference implementation formula.
 											"operands": [
 												{
 													"type": "CONSTANT",
-													"name": "minusOne",
+													"name": "minus_one",
 													"value": -1
 												},
 												{
 													"type": "VARIABLE",
-													"name": "stackTarget",
+													"name": "stack_target",
 												}
 											]
 										},

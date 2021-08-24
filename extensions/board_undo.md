@@ -40,7 +40,7 @@ Undoes the last place action at the given coordinate.
 | 403 Forbidden | Missing permission `board.pixels.undo`. |
 | 404 Not Found | Position outside of board dimensions.   |
 | 403 Forbidden | Pixel not placed by the client user.    | 
-| 409 Conflict  | `undoDeadline` for this pixel expired.  |
+| 409 Conflict  | `undo_deadline` for this pixel expired.  |
 
 --------------------------------------------------------------------------------
 

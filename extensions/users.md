@@ -8,7 +8,7 @@ User objects are represented with the following type:
 {
 	"id": number | string;
 	"name": string;
-	"createdAt": Timestamp;
+	"created_at": Timestamp;
 }
 ```
 
@@ -75,7 +75,7 @@ A User object.
 ### PATCH
 Updates a user.
 #### Request
-A partial User object without the id or createdAt fields.
+A partial User object without the id or created_at fields.
 #### Response
 The updated User object.
 #### Errors
