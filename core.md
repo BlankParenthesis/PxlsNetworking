@@ -35,11 +35,13 @@ This is represented here as the Board object defined by the following type:
 	"shape": number[][]
 	"palette": Array<{
 		"name": string;
-		"value": string;
+		"value": number;
 	}>;
 	"maxPixelsAvailable": number;
 }
 ```
+The value of each entry in `palette` is a 4-byte ARGB color value.
+
 `shape` indicates the ordering of data for the board.
 It usually contains a single array of size 2 with its elements representing width and height respectively.
 However, it may contain multiple arrays in which case each array indicates the dimensions of a virtual grid with each grid entry being the next item in the array.
@@ -102,7 +104,7 @@ Implementations should return the union of all lists defined by every implemente
 |---------------|----------------------------|
 | 403 Forbidden | Missing permission `info`. |
 
-*NOTE: Missing this permission effectively prevents the client from functioning.*
+*NOTE: Missing this permission effectively prevents the client from using extensions.*
 
 --------------------------------------------------------------------------------
 
@@ -156,13 +158,14 @@ If any sub-endpoints are called on this, the should likewise be redirected, keep
 
 --------------------------------------------------------------------------------
 
-## /boards/{board_id}/ws?extensions[]={extensions_list}
+## /boards/{board_id}/socket?extensions[]={extensions_list}
 Websocket connection point.
 A connecting client may specify which extensions it wishes to be enabled on the websocket using the `extensions_list` query parameter.
 Extension names are the same as those in `/info`.
 To receive the events defined here, the list should contain the value `core`.
 ### Server packets
 These packets are sent by the server to inform the client of something.
+They should be sent as UTF-8 encoded JSON text.
 #### BoardUpdate
 The board has changed.
 ```typescript
@@ -180,10 +183,11 @@ How many pixels may be placed by the current user without encountering a cooldow
 	"next"?: Timestamp; 
 }
 ```
-#### Permissions
+#### PermissionsChanged
 The client's permissions have changed.
 ```typescript
 {
+	"type": "permissions-changed";
 	"permissions": string[];
 }
 ```
@@ -203,9 +207,9 @@ Represents the initial state of the board.
 Binary data. 
 8-bit palette index for every pixel.
 #### Errors
-| Response Code | Cause                            |
-|---------------|----------------------------------|
-| 403 Forbidden | Missing permission `board.data`. |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `boards.data`. |
 
 --------------------------------------------------------------------------------
 
@@ -216,15 +220,15 @@ Represents the current state of the board.
 Binary data. 
 8-bit palette index for every pixel.
 #### Errors
-| Response Code | Cause                            |
-|---------------|----------------------------------|
-| 403 Forbidden | Missing permission `board.data`. |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `boards.data`. |
 
 --------------------------------------------------------------------------------
 
 ## /boards/{board_id}/data/mask
 ### GET
-Represents where placements can be made withing the board dimensions.
+Represents where placements can be made within the board dimensions.
 Values correspond to the following behaviors:
 | Value | Placement Behavior                                        |
 |:-----:|-----------------------------------------------------------|
@@ -236,24 +240,24 @@ Values correspond to the following behaviors:
 Binary data. 
 8-bit mask identifier for every pixel.
 #### Errors
-| Response Code | Cause                            |
-|---------------|----------------------------------|
-| 403 Forbidden | Missing permission `board.data`. |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `boards.data`. |
 
 --------------------------------------------------------------------------------
 
-## /boards/{board_id}/data/modified
+## /boards/{board_id}/data/timestamps
 ### GET
 Represents the last-modified time for all pixels on the board.
 #### Response
 Binary data. 
-32-bit timestamp for every pixel. 
+32-bit unsigned timestamp for every pixel. 
 Bytes are little-endian ordered.
 Timestamp is seconds since `createdAt` as defined in `/board/info`.
 #### Errors
-| Response Code | Cause                            |
-|---------------|----------------------------------|
-| 403 Forbidden | Missing permission `board.data`. |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `boards.data`. |
 
 --------------------------------------------------------------------------------
 
@@ -268,22 +272,23 @@ Gets the active and idle user counts.
 	"idleTimeout": number;
 }
 ```
+`idleTimeout` is in seconds.
 #### Errors
-| Response Code | Cause                             |
-|---------------|-----------------------------------|
-| 403 Forbidden | Missing permission `board.users`. |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `boards.users`. |
 
 --------------------------------------------------------------------------------
 
-## /board/pixels
+## /board/{board_id}/pixels
 ### GET
 Lists all placements.
 #### Response
 A Paginated List of Placement objects.
 #### Errors
-| Response Code | Cause                                   |
-|---------------|-----------------------------------------|
-| 403 Forbidden | Missing permission `board.pixels.list`. |
+| Response Code | Cause                                    |
+|---------------|------------------------------------------|
+| 403 Forbidden | Missing permission `boards.pixels.list`. |
 
 --------------------------------------------------------------------------------
 
