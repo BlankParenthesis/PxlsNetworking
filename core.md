@@ -152,7 +152,6 @@ The Board object.
 --------------------------------------------------------------------------------
 
 ## /boards/default
-### GET
 Requests made to this endpoint should be redirected using HTTP status 307 to the board object of the default board.
 If any sub-endpoints are called on this, the should likewise be redirected, keeping the path.
 

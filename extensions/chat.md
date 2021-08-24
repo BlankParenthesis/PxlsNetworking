@@ -124,6 +124,12 @@ A Paginated List of Chatroom objects.
 
 --------------------------------------------------------------------------------
 
+## /chat/rooms/default/
+Requests made to this endpoint should be redirected using HTTP status 307 to the room object of the default chat.
+If any sub-endpoints are called on this, the should likewise be redirected, keeping the path.
+
+--------------------------------------------------------------------------------
+
 ## /chat/rooms/{room_id}
 ### GET
 Gets a chatroom.
