@@ -13,21 +13,11 @@ This extension adds Ban objects which are described by following type:
 }
 ```
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission          | Purpose                                                     |
-|---------------------|-------------------------------------------------------------|
-| `users.bans.list`   | Allows GET requests to `/users/{user_id}/bans`.             |
-| `users.bans.get`    | Allows GET requests to `/users/{user_id}/bans/{ban_id}`.    |
-| `users.bans.post`   | Allows POST requests to `/users/{user_id}/bans`.            |
-| `users.bans.patch`  | Allows PATCH requests to `/users/{user_id}/bans/{ban_id}`.  |
-| `users.bans.delete` | Allows DELETE requests to `/users/{user_id}/bans/{ban_id}`. |
-
-
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["user_moderation"];
@@ -36,27 +26,45 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
-## /board/pixels/{x}/{y}
+## /board/pixels/{x}/{y?}/{z?}/…
 ### POST
 #### Errors
-| Response Code | Cause                                                   |
-|---------------|---------------------------------------------------------|
-| 403 Forbidden | One or more bans affect the client at the current time. |
+| Response Code | Cause   |
+|---------------|---------|
+| 403 Forbidden | Banned. |
+
+If the [board undo extension](./board_undo.md) is implemented, then undos are also unavailable due to bans:
+### DELETE
+#### Errors
+| Response Code | Cause   |
+|---------------|---------|
+| 403 Forbidden | Banned. |
+
+--------------------------------------------------------------------------------
+
+If the [board moderation extension](./board_undo.md) is implemented, then mass-place events are also unavailable due to bans:
+## /board/pixels
+### PATCH
+#### Errors
+| Response Code | Cause   |
+|---------------|---------|
+| 403 Forbidden | Banned. |
 
 --------------------------------------------------------------------------------
 
 ## {user_uri}/bans
 ### GET
-A list of all bans for the user.
+Lists all bans issued to a user.
 #### Response
-An array of Ban References.
+A Paginated List of Ban References.
 ##### Errors
-| Response Code            | Cause                                                          |
-|--------------------------|----------------------------------------------------------------|
-| 403 Forbidden            | The client does not have the required privileges to list bans. |
+| Response Code | Cause                                                              |
+|---------------|--------------------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.get` or `users.current.get`.             |
+| 403 Forbidden | Missing permission `users.bans.list` or `users.current.bans.list`. |
 
 ### POST
-Ban the user.
+Bans the user.
 #### Request
 ```typescript
 {
@@ -67,21 +75,24 @@ Ban the user.
 ##### Response
 A reference to the created Ban object.
 ##### Errors
-| Response Code            | Cause                                                             |
-|--------------------------|-------------------------------------------------------------------|
-| 403 Forbidden            | The client does not have the required privileges to ban the user. |
-| 422 Unprocessable Entity | The ban reason is invalid.                                        |
+| Response Code            | Cause                                                  |
+|--------------------------|--------------------------------------------------------|
+| 403 Forbidden            | Missing permission `users.get` or `users.current.get`. |
+| 403 Forbidden            | Missing permission `users.bans.post`.                  |
+| 422 Unprocessable Entity | Invalid reason.                                        |
 
 --------------------------------------------------------------------------------
 
 ## {ban_uri}
 ### GET
+Gets a ban issued to a user.
 #### Response
 The Ban object.
 ##### Errors
-| Response Code | Cause                                                          |
-|---------------|----------------------------------------------------------------|
-| 403 Forbidden | The client does not have the required privileges view the ban. |
+| Response Code | Cause                                                            |
+|---------------|------------------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.get` or `users.current.get`.           |
+| 403 Forbidden | Missing permission `users.bans.get` or `users.current.bans.get`. |
 
 ### PATCH
 Updates the ban.
@@ -95,14 +106,16 @@ Updates the ban.
 ##### Response
 The updated Ban object.
 ##### Errors
-| Response Code            | Cause                                                             |
-|--------------------------|-------------------------------------------------------------------|
-| 403 Forbidden            | The client does not have the required privileges to ban the user. |
-| 422 Unprocessable Entity | The ban reason is invalid.                                        |
+| Response Code            | Cause                                                  |
+|--------------------------|--------------------------------------------------------|
+| 403 Forbidden            | Missing permission `users.get` or `users.current.get`. |
+| 403 Forbidden            | Missing permission `users.bans.patch`.                 |
+| 422 Unprocessable Entity | The ban reason is invalid.                             |
 
 ### DELETE
 Removes the ban.
 ##### Errors
-| Response Code | Cause                                                               |
-|---------------|---------------------------------------------------------------------|
-| 403 Forbidden | The client does not have the required privileges to unban the user. |
+| Response Code | Cause                                                  |
+|---------------|--------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.get` or `users.current.get`. |
+| 403 Forbidden | Missing permission `users.bans.delete`.                |

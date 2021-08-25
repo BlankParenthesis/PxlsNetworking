@@ -5,7 +5,7 @@ Implementing this extensions adds support for real-time chat.
 At the core of chat is the Message object defined as follows:
 ```typescript
 {
-	"createdAt": Timestamp;
+	"created_at": Timestamp;
 	"raw"?: string;
 	"message": string;
 }
@@ -15,7 +15,7 @@ Messages are grouped by Chatroom objects which are defined below:
 ```typescript
 {
 	"name": string;
-	"createdAt": Timestamp;
+	"created_at": Timestamp;
 }
 ```
 
@@ -30,20 +30,11 @@ If the [users extension](./users.md) is implemented, Message objects may also sp
 }
 ```
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission                 | Purpose                                                               |
-|----------------------------|-----------------------------------------------------------------------|
-| `chat.rooms.list`          | Allows GET requests to `/chat/rooms`.                                 |
-| `chat.rooms.get`           | Allows GET requests to `/chat/rooms/{room_id}`.                       |
-| `chat.rooms.messages.list` | Allows GET requests to `/chat/rooms/{room_id}/messages`.              |
-| `chat.rooms.messages.get`  | Allows GET requests to `/chat/rooms/{room_id}/messages/{message_id}`. |
-| `chat.rooms.messages.post` | Allows POST requests to `/chat/rooms/{room_id}/messages`.             |
-
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["chat"];
@@ -52,10 +43,9 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
-## /chat/ws
-Websocket connection point for chat messages.
+## /ws?extensions[]=chat
 ### Client packets
-#### Subscribe
+#### ChatSubscribe
 Request that the server send events from the chatrooms specified by URI.
 ```typescript
 {
@@ -63,7 +53,7 @@ Request that the server send events from the chatrooms specified by URI.
 	"rooms": string[];
 }
 ```
-#### Unsubscribe
+#### ChatUnsubscribe
 Request that the server no longer send events from the chatrooms specified by URI.
 ```typescript
 {
@@ -97,17 +87,21 @@ If multiple rooms were invalid, the server need only mention one.
 	"cause": "FORBIDDEN" | "MISSING";
 }
 ```
+### Errors
+| Response Code | Cause                                          |
+|---------------|------------------------------------------------|
+| 403 Forbidden | Missing permission `socket.chat`.              |
 
 --------------------------------------------------------------------------------
 
 ## /chat/info
 ### GET
-General information on chatrooms.
+Gets general information on chatrooms.
+#### Response
 ```typescript
 {
-	"defaultRoom"?: Reference<Chatroom>;
-	"characterLimit": number;
-	"customEmoji": Array<{
+	"character_limit": number;
+	"custom_emoji": Array<{
 		"emoji": string;
 		"name": string;
 	}>;
@@ -118,39 +112,47 @@ General information on chatrooms.
 
 ## /chat/rooms
 ### GET
-A list of all chatrooms.
-#### Request
+Lists all chatrooms.
+#### Response
 An array of Chatroom References.
 #### Errors
-| Response Code | Cause                                                       |
-|---------------|-------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to list chatrooms. |
+| Response Code | Cause                                 |
+|---------------|---------------------------------------|
+| 403 Forbidden | Missing permission `chat.rooms.list`. |
+
+--------------------------------------------------------------------------------
+
+## /chat/rooms/default/
+Requests made to this endpoint should be redirected using HTTP status 307 to the room object of the default chat.
+If any sub-endpoints are called on this, the should likewise be redirected, keeping the path.
 
 --------------------------------------------------------------------------------
 
 ## {chatroom_uri}
 ### GET
-#### Request
+Gets a chatroom.
+#### Response
 The Chatroom object.
 #### Errors
-| Response Code | Cause                                                                    |
-|---------------|--------------------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to view the chatroom requested. |
+| Response Code | Cause                                |
+|---------------|--------------------------------------|
+| 403 Forbidden | Missing permission `chat.rooms.get`. |
 
 --------------------------------------------------------------------------------
 
 ## {chatroom_uri}/messages
 ### GET
-A list of all messages in the chatroom.
+Lists messages in a chatroom.
 #### Response
-An array of Message References.
+A Paginated List of Message References.
 #### Errors
-| Response Code | Cause                                                            |
-|---------------|------------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to access chat history. |
+| Response Code | Cause                                          |
+|---------------|------------------------------------------------|
+| 403 Forbidden | Missing permission `chat.rooms.get`.           |
+| 403 Forbidden | Missing permission `chat.rooms.messages.list`. |
 
 ### POST
-Create a new chat message and sends it to the chatroom.
+Creates a chat message.
 #### Request
 ```typescript
 {
@@ -160,17 +162,20 @@ Create a new chat message and sends it to the chatroom.
 #### Response
 A Reference to the created message object.
 #### Errors
-| Response Code | Cause                                                      |
-|---------------|------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to post messages. |
+| Response Code | Cause                                          |
+|---------------|------------------------------------------------|
+| 403 Forbidden | Missing permission `chat.rooms.get`.           |
+| 403 Forbidden | Missing permission `chat.rooms.messages.post`. |
 
 --------------------------------------------------------------------------------
 
 ## {message_uri}
 ### GET
-#### Request
+Gets a message in a chatroom.
+#### Response
 The Message object.
 #### Errors
-| Response Code | Cause                                                            |
-|---------------|------------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to access chat history. |
+| Response Code | Cause                                         |
+|---------------|-----------------------------------------------|
+| 403 Forbidden | Missing permission `chat.rooms.get`.          |
+| 403 Forbidden | Missing permission `chat.rooms.messages.get`. |

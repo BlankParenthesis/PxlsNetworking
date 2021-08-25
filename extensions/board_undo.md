@@ -5,16 +5,11 @@ Servers may choose to limit when an undo action can take place.
 This extension accommodates specifying a time-deadline for undo actions but does not consider required order of retractions or counted limits.
 Clients are expected to keep track of which actions can be retracted.
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission           | Purpose                                           |
-|----------------------|---------------------------------------------------|
-| `board.pixels.undo`  | Allows DELETE requests to `/board/pixels/{x}/{y}` |
-
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["undo"];
@@ -23,41 +18,37 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
-## /board/pixels/{x}/{y}
+## {board_uri}/pixels/{x}/{y?}/{z?}/…
 ### POST
 #### Response
-```typescript
-{
-	"undoDeadline": Timestamp;
-}
-```
+##### Headers
+| Header             | Value                                                                      |
+|--------------------|----------------------------------------------------------------------------|
+| Pxls-Undo-Deadline | Timestamp of when DELETE actions can no longer be sent for this placement. |
 
 ### DELETE
 Undoes the last place action at the given coordinate.
 #### Response
-```typescript
-{
-	"pixelsAvailable": number;
-	"nextAvailable"?: Timestamp; 
-}
-```
+##### Headers
+| Header                | Value                                                                          |
+|-----------------------|--------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
 #### Errors
-| Response Code | Cause                                                      |
-|---------------|------------------------------------------------------------|
-| 404 Not Found | The specified position is outside of the board dimensions. |
-| 403 Forbidden | The client user is banned from placing.                    |
-| 403 Forbidden | The client lacks the required privileges to undo.          |
-| 403 Forbidden | The pixel specified was not placed by the client user.     | 
-| 409 Conflict  | The `undoDeadline` for this pixel is in the past.          |
+| Response Code | Cause                                   |
+|---------------|-----------------------------------------|
+| 403 Forbidden | Missing permission `board.pixels.undo`. |
+| 404 Not Found | Position outside of board dimensions.   |
+| 403 Forbidden | Pixel not placed by the client user.    | 
+| 409 Conflict  | `undo_deadline` for this pixel expired.  |
 
 --------------------------------------------------------------------------------
 
 If the [board moderation extension](./board_moderation.md) is implemented, then the mass-place endpoint defined there also gets an undo timestamp sent back:
-## /board/pixels/
+## {board_uri}/pixels
 ### PATCH
 #### Response
-```typescript
-{
-	"undoDeadline": Timestamp;
-}
-```
+##### Headers
+| Header             | Value                                                                      |
+|--------------------|----------------------------------------------------------------------------|
+| Pxls-Undo-Deadline | Timestamp of when DELETE actions can no longer be sent for this placement. |

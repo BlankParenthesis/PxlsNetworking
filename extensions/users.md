@@ -7,23 +7,22 @@ User objects are represented with the following type:
 ```typescript
 {
 	"name": string;
-	"createdAt": Timestamp;
+	"created_at": Timestamp;
 }
 ```
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission         | Purpose                                                                                            |
-|--------------------|----------------------------------------------------------------------------------------------------|
-| `users.list`       | Allows GET requests to `/users`.                                                                   |
-| `users.get`        | Allows GET requests to `/users/{user_id}`.                                                         |
-| `users.patch`      | Allows PATCH requests to `/users/{user_id}`.                                                       |
-| `users.patch.name` | Allows PATCH requests for `name` to `/users/{user_id}` where `{user_id}` is the current user's ID. |
+Placement objects gain an additional field due to this extension:
+```typescript
+{
+	"user"?: User;
+}
+```
 
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["users"];
@@ -32,7 +31,7 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
-## /board/ws
+## /ws?extensions[]=users
 ### Server packets
 #### UserUpdate
 The client user has changed.
@@ -42,6 +41,10 @@ The client user has changed.
 	"user": Partial<User>;
 }
 ```
+### Errors
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `socket.users`. |
 
 --------------------------------------------------------------------------------
 
@@ -57,34 +60,49 @@ The client user has changed.
 
 ## /users
 ### GET
-A list of all users.
+Lists all users.
 #### Response
-An array of User References.
+A Paginated List of User References.
 #### Errors
-| Response Code | Cause                                                           |
-|---------------|-----------------------------------------------------------------|
-| 403 Forbidden | The client does not have the required privileges to list users. |
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `users.list`. |
 
 --------------------------------------------------------------------------------
 
 ## {user_uri}
 ### GET
+Gets a user.
 #### Response
 The User object.
 #### Errors
-| Response Code | Cause                                                                     |
-|---------------|---------------------------------------------------------------------------|
-| 403 Forbidden | The client does not have the required privileges to view the user's data. |
+| Response Code | Cause                                                  |
+|---------------|--------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.get` or `users.current.get`. |
 
 ### PATCH
-Updates the User object.
+Updates a user.
 #### Request
-A partial User object.
+A partial User object without the id or created_at fields.
 #### Response
 The updated User object.
 #### Errors
-| Response Code | Cause                                                                     |
-|---------------|---------------------------------------------------------------------------|
-| 403 Forbidden | The client does not have the required privileges to edit the user's data. |
+| Response Code | Cause                                                      |
+|---------------|------------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.patch` or `users.current.patch`. |
 
+### DELETE
+Deletes a user.
+#### Errors
+| Response Code | Cause                                                        |
+|---------------|--------------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.delete` or `users.current.delete`. |
+| 404 Not Found | No such User exists.                                         |
 
+--------------------------------------------------------------------------------
+
+## /users/current
+Requests made to this endpoint should be redirected using HTTP status 307 to the user object of the currently authenticated user.
+If the client is not authenticated, then the server should respond with a status of 401 - unauthorized.
+
+If any sub-endpoints are called on this, they should likewise be redirected, keeping the path.

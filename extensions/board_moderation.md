@@ -2,19 +2,11 @@ Board Moderation
 ================
 Implementing this extension provides users with the tools necessary to moderate the content of the board directly.
 
-If the [roles extension](./roles.md) is implemented, the following permissions are added due to this extension:
-
-| Permission                       | Purpose                                                     |
-|----------------------------------|-------------------------------------------------------------|
-| `board.pixels.override.cooldown` | Allows sending requests with the cooldown override enabled. |
-| `board.pixels.override.color`    | Allows sending requests with the color override enabled.    |
-| `board.pixels.override.mask`     | Allows sending requests with the mask override enabled.     |
-| `board.pixels.patch`             | Allows sending PATCH requests to `/board/pixels`.           |
-
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["board_moderation"];
@@ -23,7 +15,7 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 
 --------------------------------------------------------------------------------
 
-## /board/pixels/{x}/{y}
+## {board_uri}/pixels/{x}/{y?}/{z?}/…
 ### POST
 #### Request
 ```typescript
@@ -36,13 +28,15 @@ If the [roles extension](./roles.md) is implemented, the following permissions a
 }
 ```
 #### Errors
-| Response Code | Cause                                                                            |
-|---------------|----------------------------------------------------------------------------------|
-| 403 Forbidden | The client does not have the required privileges to use all specified overrides. |
+| Response Code | Cause                                                |
+|---------------|------------------------------------------------------|
+| 403 Forbidden | Missing permission `board.pixels.override.cooldown`. |
+| 403 Forbidden | Missing permission `board.pixels.override.color`.    |
+| 403 Forbidden | Missing permission `board.pixels.override.mask`.     |
 
 --------------------------------------------------------------------------------
 
-## /board/pixels
+## {board_uri}/pixels
 ### PATCH
 Replace a subarea of the board.
 This is most useful for when moderators need to censor or otherwise change a large area and other tools - such as user rollbacks - are insufficient.
@@ -51,11 +45,9 @@ If a user has not specified a cooldown override and has some but not all of the 
 #### Request
 ```typescript
 {
-	"x": number;
-	"y": number;
-	"width": number;
-	"height": number;
-	"colors": string;
+	"from": number[],
+	"to": number[],
+	"colors": number[];
 	"overrides"?:  {
 		"cooldown": boolean;
 		"color": boolean;
@@ -63,22 +55,28 @@ If a user has not specified a cooldown override and has some but not all of the 
 	}
 }
 ```
+`from` and `to` are the start and end positions respectively.
 #### Response
 ```typescript
 {
-	"pixelsChanged": number;
-	"pixelsAvailable": number;
-	"nextAvailable"?: Timestamp; 
+	"pixels_changed": number;
 }
 ```
+##### Headers
+| Header                | Value                                                                          |
+|-----------------------|--------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
+
 #### Errors
-| Response Code            | Cause                                                                            |
-|--------------------------|----------------------------------------------------------------------------------|
-| 404 Not Found            | The specified position is outside of the board dimensions.                       |
-| 403 Forbidden            | The client is banned from placing.                                               |
-| 403 Forbidden            | The client does not have the required privileges to mass post pixels.            |
-| 403 Forbidden            | The specified position is not placable according to the board mask.              |
-| 403 Forbidden            | The client does not have the required privileges to use all specified overrides. |
-| 409 Conflict             | The change would have no effect.                                                 |
-| 422 Unprocessable Entity | The supplied color does not exist on the palette.                                |
-| 429 Too Many Requests    | The client user has less pixels available than needed to fulfil the request.     |
+| Response Code            | Cause                                                |
+|--------------------------|------------------------------------------------------|
+| 403 Forbidden            | Missing permission `board.pixels.patch`.             |
+| 404 Not Found            | Position outside of board dimensions.                |
+| 403 Forbidden            | Missing permission `board.pixels.override.cooldown`. |
+| 403 Forbidden            | Missing permission `board.pixels.override.color`.    |
+| 403 Forbidden            | Missing permission `board.pixels.override.mask`.     |
+| 403 Forbidden            | Position is not placable according to board mask.    |
+| 409 Conflict             | Placement would have no effect.                      |
+| 422 Unprocessable Entity | Color does not exist on the palette.                 |
+| 429 Too Many Requests    | No available pixels to place.                        |

@@ -1,53 +1,32 @@
 Roles
 =====
-Implementing this extension provides a way to distinguish different classes of users and assign different privileges to each class.
+Implementing this extension provides a way for users distinguish different classes of users using roles.
+Roles group users similar to factions (see the [factions extension](./factions.md)): a user can hold multiple roles and many users can hold the same role.
+Roles differ from factions in their complexity.
+While a faction might have a hierarchy, roles are uniform.
 
-This extension does not require that the [users extension](./users.md) is implemented, but if it is this extension modifies the User object to add a list of Role References for the roles associated with a given user:
-```typescript
-{
-	"roles": Reference<Role>[];
-}
-```
+Since roles help users distinguish other users, implementing this extension requires implementing the [users extension](./users.md).
+
+Roles also govern which permissions its members have.
+*Implementations lose the ability to arbitrarily decide a users permissions set by implementing this extensions.*
+Instead, a user's permissions are determined entirely based on roles.
+Each role defines a set of permission keys and a user's permissions keys should be the union of the permissions for all roles they hold.
+Granting a role the permission to edit roles *effectively grants all permissions to that role.*
 
 Role objects are defined by the following type:
 ```typescript
 {
 	"name": string;
-	"permissions": string[];
 	"icon"?: string;
+	"permissions": string[];
 }
 ```
-
-**DISCUSS:** Assuming the icon is a font-awesome class seems way too implementation specific.
-The the best generic way I can think of is specifying an icon src but this would be incompatible with the current implementation.
-
-A list of basic permissions are given here, but other extensions add to this list as needed.
-These cover the core protocol: 
-
-| Permission          | Purpose                                                           |
-|---------------------|-------------------------------------------------------------------|
-| `board.data`        | Allows GET requests to `/board/data` endpoints and `/board/info`. |
-| `board.users`       | Allows GET requests to `/board/users`.                            |
-| `board.socket`      | Allows connecting to the websocket at `/board/ws`.                |
-| `board.pixels.get`  | Allows GET requests to `/board/pixels/{x}/{y}`.                   |
-| `board.pixels.post` | Allows POST requests to `/board/pixels/{x}/{y}`.                  |
-
-These permissions cover the extra functionality added by this extension: 
-
-| Permission      | Purpose                                         |
-|-----------------|-------------------------------------------------|
-| `roles.list`    | Allows GET requests to `/roles`.                |
-| `roles.get`     | Allows GET requests to `/roles/{role_name}`.    |
-| `roles.post`    | Allows POST requests to `/roles`.               |
-| `roles.patch`   | Allows PATCH requests to `/roles/{role_name}`.  |
-| `roles.delete`  | Allows DELETE requests to `/roles/{role_name}`. |
-
-Server implementations may forgo implementing any of these modifying permissions and do not need to implement the associated modifying endpoints.
 
 --------------------------------------------------------------------------------
 
 ## /info
 ### GET
+#### Response
 ```typescript
 {
 	"extensions": ["roles"];
@@ -56,15 +35,72 @@ Server implementations may forgo implementing any of these modifying permissions
 
 --------------------------------------------------------------------------------
 
+## {user_uri}/roles
+### GET
+Lists all roles a user has.
+#### Response
+A Paginated List of Role objects.
+#### Errors
+| Response Code | Cause                                  |
+|---------------|----------------------------------------|
+| 403 Forbidden | Missing permission `users.get`.        |
+| 404 Forbidden | No such User exists.                   |
+| 403 Forbidden | Missing permission `users.roles.post`. |
+
+### POST
+Adds a role to a user.
+#### Request
+```typescript
+{
+	"role": string;
+}
+```
+#### Response
+A Paginated List of Role objects.
+#### Errors
+| Response Code | Cause                                  |
+|---------------|----------------------------------------|
+| 403 Forbidden | Missing permission `users.get`.        |
+| 403 Forbidden | Missing permission `users.roles.post`. |
+| 404 Forbidden | No such Role exists.                   |
+
+### DELETE
+Removes a role from a user.
+#### Request
+```typescript
+{
+	"role": string;
+}
+```
+#### Errors
+| Response Code | Cause                                    |
+|---------------|------------------------------------------|
+| 403 Forbidden | Missing permission `users.get`.          |
+| 403 Forbidden | Missing permission `users.roles.delete`. |
+| 404 Forbidden | No such Role exists.                     |
+
+--------------------------------------------------------------------------------
+
 ## /roles
 ### GET
-A list of all roles.
+Lists all roles.
 #### Response
-An array of Role References.
+A Paginated List of Role References.
 #### Errors
-| Response Code | Cause                                                   |
-|---------------|---------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to list roles. |
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `roles.list`. |
+
+### POST
+Creates a role.
+#### Request
+A Role object without an ID.
+#### Response
+The created Role object.
+#### Errors
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `roles.post`. |
 
 ### POST
 Create a new role.
@@ -81,27 +117,28 @@ A reference to the created Role object.
 
 ## {role_uri}
 ### GET
+Gets the role.
 #### Response
 The Role object.
 #### Errors
-| Response Code | Cause                                                      |
-|---------------|------------------------------------------------------------|
-| 403 Forbidden | The client lacks the required privileges to view the role. |
+| Response Code | Cause                           |
+|---------------|---------------------------------|
+| 403 Forbidden | Missing permission `roles.get`. |
 
 ### PATCH
-Updates the Role object.
+Updates the role.
 #### Request
 A partial Role object.
 #### Response
 The updated Role object.
 #### Errors
-| Response Code | Cause                                                           |
-|---------------|-----------------------------------------------------------------|
-| 403 Forbidden | The client does not have the required privileges to edit roles. |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `roles.patch`. |
 
 ### DELETE
-Deletes the Role object.
+Deletes the role.
 #### Errors
-| Response Code | Cause                                                             |
-|---------------|-------------------------------------------------------------------|
-| 403 Forbidden | The client does not have the required privileges to delete roles. |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `roles.delete`. |
