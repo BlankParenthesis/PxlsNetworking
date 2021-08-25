@@ -33,14 +33,14 @@ This is represented here as the Board object defined by the following type:
 	"name": string;
 	"created_at": Timestamp;
 	"shape": number[][]
-	"palette": Array<{
+	"palette": Map<number, {
 		"name": string;
 		"value": number;
 	}>;
 	"max_pixels_available": number;
 }
 ```
-The value of each entry in `palette` is a 4-byte ARGB color value.
+The `value` field of each entry in `palette` is a 4-byte ARGB color value.
 
 `shape` indicates the ordering of data for the board.
 It usually contains a single array of size 2 with its elements representing width and height respectively.
