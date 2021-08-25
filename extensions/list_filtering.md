@@ -10,12 +10,12 @@ Similarly, to get all Placements of the color 0, the client could perform a GET 
 Some fields are too specific to warrant filtering by exact value, such as Timestamps.
 To allow for filtering without knowing a specific value, numeric values can be specified as a range.
 This is done by joining the start number followed by the end number in a range with two period characters.
-For example, to search for all Placements that occurred within the first minute of the Unix epoch, the client could perform a GET request to `/board/pixels?modified=0..60`.
+For example, to search for all Placements that occurred within the first minute of the Unix epoch, the client could perform a GET request to `{board_uri}/pixels?modified=0..60`.
 Ranges include both the start and end numbers.
 
 Ranges may be unbounded.
 This is indicated by not specifying the start or end of the range.
-For example, to search for all Placements that occurred after the first minute of the Unix epoch, the client could perform a GET request to `/board/pixels?modified=60..`.
+For example, to search for all Placements that occurred after the first minute of the Unix epoch, the client could perform a GET request to `{board_uri}/pixels?modified=60..`.
 
 Some objects have nested fields.
 For example, Member objects from the [factions extension](./factions.md) have an approval field.

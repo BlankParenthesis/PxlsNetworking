@@ -5,7 +5,6 @@ Implementing this extensions adds support for real-time chat.
 At the core of chat is the Message object defined as follows:
 ```typescript
 {
-	"id": number | string;
 	"created_at": Timestamp;
 	"raw"?: string;
 	"message": string;
@@ -15,7 +14,6 @@ At the core of chat is the Message object defined as follows:
 Messages are grouped by Chatroom objects which are defined below:
 ```typescript
 {
-	"id": number | string;
 	"name": string;
 	"created_at": Timestamp;
 }
@@ -48,19 +46,19 @@ If the [users extension](./users.md) is implemented, Message objects may also sp
 ## /ws?extensions[]=chat
 ### Client packets
 #### ChatSubscribe
-Request that the server send events from the specified chatrooms.
+Request that the server send events from the chatrooms specified by URI.
 ```typescript
 {
-	"type": "chat-subscribe";
-	"rooms": Array<number | string>;
+	"type": "subscribe";
+	"rooms": string[];
 }
 ```
 #### ChatUnsubscribe
-Request that the server no longer send events from the specified chatrooms.
+Request that the server no longer send events from the chatrooms specified by URI.
 ```typescript
 {
-	"type": "chat-unsubscribe";
-	"rooms": Array<number | string>;
+	"type": "unsubscribe";
+	"rooms": string[];
 }
 ```
 
@@ -71,8 +69,8 @@ New messages were sent.
 ```typescript
 {
 	"type": "messages";
-	"room": number | string;
-	"messages": Message[];
+	"room": Reference<Chatroom>;
+	"messages": Reference<Message>[];
 }
 ```
 
@@ -85,7 +83,7 @@ If multiple rooms were invalid, the server need only mention one.
 {
 	"type": "error";
 	"error": "INVALID_ROOM";
-	"room": number | string;
+	"room": string;
 	"cause": "FORBIDDEN" | "MISSING";
 }
 ```
@@ -116,7 +114,7 @@ Gets general information on chatrooms.
 ### GET
 Lists all chatrooms.
 #### Response
-A Paginated List of Chatroom objects.
+An array of Chatroom References.
 #### Errors
 | Response Code | Cause                                 |
 |---------------|---------------------------------------|
@@ -130,28 +128,26 @@ If any sub-endpoints are called on this, the should likewise be redirected, keep
 
 --------------------------------------------------------------------------------
 
-## /chat/rooms/{room_id}
+## {chatroom_uri}
 ### GET
 Gets a chatroom.
 #### Response
-A Chatroom object.
+The Chatroom object.
 #### Errors
 | Response Code | Cause                                |
 |---------------|--------------------------------------|
-| 404 Not Found | No such Chatroom exists.             |
 | 403 Forbidden | Missing permission `chat.rooms.get`. |
 
 --------------------------------------------------------------------------------
 
-## /chat/rooms/{room_id}/messages
+## {chatroom_uri}/messages
 ### GET
 Lists messages in a chatroom.
 #### Response
-A Paginated List of Message objects.
+A Paginated List of Message References.
 #### Errors
 | Response Code | Cause                                          |
 |---------------|------------------------------------------------|
-| 404 Not Found | No such Chatroom exists.                       |
 | 403 Forbidden | Missing permission `chat.rooms.get`.           |
 | 403 Forbidden | Missing permission `chat.rooms.messages.list`. |
 
@@ -164,25 +160,22 @@ Creates a chat message.
 }
 ```
 #### Response
-The created message object.
+A Reference to the created message object.
 #### Errors
 | Response Code | Cause                                          |
 |---------------|------------------------------------------------|
-| 404 Not Found | No such Chatroom exists.                       |
 | 403 Forbidden | Missing permission `chat.rooms.get`.           |
 | 403 Forbidden | Missing permission `chat.rooms.messages.post`. |
 
 --------------------------------------------------------------------------------
 
-## /chat/rooms/{room_id}/messages/{message_id}
+## {message_uri}
 ### GET
 Gets a message in a chatroom.
 #### Response
-A Message object.
+The Message object.
 #### Errors
 | Response Code | Cause                                         |
 |---------------|-----------------------------------------------|
-| 404 Not Found | No such Chatroom exists.                      |
 | 403 Forbidden | Missing permission `chat.rooms.get`.          |
-| 404 Not Found | No such Message exists.                       |
 | 403 Forbidden | Missing permission `chat.rooms.messages.get`. |

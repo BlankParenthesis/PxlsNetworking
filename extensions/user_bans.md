@@ -6,7 +6,6 @@ Since this concerns user objects directly, implementing this extension requires 
 This extension adds Ban objects which are described by following type:
 ```typescript
 {
-	"id": number | string;
 	"issued": Timestamp;
 	"expiry": Timestamp;
 	"issuer"?: User;
@@ -53,20 +52,19 @@ If the [board moderation extension](./board_undo.md) is implemented, then mass-p
 
 --------------------------------------------------------------------------------
 
-## /users/{user_id}/bans
+## {user_uri}/bans
 ### GET
 Lists all bans issued to a user.
 #### Response
-A Paginated List of Ban objects.
+A Paginated List of Ban References.
 ##### Errors
 | Response Code | Cause                                                              |
 |---------------|--------------------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.get` or `users.current.get`.             |
-| 404 Not Found | No such User exists.                                               |
 | 403 Forbidden | Missing permission `users.bans.list` or `users.current.bans.list`. |
 
 ### POST
-Bans a user.
+Bans the user.
 #### Request
 ```typescript
 {
@@ -75,32 +73,29 @@ Bans a user.
 }
 ```
 ##### Response
-The created Ban object.
+A reference to the created Ban object.
 ##### Errors
 | Response Code            | Cause                                                  |
 |--------------------------|--------------------------------------------------------|
 | 403 Forbidden            | Missing permission `users.get` or `users.current.get`. |
-| 404 Not Found            | No such User exists.                                   |
 | 403 Forbidden            | Missing permission `users.bans.post`.                  |
 | 422 Unprocessable Entity | Invalid reason.                                        |
 
 --------------------------------------------------------------------------------
 
-## /users/{user_id}/bans/{ban_id}
+## {ban_uri}
 ### GET
 Gets a ban issued to a user.
 #### Response
-A Ban object.
+The Ban object.
 ##### Errors
 | Response Code | Cause                                                            |
 |---------------|------------------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.get` or `users.current.get`.           |
-| 404 Not Found | No such User exists.                                             |
 | 403 Forbidden | Missing permission `users.bans.get` or `users.current.bans.get`. |
-| 404 Not Found | No such Ban exists.                                              |
 
 ### PATCH
-Updates a ban issued to a user.
+Updates the ban.
 #### Request
 ```typescript
 {
@@ -109,22 +104,18 @@ Updates a ban issued to a user.
 }
 ```
 ##### Response
-The created Ban object.
+The updated Ban object.
 ##### Errors
 | Response Code            | Cause                                                  |
 |--------------------------|--------------------------------------------------------|
 | 403 Forbidden            | Missing permission `users.get` or `users.current.get`. |
-| 404 Not Found            | No such User exists.                                   |
 | 403 Forbidden            | Missing permission `users.bans.patch`.                 |
-| 404 Not Found            | No such Ban exists.                                    |
 | 422 Unprocessable Entity | The ban reason is invalid.                             |
 
 ### DELETE
-Deletes a ban issued to a user.
+Removes the ban.
 ##### Errors
 | Response Code | Cause                                                  |
 |---------------|--------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.get` or `users.current.get`. |
-| 404 Not Found | No such User exists.                                   |
 | 403 Forbidden | Missing permission `users.bans.delete`.                |
-| 404 Not Found | No such Ban exists.                                    |

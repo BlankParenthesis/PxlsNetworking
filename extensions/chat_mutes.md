@@ -8,7 +8,6 @@ It also requires implementing the [users extension](./users.md) to identify user
 This extension adds Mute objects which are described by following type:
 ```typescript
 {
-	"id": number | string;
 	"issued": Timestamp;
 	"expiry": Timestamp;
 	"issuer"?: User;
@@ -31,7 +30,7 @@ This object appears identical to the Ban object described in the [bans extension
 
 --------------------------------------------------------------------------------
 
-## /chat/rooms/{room_id}/messages
+## {chatroom_uri}/messages
 ### POST
 #### Errors
 | Response Code | Cause  |
@@ -40,15 +39,14 @@ This object appears identical to the Ban object described in the [bans extension
 
 --------------------------------------------------------------------------------
 
-## /users/{user_id}/mutes
+## {user_uri}/mutes
 ### GET
 Lists all mutes issued to a user.
 #### Response
-A Paginated List of Mute objects.
+A Paginated List of Mute references.
 ##### Errors
 | Response Code | Cause                                                                |
 |---------------|----------------------------------------------------------------------|
-| 404 Not Found | No such User exists.                                                 | 
 | 403 Forbidden | Missing permission `users.mutes.list` or `users.current.mutes.list`. |
 
 ### POST
@@ -65,22 +63,19 @@ The created Mute object.
 ##### Errors
 | Response Code            | Cause                                   |
 |--------------------------|-----------------------------------------|
-| 404 Not Found            | No such User exists.                    | 
 | 403 Forbidden            | Missing permission `users.mutes.post`.  |
 | 422 Unprocessable Entity | Invalid reason.                         |
 
 --------------------------------------------------------------------------------
 
-## /users/{user_id}/mutes/{mute_id}
+## {mute_uri}
 ### GET
 Gets a mute issued to a user.
 #### Response
-A Mute object.
+The Mute object.
 ##### Errors
 | Response Code | Cause                                                              |
 |---------------|--------------------------------------------------------------------|
-| 404 Not Found | No such User exists.                                               |
-| 404 Not Found | No such Mute exists.                                               |
 | 403 Forbidden | Missing permission `users.mutes.get` or `users.current.mutes.get`. |
 
 ### PATCH
@@ -97,16 +92,12 @@ The created Mute object.
 ##### Errors
 | Response Code            | Cause                                   |
 |--------------------------|-----------------------------------------|
-| 404 Not Found            | No such User exists.                    |
-| 404 Not Found            | No such Mute exists.                    |
 | 403 Forbidden            | Missing permission `users.mutes.patch`. |
 | 422 Unprocessable Entity | Invalid reason.                         |
 
 ### DELETE
-Deletes a mute issued to a user.
+Removes a the Mute.
 ##### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|
-| 404 Not Found | No such User exists.                     |
-| 404 Not Found | No such Mute exists.                     |
 | 403 Forbidden | Missing permission `users.mutes.delete`. |

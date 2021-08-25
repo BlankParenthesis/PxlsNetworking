@@ -18,7 +18,7 @@ Clients are expected to keep track of which actions can be retracted.
 
 --------------------------------------------------------------------------------
 
-## /board/pixels/{x}/{y?}/{z?}/…
+## {board_uri}/pixels/{x}/{y?}/{z?}/…
 ### POST
 #### Response
 ##### Headers
@@ -45,7 +45,7 @@ Undoes the last place action at the given coordinate.
 --------------------------------------------------------------------------------
 
 If the [board moderation extension](./board_moderation.md) is implemented, then the mass-place endpoint defined there also gets an undo timestamp sent back:
-## /board/pixels
+## {board_uri}/pixels
 ### PATCH
 #### Response
 ##### Headers

@@ -16,7 +16,6 @@ Granting a role the permission to edit roles *effectively grants all permissions
 Role objects are defined by the following type:
 ```typescript
 {
-	"id": number | string;
 	"name": string;
 	"icon"?: string;
 	"permissions": string[];
@@ -36,7 +35,7 @@ Role objects are defined by the following type:
 
 --------------------------------------------------------------------------------
 
-## /users/{user_id}/roles
+## {user_uri}/roles
 ### GET
 Lists all roles a user has.
 #### Response
@@ -53,7 +52,7 @@ Adds a role to a user.
 #### Request
 ```typescript
 {
-	"role": number | string;
+	"role": string;
 }
 ```
 #### Response
@@ -62,19 +61,21 @@ A Paginated List of Role objects.
 | Response Code | Cause                                  |
 |---------------|----------------------------------------|
 | 403 Forbidden | Missing permission `users.get`.        |
-| 404 Forbidden | No such User exists.                   |
 | 403 Forbidden | Missing permission `users.roles.post`. |
+| 404 Forbidden | No such Role exists.                   |
 
---------------------------------------------------------------------------------
-
-## /users/{user_id}/roles/{role_id}
 ### DELETE
 Removes a role from a user.
+#### Request
+```typescript
+{
+	"role": string;
+}
+```
 #### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|
 | 403 Forbidden | Missing permission `users.get`.          |
-| 404 Forbidden | No such User exists.                     |
 | 403 Forbidden | Missing permission `users.roles.delete`. |
 | 404 Forbidden | No such Role exists.                     |
 
@@ -84,7 +85,7 @@ Removes a role from a user.
 ### GET
 Lists all roles.
 #### Response
-A Paginated List of Role objects.
+A Paginated List of Role References.
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -101,35 +102,43 @@ The created Role object.
 |---------------|----------------------------------|
 | 403 Forbidden | Missing permission `roles.post`. |
 
+### POST
+Create a new role.
+#### Request
+A role object
+#### Response
+A reference to the created Role object.
+#### Errors
+| Response Code | Cause                                                     |
+|---------------|-----------------------------------------------------------|
+| 403 Forbidden | The client lacks the required privileges to create roles. |
+
 --------------------------------------------------------------------------------
 
-## /roles/{role_id}
+## {role_uri}
 ### GET
-Gets a role.
+Gets the role.
 #### Response
-A Role object.
+The Role object.
 #### Errors
 | Response Code | Cause                           |
 |---------------|---------------------------------|
 | 403 Forbidden | Missing permission `roles.get`. |
-| 404 Not Found | No such Role exists.            |
 
 ### PATCH
-Updates a role.
+Updates the role.
 #### Request
-A partial Role object without the ID.
+A partial Role object.
 #### Response
 The updated Role object.
 #### Errors
 | Response Code | Cause                             |
 |---------------|-----------------------------------|
 | 403 Forbidden | Missing permission `roles.patch`. |
-| 404 Not Found | No such Role exists.              |
 
 ### DELETE
-Deletes a role.
+Deletes the role.
 #### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
 | 403 Forbidden | Missing permission `roles.delete`. |
-| 404 Not Found | No such Role exists.               |

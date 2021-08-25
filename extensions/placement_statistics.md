@@ -71,7 +71,7 @@ A Paginated List of the following type:
 
 --------------------------------------------------------------------------------
 
-## /users/{user_id}/stats
+## {user_uri}/stats
 ### GET
 Gets the placement statistics for a user.
 #### Response
@@ -90,4 +90,3 @@ Notably, the sum of all other entries do not need to sum to the total provided.
 | Response Code | Cause                                                            |
 |---------------|------------------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.stats.get` or users.current.stats.get. |
-| 404 Not Found | No such User exists.                                             |

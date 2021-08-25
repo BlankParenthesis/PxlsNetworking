@@ -29,31 +29,29 @@ Messages were deleted by a moderator.
 ```
 --------------------------------------------------------------------------------
 
-## /chat/rooms/{room_id}/messages
+
+## {chatroom_uri}/messages
 ### DELETE
 Deletes all specified messages.
 #### Request
 ```typescript
 {
-	messages: Array<number | string>;
+	messages: string[];
 }
 ```
 #### Errors
 | Response Code | Cause                                               |
 |---------------|-----------------------------------------------------|
 | 403 Forbidden | Missing permission `chat.rooms.get`.                |
-| 404 Not Found | No such Chatroom exists.                            |
 | 403 Forbidden | Missing permission `chat.rooms.messages.delete`.    |
 | 404 Not Found | At least one ID provided has no associated message. |
 
 
-## /chat/rooms/{room_id}/messages/{message_id}
+## {message_uri}
 ### DELETE
-Deletes a message.
+Deletes the message.
 #### Errors
 | Response Code | Cause                                            |
 |---------------|--------------------------------------------------|
 | 403 Forbidden | Missing permission `chat.rooms.get`.             |
-| 404 Not Found | No such Chatroom exists.                         |
 | 403 Forbidden | Missing permission `chat.rooms.messages.delete`. |
-| 404 Not Found | No such Message exists.                          |

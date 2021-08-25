@@ -15,7 +15,7 @@ Implementing this extension provides users with the tools necessary to moderate 
 
 --------------------------------------------------------------------------------
 
-## /board/pixels/{x}/{y?}/{z?}/…
+## {board_uri}/pixels/{x}/{y?}/{z?}/…
 ### POST
 #### Request
 ```typescript
@@ -36,7 +36,7 @@ Implementing this extension provides users with the tools necessary to moderate 
 
 --------------------------------------------------------------------------------
 
-## /board/pixels
+## {board_uri}/pixels
 ### PATCH
 Replace a subarea of the board.
 This is most useful for when moderators need to censor or otherwise change a large area and other tools - such as user rollbacks - are insufficient.

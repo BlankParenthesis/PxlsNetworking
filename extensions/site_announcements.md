@@ -73,7 +73,7 @@ A site announcement has been removed.
 ### GET
 Lists all site announcements.
 #### Response
-A Paginated List of Announcement objects.
+A Paginated List of Announcement References.
 #### Errors
 | Response Code | Cause                                          |
 |---------------|------------------------------------------------|
@@ -84,7 +84,7 @@ Creates a site announcement.
 #### Request
 An Announcement object without an ID (or author if the [users extension](./users.md) is implemented).
 #### Response
-The created Announcement object.
+A reference to the created Announcement.
 #### Errors
 | Response Code | Cause                                          |
 |---------------|------------------------------------------------|
@@ -92,7 +92,7 @@ The created Announcement object.
 
 --------------------------------------------------------------------------------
 
-## /announcements/{announcements_id}
+## {announcements_uri}
 ### GET
 Gets a site announcement.
 #### Response

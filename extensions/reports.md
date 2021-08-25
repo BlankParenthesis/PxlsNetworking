@@ -5,7 +5,6 @@ Implementing this extension provides users with a means of notifying moderators 
 Reports are represented with Report objects which are described by the type below:
 ```typescript
 {
-	"id": number | string;
 	"artifacts": Array<{
 		"uri": string;
 		"timestamp"?: Timestamp;
@@ -82,7 +81,7 @@ A report has been removed.
 ### GET 
 Lists all reports.
 #### Response
-A Paginated List of Report objects.
+A Paginated List of Report References.
 #### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
@@ -93,7 +92,7 @@ Creates a Report.
 #### Request
 A Report object without an ID, history, or status (or reporter if the [users extension](./users.md) is implemented).
 #### Response
-The created Report object.
+A reference to the created Report object.
 #### Errors
 | Response Code | Cause                                       |
 |---------------|---------------------------------------------|
@@ -110,7 +109,7 @@ If the [authentication extension](./authentication.md) is implemented, any creat
 ### GET
 Lists all reports owned by the client's user.
 #### Response
-A Paginated List of Report objects.
+A Paginated List of Report References.
 #### Errors
 | Response Code | Cause                                                      |
 |---------------|------------------------------------------------------------|
@@ -118,19 +117,18 @@ A Paginated List of Report objects.
 
 --------------------------------------------------------------------------------
 
-## /reports/{report_id}
+## {report_uri}
 ### GET
 Gets a report.
 #### Response
-A Report object.
+The Report object.
 #### Errors
 | Response Code | Cause                                                    |
 |---------------|----------------------------------------------------------|
 | 403 Forbidden | Missing permission `reports.get` or `reports.owned.get`. |
-| 404 Not Found | No such Report exists.                                   |
 
 ### PATCH
-Re-opens or closes a report.
+Re-opens or closes the report.
 #### Request
 ```typescript
 {
@@ -139,24 +137,22 @@ Re-opens or closes a report.
 }
 ```
 #### Response
-The modified Report.
+The updated Report object.
 #### Errors
 | Response Code | Cause                                                        |
 |---------------|--------------------------------------------------------------|
 | 403 Forbidden | Missing permission `reports.patch` or `reports.owned.patch`. |
-| 404 Not Found | No such Report exists.                                       |
 
 ### DELETE
-Deletes a report.
+Deletes the report.
 #### Errors
 | Response Code | Cause                                                          |
 |---------------|----------------------------------------------------------------|
 | 403 Forbidden | Missing permission `reports.delete` or `reports.owned.delete`. |
-| 404 Not Found | No such Report exists.                                         |
 
 --------------------------------------------------------------------------------
 
-## /reports/{report_id}/history
+## {report_uri}/history
 ### GET
 Lists all changes to a report.
 #### Response
@@ -178,5 +174,4 @@ If the [users extension](./users.md) is implemented, history entries may additio
 | Response Code | Cause                                                                      |
 |---------------|----------------------------------------------------------------------------|
 | 403 Forbidden | Missing permission `reports.get` or `reports.owned.get`.                   |
-| 404 Not Found | No such Report exists.                                                     |
 | 403 Forbidden | Missing permission `reports.history.list` or `reports.owned.history.list`. |

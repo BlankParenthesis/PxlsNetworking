@@ -5,7 +5,6 @@ Implementing this extension adds factions which allow users to group themselves 
 Factions objects are defined by the following type: 
 ```typescript
 {
-	"id": number | string;
 	"name": string;
 	"tag": string;
 	"color": number;
@@ -17,7 +16,6 @@ Factions objects are defined by the following type:
 Factions identify users with Member objects which are defined by the following type:
 ```typescript
 {
-	"id": number | string;
 	"displays_faction": boolean;
 	"approval": {
 		"member": boolean;
@@ -56,7 +54,7 @@ If the [users extension](./users.md) is implemented, Member objects will also co
 ### GET
 Lists all factions.
 #### Response
-A Paginated List of Faction objects.
+A Paginated List of Faction References.
 #### Errors
 | Response Code | Cause                               |
 |---------------|-------------------------------------|
@@ -73,7 +71,7 @@ Creates a faction.
 }
 ```
 #### Response
-The created Faction object.
+A reference to the created Faction object.
 #### Errors
 | Response Code | Cause                               |
 |---------------|-------------------------------------|
@@ -84,19 +82,17 @@ The created Faction object.
 
 --------------------------------------------------------------------------------
 
-## /factions/{faction_id}
+## {faction_uri}
 ### GET
-Gets a faction.
 #### Response
-A Faction object.
+The Faction object.
 #### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
 | 403 Forbidden | Missing permission `factions.get`. |
-| 404 Not Found | No such Faction exists.            |
 
 ### PATCH
-Updates a faction.
+Updates the Faction.
 #### Request
 ```typescript
 Partial<{
@@ -106,24 +102,22 @@ Partial<{
 }>
 ```
 #### Response
-The modified Faction.
+The update Faction object.
 #### Errors
 | Response Code | Cause                                |
 |---------------|--------------------------------------|
 | 403 Forbidden | Missing permission `factions.patch`. |
-| 404 Not Found | No such Faction exists.              |
 
 ### DELETE
-Deletes a faction.
+Deletes the faction.
 #### Errors
 | Response Code | Cause                                 |
 |---------------|---------------------------------------|
 | 403 Forbidden | Missing permission `factions.delete`. |
-| 404 Not Found | No such Faction exists.               |
 
 --------------------------------------------------------------------------------
 
-## /factions/{faction_id}/members
+## {faction_uri}/members
 ### GET
 Lists all members of a faction.
 #### Response
@@ -132,33 +126,31 @@ A Paginated List of Member objects.
 | Response Code | Cause                                      |
 |---------------|--------------------------------------------|
 | 403 Forbidden | Missing permission `factions.get`.         |
-| 404 Not Found | No such Faction exists.                    |
 | 403 Forbidden | Missing permission `factions.members.get`. |
 
 ### POST
 Adds a new member to a faction.
 #### Request
-Empty unless the [users extension](./users.md) is implemented in which case, an optional User ID may be specified:
+Empty unless the [users extension](./users.md) is implemented in which case, an optional User URI may be specified:
 ```typescript
 {
-	"id"?: number | string;
+	"user": string;
 }
 ```
 If unspecified, the user added will be the currently authenticated one.
 #### Response
-The created Member object.
+A reference to the created Member object.
 #### Errors
 | Response Code | Cause                                                  |
 |---------------|--------------------------------------------------------|
 | 403 Forbidden | Missing permission `factions.get`.                     |
-| 404 Not Found | No such Faction exists.                                |
 | 403 Forbidden | Missing permission `factions.members.post`.            |
-| 404 Not Found | No such User exists.                                   |
+| 404 Not Found | The user URI is invalid.                               |
 | 409 Conflict  | The user is already a member of the requested faction. |
 
 --------------------------------------------------------------------------------
 
-## /factions/{faction_id}/members/{member_id}
+## {member_uri}
 ### GET
 Gets a faction member.
 #### Response
@@ -167,30 +159,24 @@ A Member object.
 | Response Code | Cause                                      |
 |---------------|--------------------------------------------|
 | 403 Forbidden | Missing permission `factions.get`.         |
-| 404 Not Found | No such Faction exists.                    |
 | 403 Forbidden | Missing permission `factions.members.get`. |
-| 404 Not Found | No such Member exists.                     |
 
 ### PATCH
-Edits a faction member.
+Edit a faction member.
 #### Request
-A partial Member object without ID (or User) specified.
+A partial Member object.
 #### Response
 The updated Member object.
 #### Errors
 | Response Code | Cause                                        |
 |---------------|----------------------------------------------|
 | 403 Forbidden | Missing permission `factions.get`.           |
-| 404 Not Found | No such Faction exists.                      |
 | 403 Forbidden | Missing permission `factions.members.patch`. |
-| 404 Not Found | No such Member exists.                       |
 
 ### DELETE
-Removes a faction member.
+Remove a faction member.
 #### Errors
 | Response Code | Cause                                         |
 |---------------|-----------------------------------------------|
 | 403 Forbidden | Missing permission `factions.get`.            |
-| 404 Not Found | No such Faction exists.                       |
 | 403 Forbidden | Missing permission `factions.members.delete`. |
-| 404 Not Found | No such Member exists.                        |

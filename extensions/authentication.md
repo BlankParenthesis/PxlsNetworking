@@ -10,7 +10,6 @@ To accommodate servers allowing authentication of known users while disallowing 
 Authentication options are given by Methods which are defined by the following type:
 ```typescript
 {
-	"id": number | string;
 	"type": "OAUTH" | "FORM";
 	"name": string;
 	"description"?: string;
@@ -44,14 +43,14 @@ Clients should send the indicated cookies back to the server for any future requ
 ### GET
 Lists authentication methods.
 #### Response
-A Paginated List of Methods.
+A Paginated List of Method References.
 
 ### POST
 Creates an authentication method.
 #### Request
 A Method object without an ID.
 #### Response
-The created Method object.
+A Reference to the created Method object.
 #### Errors
 | Response Code | Cause                           |
 |---------------|---------------------------------|
@@ -59,30 +58,28 @@ The created Method object.
 
 --------------------------------------------------------------------------------
 
-## /auth/methods/{method_id}
+## {method_uri}
 ### GET
 Gets an authentication method.
 #### Response
-A Method object.
+The Method object.
 
 ### PATCH
-Updates an authentication method.
+Updates the authentication method.
 #### Request
-A partial Method object without an ID.
+A partial Method object.
 #### Response
-The modified Method object.
+The updated Method object.
 #### Errors
 | Response Code | Cause                          |
 |---------------|--------------------------------|
-| 404 Not Found | No such Method exists.         |
 | 403 Forbidden | Missing permission `auth.get`. |
 
 ### DELETE
-Deletes an authentication method.
+Deletes the authentication method.
 #### Errors
 | Response Code | Cause                             |
 |---------------|-----------------------------------|
-| 404 Not Found | No such Method exists.            |
 | 403 Forbidden | Missing permission `auth.delete`. |
 
 

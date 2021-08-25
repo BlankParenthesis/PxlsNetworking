@@ -8,6 +8,26 @@ Within these extensions, endpoints declared either here or in other extensions m
 These **duplicate response type definitions should be treated as the union of implemented definitions**.
 This allows extensions to add new fields to responses in a flexible way.
 
+
+To be as RESTful as possible, objects have a canonical address which can be used to refer to them.
+Where an object is returned elsewhere, a Reference to it will be returned instead.
+A Reference for an object T can be described with the following type:
+```typescript
+type Reference<T> = {
+	uri: string;
+	view?: T;
+};
+```
+where `uri` points to a location where `T` can be obtained with a simple GET request.
+The `view` field may be populated by servers so that clients can operate faster and with less requests.
+
+Clients may need to specify an object as part of a request.
+By using the URI of the object, clients need not know anything about internal IDs used by the server.
+
+Server implementations may choose to logically arrange their reference URIs (e.g. `/users/{user_id}`), but are not required to do so.
+Clients should not assume such a structure, nor should they assume any server will popular the `view` field.
+
+
 Some endpoints return a list of objects rather that a single one.
 Sometimes, too many objects will exist in this list to be reasonably sent in a single request.
 To solve this, all list endpoints return paginated responses.
@@ -134,7 +154,7 @@ A Paginated List of Board objects.
 
 --------------------------------------------------------------------------------
 
-## /boards/{board_id}
+## {board_uri}
 ### GET
 #### Response
 The Board object.
@@ -146,7 +166,6 @@ The Board object.
 #### Errors
 | Response Code | Cause                                  |
 |---------------|----------------------------------------|
-| 404 Not Found | No board with the requested ID exists. |
 | 403 Forbidden | Missing permission `boards.get`        |
 
 --------------------------------------------------------------------------------
@@ -157,7 +176,7 @@ If any sub-endpoints are called on this, the should likewise be redirected, keep
 
 --------------------------------------------------------------------------------
 
-## /boards/{board_id}/socket?extensions[]={extensions_list}
+## {board_uri}/socket?extensions[]={extensions_list}
 Websocket connection point.
 A connecting client may specify which extensions it wishes to be enabled on the websocket using the `extensions_list` query parameter.
 Extension names are the same as those in `/info`.
@@ -199,7 +218,7 @@ The client's permissions have changed.
 
 --------------------------------------------------------------------------------
 
-## /boards/{board_id}/data/initial
+## {board_uri}/data/initial
 ### GET
 Represents the initial state of the board.
 #### Response
@@ -212,7 +231,7 @@ Binary data.
 
 --------------------------------------------------------------------------------
 
-## /boards/{board_id}/data/colors
+## {board_uri}/data/colors
 ### GET
 Represents the current state of the board.
 #### Response
@@ -225,7 +244,7 @@ Binary data.
 
 --------------------------------------------------------------------------------
 
-## /boards/{board_id}/data/mask
+## {board_uri}/data/mask
 ### GET
 Represents where placements can be made within the board dimensions.
 Values correspond to the following behaviors:
@@ -245,7 +264,7 @@ Binary data.
 
 --------------------------------------------------------------------------------
 
-## /boards/{board_id}/data/timestamps
+## {board_uri}/data/timestamps
 ### GET
 Represents the last-modified time for all pixels on the board.
 #### Response
@@ -260,7 +279,7 @@ Timestamp is seconds since `created_at` as defined in `/board/info`.
 
 --------------------------------------------------------------------------------
 
-## /boards/{board_id}/users
+## {board_uri}/users
 ### GET
 Gets the active and idle user counts.
 #### Response
@@ -279,7 +298,7 @@ Gets the active and idle user counts.
 
 --------------------------------------------------------------------------------
 
-## /board/{board_id}/pixels
+## {board_uri}/pixels
 ### GET
 Lists all placements.
 #### Response
@@ -291,7 +310,7 @@ A Paginated List of Placement objects.
 
 --------------------------------------------------------------------------------
 
-## /boards/{board_id}/pixels/{x}/{y?}/{z?}/…
+## {board_uri}/pixels/{x}/{y?}/{z?}/…
 ### GET
 Gets the most recent placement for the specified board position.
 #### Response

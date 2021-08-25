@@ -68,11 +68,11 @@ A board announcement has been removed.
 
 --------------------------------------------------------------------------------
 
-## /board/announcements
+## {board_uri}/announcements
 ### GET
 Lists all board announcements.
 #### Response
-A Paginated List of Announcement objects.
+A Paginated List of Announcement References.
 #### Errors
 | Response Code | Cause                                          |
 |---------------|------------------------------------------------|
@@ -91,16 +91,15 @@ The created Announcement object.
 
 --------------------------------------------------------------------------------
 
-## /board/announcements/{announcements_id}
+## {announcement_uri}
 ### GET
 Gets a board announcement.
 #### Response
-An Announcement object.
+The Announcement object.
 #### Errors
 | Response Code | Cause                                         |
 |---------------|-----------------------------------------------|
 | 403 Forbidden | Missing permission `board.announcements.get`. |
-| 404 Not Found | No such Announcement exists.                  |
 
 ### PATCH
 Updates a board announcement.
@@ -112,12 +111,10 @@ The updated Announcement object.
 | Response Code | Cause                                           |
 |---------------|-------------------------------------------------|
 | 403 Forbidden | Missing permission `board.announcements.patch`. |
-| 404 Not Found | No such Announcement exists.                    |
 
 ### DELETE
-Deletes a board announcement.
+Deletes the board announcement.
 #### Errors
 | Response Code | Cause                                            |
 |---------------|--------------------------------------------------|
 | 403 Forbidden | Missing permission `board.announcements.delete`. |
-| 404 Not Found | No such Announcement exists.                     |

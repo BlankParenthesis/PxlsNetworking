@@ -6,7 +6,6 @@ Consequently, implementing this extension requires implementing the [authenticat
 User objects are represented with the following type:
 ```typescript
 {
-	"id": number | string;
 	"name": string;
 	"created_at": Timestamp;
 }
@@ -49,11 +48,21 @@ The client user has changed.
 
 --------------------------------------------------------------------------------
 
+## /board/pixels/{x}/{y}
+### GET
+```typescript
+{
+	"user"?: User;
+}
+```
+
+--------------------------------------------------------------------------------
+
 ## /users
 ### GET
 Lists all users.
 #### Response
-A Paginated List of User objects.
+A Paginated List of User References.
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
@@ -61,16 +70,15 @@ A Paginated List of User objects.
 
 --------------------------------------------------------------------------------
 
-## /users/{user_id}
+## {user_uri}
 ### GET
 Gets a user.
 #### Response
-A User object.
+The User object.
 #### Errors
 | Response Code | Cause                                                  |
 |---------------|--------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.get` or `users.current.get`. |
-| 404 Not Found | No such User exists.                                   |
 
 ### PATCH
 Updates a user.
@@ -82,7 +90,6 @@ The updated User object.
 | Response Code | Cause                                                      |
 |---------------|------------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.patch` or `users.current.patch`. |
-| 404 Not Found | No such User exists.                                       |
 
 ### DELETE
 Deletes a user.
@@ -98,6 +105,4 @@ Deletes a user.
 Requests made to this endpoint should be redirected using HTTP status 307 to the user object of the currently authenticated user.
 If the client is not authenticated, then the server should respond with a status of 401 - unauthorized.
 
-Some extensions define endpoints which being with the specific user endpoint (`/users/{user_id}`).
-For each such definition, a client should be redirected to the appropriate endpoint when accessing the definitions URI with this endpoint as the base.
-For example, `/users/current/mutes` would redirect to `/users/0/mutes` if the current user's ID was 0.
+If any sub-endpoints are called on this, they should likewise be redirected, keeping the path.
