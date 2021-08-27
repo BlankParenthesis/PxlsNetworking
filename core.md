@@ -145,19 +145,45 @@ It represents the actions the client can take without encountering a permissions
 
 ## /boards
 ### GET
+Lists all Board objects.
 #### Response
-A Paginated List of Board objects.
+A Paginated List of Board References.
 #### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
 | 403 Forbidden | Missing permission `boards.list` |
 
+### POST
+Creates a new Board object.
+#### Request
+```typescript
+{
+	"name": string;
+	"shape": number[][]
+	"palette": Map<number, {
+		"name": string;
+		"value": number;
+	}>;
+}
+```
+#### Response
+A Board Reference.
+##### Headers
+| Header | Value                                |
+|--------|--------------------------------------|
+| Location | The location of the created Board. |
+#### Errors
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `boards.post` |
+
 --------------------------------------------------------------------------------
 
 ## {board_uri}
 ### GET
+Gets a Board object.
 #### Response
-The Board object.
+A Board Reference.
 ##### Headers
 | Header                | Value                                                                          |
 |-----------------------|--------------------------------------------------------------------------------|
@@ -167,6 +193,35 @@ The Board object.
 | Response Code | Cause                                  |
 |---------------|----------------------------------------|
 | 403 Forbidden | Missing permission `boards.get`        |
+
+### PATCH
+Updates the Board object.
+#### Request
+```typescript
+Partial<{
+	"name": string;
+	"shape": number[][]
+	"palette": Map<number, {
+		"name": string;
+		"value": number;
+	}>;
+}>
+```
+#### Response
+A Board Reference.
+#### Errors
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `boards.patch` |
+
+### DELETE
+Deletes the Board object.
+#### Response
+*No Content*
+#### Errors
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `boards.delete` |
 
 --------------------------------------------------------------------------------
 
