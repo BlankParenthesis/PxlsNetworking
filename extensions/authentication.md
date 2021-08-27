@@ -63,6 +63,10 @@ A Reference to the created Method object.
 Gets an authentication method.
 #### Response
 The Method object.
+#### Errors
+| Response Code | Cause                          |
+|---------------|--------------------------------|
+| 403 Forbidden | Missing permission `auth.get`. |
 
 ### PATCH
 Updates the authentication method.
@@ -71,9 +75,9 @@ A partial Method object.
 #### Response
 The updated Method object.
 #### Errors
-| Response Code | Cause                          |
-|---------------|--------------------------------|
-| 403 Forbidden | Missing permission `auth.get`. |
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `auth.patch`. |
 
 ### DELETE
 Deletes the authentication method.
