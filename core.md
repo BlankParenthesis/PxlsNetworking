@@ -74,8 +74,17 @@ It would differ by orienting the first 62,500 pixels in the first 250 by 250 are
 
 All dimensions should be interpreted as being of the same length by padding any entries smaller than others with 1s at the end.
 
-Clients must be allowed to make valid requests with a range size equal to the product of the final array's elements, aligned to the same size.
-If the server allows it, however, clients may request different ranges as they see fit.
+Clients must be allowed to make valid requests with a range size equal to the product of the final shape dimensions, aligned to the same size.
+For example, for a shape of `[[8,8], [128, 128]]` a server must accept each of these requests: `Range: bytes=0-16384`, `Range: bytes=16384-32768`, `Range: bytes=-16384`, `Range: bytes=1032192-`. These examples are non-exhaustive, obviously the server must respond to many other valid ranges as well. Additionally, the server may respond to arbitrary range requests if it chooses.
+
+The server should respond to such requests with a 206 partial content response with the bytes unit type as other unit types are prone to being dropped by proxy servers.
+
+Servers need not support multipart ranges — the hassle of properly supporting the multipart/byteranges response type (the boundary in particular) makes this less desirable than it initially seems.
+
+It should be noted that servers can reject requests for the entire board.
+Such rejections should be done with a 416 response even if the original request did not contain a range.
+All clients should support ranges to be compatible.
+This is so that servers can reject blind client requests for chunked boards which are too large to reasonably process as one object, saving the client from itself.
 
 For orientation purposes, the default board orientation is left→right, then top→bottom, then back→front.
 Higher order boards are up to client interpretation.
