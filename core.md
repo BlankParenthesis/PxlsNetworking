@@ -366,7 +366,7 @@ Gets the active and idle user counts.
 ### GET
 Lists all placements.
 #### Response
-A Paginated List of Placement objects.
+A Paginated List of Placement objects, sorted by timestamp ascending.
 #### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|
