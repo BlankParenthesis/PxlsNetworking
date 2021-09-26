@@ -1,30 +1,9 @@
 Client Authentication
 =====================
 Implementing this extension lets clients authenticate their users with the server.
-It provides details on how servers can expose available authentication methods for OAuth and direct login.
-A server implementing this extension need only provide one method of authentication but could support as many as desired.
+It provides endpoints indicating where and how clients should authenticate and continue to appear authenticated.
 
-It may be beneficial to close registration from particular services for a short time or indefinitely.
-To accommodate servers allowing authentication of known users while disallowing new ones, each method can have registration disabled but still present itself as available for authentication.
-
-Authentication options are given by Methods which are defined by the following type:
-```typescript
-{
-	"type": "OAUTH" | "FORM";
-	"name": string;
-	"description"?: string;
-	"url": string;
-	"registration": boolean;
-}
-```
-Methods that use the "OAUTH" type of authentication provide a URL which will initiate an OAuth flow.
-Client implementations have no control over this flow.
-Web clients served from the same origin as the server can simply redirect the page to the chosen flow and can expect to eventually be revisited at the completion of the flow with authentication in place.
-Other clients cannot expect this and should not use this type of method.
-
-Methods that use the "FORM" type of authentication provide a URL to which a client can POST a `username` and `password`.
-Responses from the provided URL should return a response with the Set-Cookie header when successful.
-Clients should send the indicated cookies back to the server for any future requests and should expect to be authenticated when they do so.
+Clients are expected to obtain an OAuth 2.0 token and send this in the authorization header as per [rfc6750](https://datatracker.ietf.org/doc/html/rfc6750#section-2.1).
 
 --------------------------------------------------------------------------------
 
@@ -39,52 +18,24 @@ Clients should send the indicated cookies back to the server for any future requ
 
 --------------------------------------------------------------------------------
 
-## /auth/methods
+## /auth
 ### GET
-Lists authentication methods.
+Gets information about where and how clients can obtain authentication tokens.
 #### Response
-A Paginated List of Method References.
-
-### POST
-Creates an authentication method.
-#### Request
-A Method object without an ID.
-#### Response
-A Reference to the created Method object.
-#### Errors
-| Response Code | Cause                           |
-|---------------|---------------------------------|
-| 403 Forbidden | Missing permission `auth.post`. |
+```typescript
+{
+	"auth_uri": string;
+	"token_uri": string;
+	"client_id"?: string;
+}
+```
+`login_uri` is the location where clients can direct a web browser to start an OAuth 2.0 login flow.
+`token_uri` is the location where the client can send the code retrieved by the login process to retrieve a token.
+Clients should use the PKCE method described in [rfc7636](https://datatracker.ietf.org/doc/html/rfc7636) for initiating the login flow and retrieving the token.
+If `client_id` is present, it is public and supports any redirect URI with no required secret.
+Otherwise, clients will need to use a known client id (and probably secret).
+Knowing this id and secret implies a pre-existing relationship between the client and server, making complete interchangeability difficult in these cases.
 
 --------------------------------------------------------------------------------
 
-## {method_uri}
-### GET
-Gets an authentication method.
-#### Response
-The Method object.
-#### Errors
-| Response Code | Cause                          |
-|---------------|--------------------------------|
-| 403 Forbidden | Missing permission `auth.get`. |
-
-### PATCH
-Updates the authentication method.
-#### Request
-A partial Method object.
-#### Response
-The updated Method object.
-#### Errors
-| Response Code | Cause                            |
-|---------------|----------------------------------|
-| 403 Forbidden | Missing permission `auth.patch`. |
-
-### DELETE
-Deletes the authentication method.
-#### Errors
-| Response Code | Cause                             |
-|---------------|-----------------------------------|
-| 403 Forbidden | Missing permission `auth.delete`. |
-
-
-**TODO:** "Methods" is not a great name, perhaps come up with a good alternative. Ideally, it would fit in the url and as the object name.
+**TODO:** scopes, consider only giving realm uri and specifying to use oidc discovery.
