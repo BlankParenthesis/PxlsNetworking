@@ -14,8 +14,8 @@ Where an object is returned elsewhere, a Reference to it will be returned instea
 A Reference for an object T can be described with the following type:
 ```typescript
 type Reference<T> = {
-	uri: string;
-	view?: T;
+	"uri": string;
+	"view"?: T;
 };
 ```
 where `uri` points to a location where `T` can be obtained with a simple GET request.
