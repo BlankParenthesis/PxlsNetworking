@@ -253,7 +253,43 @@ The board has changed.
 ```typescript
 {
 	"type": "board-update";
-	"pixels": Array<Placement>;
+	"info"?: Partial<{
+		"name": string;
+		"shape": number[][]
+		"palette": Map<number, {
+			"name": string;
+			"value": number;
+		}>;
+	}>;
+	"data"?: Partial<{
+		"colors": Array<Change>;
+		"timestamps": Array<Change>;
+		"initial": Array<Change>;
+		"mask": Array<Change>;
+	}
+}
+```
+Where a Change object is defined as:
+```typescript
+{
+	"position": number;
+	"values": number[];
+}
+```
+Where `values` a is contiguous run of data and can be of any valid length.
+
+In the vast majority of cases, this packet will look similar to the following, representing a placement event:
+```json
+{
+	"type": "board-update",
+	"data": {
+		"colors": [
+			{ "position": 0, "values": [1] }
+		],
+		"timestamps": [
+			{ "position": 0, "values": [420] }
+		]
+	}
 }
 ```
 #### PixelsAvailable
