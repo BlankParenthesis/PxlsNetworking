@@ -410,7 +410,7 @@ A Paginated List of Placement objects, sorted by timestamp ascending.
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/pixels/{x}/{y?}/{z?}/…
+## {board_uri}/pixels/{position}
 ### GET
 Gets the most recent placement for the specified board position.
 #### Response
