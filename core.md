@@ -325,9 +325,24 @@ Represents the initial state of the board.
 Binary data. 
 8-bit palette index for every pixel.
 #### Errors
-| Response Code | Cause                             |
-|---------------|-----------------------------------|
-| 403 Forbidden | Missing permission `boards.data`. |
+| Response Code | Cause                                 |
+|---------------|---------------------------------------|
+| 403 Forbidden | Missing permission `boards.data.get`. |
+
+### PATCH
+Update the initial board.
+#### Request
+Binary data.
+Content-range can be specified.
+Content-type may be multipart/byteranges which allows the client to patch smaller segments individually if the server supports it.
+Server implementations must support content-range headers which specify a range aligning with shape boundaries, but need not support other range features.
+#### Response
+204 No Content
+#### Errors
+| Response Code | Cause                                   |
+|---------------|-----------------------------------------|
+| 403 Forbidden | Missing permission `boards.data.patch`. |
+| 409 Conflict  | Patch is considered invalid.            |
 
 --------------------------------------------------------------------------------
 
@@ -338,9 +353,9 @@ Represents the current state of the board.
 Binary data. 
 8-bit palette index for every pixel.
 #### Errors
-| Response Code | Cause                             |
-|---------------|-----------------------------------|
-| 403 Forbidden | Missing permission `boards.data`. |
+| Response Code | Cause                                 |
+|---------------|---------------------------------------|
+| 403 Forbidden | Missing permission `boards.data.get`. |
 
 --------------------------------------------------------------------------------
 
@@ -358,9 +373,24 @@ Values correspond to the following behaviors:
 Binary data. 
 8-bit mask identifier for every pixel.
 #### Errors
-| Response Code | Cause                             |
-|---------------|-----------------------------------|
-| 403 Forbidden | Missing permission `boards.data`. |
+| Response Code | Cause                                 |
+|---------------|---------------------------------------|
+| 403 Forbidden | Missing permission `boards.data.get`. |
+
+### PATCH
+Update the board mask.
+#### Request
+Binary data.
+Content-range can be specified.
+Content-type may be multipart/byteranges which allows the client to patch smaller segments individually if the server supports it.
+Server implementations must support content-range headers which specify a range aligning with shape boundaries, but need not support other range features.
+#### Response
+204 No Content
+#### Errors
+| Response Code | Cause                                   |
+|---------------|-----------------------------------------|
+| 403 Forbidden | Missing permission `boards.data.patch`. |
+| 409 Conflict  | Patch is considered invalid.            |
 
 --------------------------------------------------------------------------------
 
@@ -373,9 +403,9 @@ Binary data.
 Bytes are little-endian ordered.
 Timestamp is seconds since `created_at` as defined in `/board/info`.
 #### Errors
-| Response Code | Cause                             |
-|---------------|-----------------------------------|
-| 403 Forbidden | Missing permission `boards.data`. |
+| Response Code | Cause                                 |
+|---------------|---------------------------------------|
+| 403 Forbidden | Missing permission `boards.data.get`. |
 
 --------------------------------------------------------------------------------
 
