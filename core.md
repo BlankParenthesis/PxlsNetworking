@@ -276,7 +276,7 @@ Where a Change object is defined as:
 	"values": number[];
 }
 ```
-Where `values` a is contiguous run of data and can be of any valid length.
+Where `values` is a contiguous run of data and can be of any valid length.
 
 In the vast majority of cases, this packet will look similar to the following, representing a placement event:
 ```json
