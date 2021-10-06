@@ -301,14 +301,6 @@ How many pixels may be placed by the current user without encountering a cooldow
 	"next"?: Timestamp; 
 }
 ```
-#### PermissionsChanged
-The client's permissions have changed.
-```typescript
-{
-	"type": "permissions-changed";
-	"permissions": string[];
-}
-```
 ### Errors
 | Response Code            | Cause                               |
 |--------------------------|-------------------------------------|
