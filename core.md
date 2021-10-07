@@ -403,12 +403,11 @@ Timestamp is seconds since `created_at` as defined in `/board/info`.
 
 ## {board_uri}/users
 ### GET
-Gets the active and idle user counts.
+Gets the active user count.
 #### Response
 ```typescript
 {
 	"active": number;
-	"idle": number;
 	"idle_timeout": number;
 }
 ```
