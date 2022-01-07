@@ -60,7 +60,7 @@ This is represented here as the Board object defined by the following type:
 	"max_pixels_available": number;
 }
 ```
-The `value` field of each entry in `palette` is a 4-byte ARGB color value.
+The `value` field of each entry in `palette` is a 4-byte RGBA color value.
 
 `shape` indicates the ordering of data for the board.
 It usually contains a single array of size 2 with its elements representing width and height respectively.
