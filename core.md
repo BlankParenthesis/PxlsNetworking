@@ -306,6 +306,15 @@ How many pixels may be placed by the current user without encountering a cooldow
 	"next"?: Timestamp; 
 }
 ```
+#### Ready
+The first packet sent by the server. 
+After receiving this clients can begin fetching board data resources.
+Events received after this packet and before the data resources are loaded can be replayed after loading with a guarantee that the client will end up with the correct resource representation.
+```typescript
+{
+	"type": "ready";
+}
+```
 ### Errors
 | Response Code            | Cause                               |
 |--------------------------|-------------------------------------|
