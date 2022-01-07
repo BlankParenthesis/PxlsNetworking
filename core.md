@@ -90,17 +90,15 @@ For orientation purposes, the default board orientation is left→right, then to
 Higher order boards are up to client interpretation.
 
 
-Of equivalent importance to the board is the ability to modify the it with Placements.
+Of equivalent importance to the board is the ability to modify it with Placements.
 A Placement object represents a change of board state at a particular time and is defined by the following type:
 ```typescript
 {
-	"position": number[];
+	"position": number;
 	"color": number;
 	"modified": Timestamp;
 }
 ```
-`position` should match the number of axis for the board it relates to as described by the board's `shape`.
-
 Placements are often not functional distinguishable from pixels on the board and the two concepts are mostly treated interchangeably.
 
 
