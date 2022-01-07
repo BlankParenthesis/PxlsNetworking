@@ -642,10 +642,7 @@
                             "title": "Position",
                             "description": "Position on the board. Should match the number of axis for the board it relates to as described by the board's shape."
                         },
-                        "example": [
-                            12,
-                            5
-                        ],
+                        "example": 12546,
                         "name": "position",
                         "in": "path"
                     }
