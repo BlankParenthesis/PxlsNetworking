@@ -25,11 +25,11 @@ Clients may need to specify an object as part of a request.
 By using the URI of the object, clients need not know anything about internal IDs used by the server.
 
 Server implementations may choose to logically arrange their reference URIs (e.g. `/users/{user_id}`), but are not required to do so.
-Clients should not assume such a structure, nor should they assume any server will popular the `view` field.
+Clients should not assume such a structure and should not assume any server will populate the `view` field.
 
 
 Some endpoints return a list of objects rather that a single one.
-Sometimes, too many objects will exist in this list to be reasonably sent in a single request.
+Sometimes too many objects will exist in this list to be reasonably sent in a single request.
 To solve this, all list endpoints return paginated responses.
 For an object type X, a Paginated List of X can be defined by the following type:
 ```typescript
@@ -39,11 +39,14 @@ For an object type X, a Paginated List of X can be defined by the following type
 	"previous"?: string;
 }
 ```
-Where `next` and `previous` are URIs pointing to the continuations in their respective directions of the list.
+Where `next` and `previous` are URIs pointing to next and previous pages respectively.
 The presence of these fields should be used to determine if the request completes or starts a list.
 
 In requesting a Paginated list, clients may specify an upper limit of responses in a single page with the `limit` query parameter.
 Server implementations must not return more items than this number but may return less even if the list is not completed by the current page.
+
+The `next` and `previous` URIs should not result in duplicate items across pages when the list updates in-between fetches.
+Clients sequentially loading every "next" page until the end of a list should be sent every item in the list *exactly once*.
 
 
 At the core of Pxls is the board on which pixels are placed.
@@ -75,7 +78,9 @@ It would differ by orienting the first 62,500 pixels in the first 250 by 250 are
 All dimensions should be interpreted as being of the same length by padding any entries smaller than others with 1s at the end.
 
 Clients must be allowed to make valid requests with a range size equal to the product of the final shape dimensions, aligned to the same size.
-For example, for a shape of `[[8,8], [128, 128]]` a server must accept each of these requests: `Range: bytes=0-16384`, `Range: bytes=16384-32768`, `Range: bytes=-16384`, `Range: bytes=1032192-`. These examples are non-exhaustive, obviously the server must respond to many other valid ranges as well. Additionally, the server may respond to arbitrary range requests if it chooses.
+For example, for a shape of `[[8,8], [128, 128]]` a server must accept each of these requests: `Range: bytes=0-16384`, `Range: bytes=16384-32768`, `Range: bytes=-16384`, `Range: bytes=1032192-`.
+These examples are non-exhaustive — the server must respond to many other valid ranges as well.
+The server may respond to arbitrary range requests if it chooses.
 
 The server should respond to such requests with a 206 partial content response with the bytes unit type as other unit types are prone to being dropped by proxy servers.
 
@@ -99,7 +104,7 @@ A Placement object represents a change of board state at a particular time and i
 	"modified": Timestamp;
 }
 ```
-Placements are often not functional distinguishable from pixels on the board and the two concepts are mostly treated interchangeably.
+Placements are similar to pixels on the board and the two concepts are often treated interchangeably.
 
 
 Nearly all requests by the client can be rejected by the server implementation.
@@ -171,13 +176,14 @@ Creates a new Board object.
 		"name": string;
 		"value": number;
 	}>;
+	"max_pixels_available": number;
 }
 ```
 #### Response
 A Board Reference.
 ##### Headers
-| Header | Value                                |
-|--------|--------------------------------------|
+| Header   | Value                              |
+|----------|------------------------------------|
 | Location | The location of the created Board. |
 #### Errors
 | Response Code | Cause                            |
@@ -192,14 +198,14 @@ Gets a Board object.
 #### Response
 A Board Reference.
 ##### Headers
-| Header                | Value                                                                          |
-|-----------------------|--------------------------------------------------------------------------------|
-| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
-| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
+| Header                | Value                                                                                                               |
+|-----------------------|---------------------------------------------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                      |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available` |
 #### Errors
-| Response Code | Cause                                  |
-|---------------|----------------------------------------|
-| 403 Forbidden | Missing permission `boards.get`        |
+| Response Code | Cause                           |
+|---------------|---------------------------------|
+| 403 Forbidden | Missing permission `boards.get` |
 
 ### PATCH
 Updates the Board object.
@@ -212,6 +218,7 @@ Partial<{
 		"name": string;
 		"value": number;
 	}>;
+	"max_pixels_available": number;
 }>
 ```
 #### Response
@@ -245,7 +252,7 @@ Extension names are the same as those in `/info`.
 To receive the events defined here, the list should contain the value `core`.
 ### Server packets
 These packets are sent by the server to inform the client of something.
-They should be sent as UTF-8 encoded JSON text.
+They should be sent as UTF-8 encoded JSON text or as a [permessage-deflate](https://www.rfc-editor.org/rfc/rfc7692) representation of that if supported.
 #### BoardUpdate
 The board has changed.
 ```typescript
@@ -358,7 +365,6 @@ Values correspond to the following behaviors:
 |   0   | No placement allowed.                                     |
 |   1   | Placement allowed.                                        |
 |   2   | Placement allowed if an adjacent pixel has been modified. |
-
 #### Response
 Binary data. 
 8-bit mask identifier for every pixel.
@@ -391,7 +397,7 @@ Represents the last-modified time for all pixels on the board.
 Binary data. 
 32-bit unsigned timestamp for every pixel. 
 Bytes are little-endian ordered.
-Timestamp is seconds since `created_at` as defined in `/board/info`.
+Timestamp is seconds since `created_at` as defined in `{board_uri}/info`.
 #### Errors
 | Response Code | Cause                                 |
 |---------------|---------------------------------------|
@@ -421,7 +427,8 @@ Gets the active user count.
 ### GET
 Lists all placements.
 #### Response
-A Paginated List of Placement objects, sorted by timestamp ascending.
+A Paginated List of Placement objects, sorted by timestamp ascending.  
+NOTE: Placements have no canonical location and must be sent as objects here rather than references.
 #### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|
@@ -452,10 +459,10 @@ Creates a placement.
 #### Response
 The created Placement object.
 ##### Headers
-| Header                | Value                                                                          |
-|-----------------------|--------------------------------------------------------------------------------|
-| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
-| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
+| Header                | Value                                                                                                               |
+|-----------------------|---------------------------------------------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                      |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available` |
 #### Errors
 | Response Code            | Cause                                             |
 |--------------------------|---------------------------------------------------|
