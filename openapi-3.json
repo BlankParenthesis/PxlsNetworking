@@ -116,11 +116,11 @@
                 }
             }
         },
-        "/board/default": {
+        "/boards/default": {
             "get": {
                 "summary": "Default Board",
                 "description": "Redirect to the board object of the default board.",
-                "operationId": "default_board_board_default_get",
+                "operationId": "default_board_boards_default_get",
                 "responses": {
                     "307": {
                         "description": "Successful Response",
@@ -642,7 +642,7 @@
                             "title": "Position",
                             "description": "Position on the board. Should match the number of axis for the board it relates to as described by the board's shape."
                         },
-                        "example": 12546,
+                        "example": 25567,
                         "name": "position",
                         "in": "path"
                     }
@@ -693,6 +693,16 @@
                         "in": "path"
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Color"
+                            }
+                        }
+                    },
+                    "required": true
+                },
                 "responses": {
                     "200": {
                         "description": "Successful Response",
@@ -795,16 +805,18 @@
                     }
                 }
             },
-            "HTTPValidationError": {
-                "title": "HTTPValidationError",
+            "Color": {
+                "title": "Color",
+                "required": [
+                    "color"
+                ],
                 "type": "object",
                 "properties": {
-                    "detail": {
-                        "title": "Detail",
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ValidationError"
-                        }
+                    "color": {
+                        "title": "Color",
+                        "type": "integer",
+                        "description": "4-byte RGBA color value",
+                        "example": 13487565
                     }
                 }
             },
@@ -849,7 +861,8 @@
                 "required": [
                     "name",
                     "shape",
-                    "palette"
+                    "palette",
+                    "max_pixels_available"
                 ],
                 "type": "object",
                 "properties": {
@@ -891,6 +904,11 @@
                                 "value": 0
                             }
                         }
+                    },
+                    "max_pixels_available": {
+                        "title": "Max Pixels Available",
+                        "type": "integer",
+                        "description": "Stack size for the board"
                     }
                 }
             },
@@ -910,7 +928,7 @@
                     "value": {
                         "title": "Value",
                         "type": "integer",
-                        "description": "4-byte ARGB color value",
+                        "description": "4-byte RGBA color value",
                         "example": 13487565
                     }
                 }
@@ -976,7 +994,8 @@
                 "required": [
                     "name",
                     "shape",
-                    "palette"
+                    "palette",
+                    "max_pixels_available"
                 ],
                 "type": "object",
                 "properties": {
@@ -1021,7 +1040,8 @@
                     },
                     "max_pixels_available": {
                         "title": "Max Pixels Available",
-                        "type": "integer"
+                        "type": "integer",
+                        "description": "Stack size for the board"
                     },
                     "created_at": {
                         "title": "Created At",
@@ -1061,11 +1081,8 @@
                 "properties": {
                     "position": {
                         "title": "Position",
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        },
-                        "description": "Position on the board. Should match the number of axis for the board it relates to as described by the board's shape."
+                        "type": "integer",
+                        "description": "Position on the board."
                     },
                     "color": {
                         "title": "Color",
@@ -1119,32 +1136,6 @@
                         "title": "Idle Timeout",
                         "type": "number",
                         "description": "Duration before a user is considered inactive, in seconds."
-                    }
-                }
-            },
-            "ValidationError": {
-                "title": "ValidationError",
-                "required": [
-                    "loc",
-                    "msg",
-                    "type"
-                ],
-                "type": "object",
-                "properties": {
-                    "loc": {
-                        "title": "Location",
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "msg": {
-                        "title": "Message",
-                        "type": "string"
-                    },
-                    "type": {
-                        "title": "Error Type",
-                        "type": "string"
                     }
                 }
             }
