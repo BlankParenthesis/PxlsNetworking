@@ -333,24 +333,6 @@ Binary data.
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/users
-### GET
-Gets the active user count.
-#### Response
-```typescript
-{
-	"active": number;
-	"idle_timeout": number;
-}
-```
-`idle_timeout` is in seconds.
-#### Errors
-| Response Code | Cause                              |
-|---------------|------------------------------------|
-| 403 Forbidden | Missing permission `boards.users`. |
-
---------------------------------------------------------------------------------
-
 ## {board_uri}/pixels
 ### GET
 Lists all placements.
