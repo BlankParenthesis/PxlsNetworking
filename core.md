@@ -165,31 +165,6 @@ A Paginated List of Board References.
 |---------------|----------------------------------|
 | 403 Forbidden | Missing permission `boards.list` |
 
-### POST
-Creates a new Board object.
-#### Request
-```typescript
-{
-	"name": string;
-	"shape": number[][]
-	"palette": Map<number, {
-		"name": string;
-		"value": number;
-	}>;
-	"max_pixels_available": number;
-}
-```
-#### Response
-A Board Reference.
-##### Headers
-| Header   | Value                              |
-|----------|------------------------------------|
-| Location | The location of the created Board. |
-#### Errors
-| Response Code | Cause                            |
-|---------------|----------------------------------|
-| 403 Forbidden | Missing permission `boards.post` |
-
 --------------------------------------------------------------------------------
 
 ## {board_uri}
@@ -198,44 +173,14 @@ Gets a Board object.
 #### Response
 A Board Reference.
 ##### Headers
-| Header                | Value                                                                                                               |
-|-----------------------|---------------------------------------------------------------------------------------------------------------------|
-| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                      |
-| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available` |
+| Header                | Value                                                                                                                |
+|-----------------------|----------------------------------------------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                       |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available`. |
 #### Errors
 | Response Code | Cause                           |
 |---------------|---------------------------------|
 | 403 Forbidden | Missing permission `boards.get` |
-
-### PATCH
-Updates the Board object.
-#### Request
-```typescript
-Partial<{
-	"name": string;
-	"shape": number[][]
-	"palette": Map<number, {
-		"name": string;
-		"value": number;
-	}>;
-	"max_pixels_available": number;
-}>
-```
-#### Response
-A Board Reference.
-#### Errors
-| Response Code | Cause                             |
-|---------------|-----------------------------------|
-| 403 Forbidden | Missing permission `boards.patch` |
-
-### DELETE
-Deletes the Board object.
-#### Response
-*No Content*
-#### Errors
-| Response Code | Cause                              |
-|---------------|------------------------------------|
-| 403 Forbidden | Missing permission `boards.delete` |
 
 --------------------------------------------------------------------------------
 
@@ -250,6 +195,9 @@ Websocket connection point.
 A connecting client may specify which extensions it wishes to be enabled on the websocket using the `extensions_list` query parameter.
 Extension names are the same as those in `/info`.
 To receive the events defined here, the list should contain the value `core`.
+
+Servers should disconnect clients when metadata about the board changes which the client is not notified about.
+Because of this, clients should fetch the board metadata again after an unexpected socket disconnect.
 ### Server packets
 These packets are sent by the server to inform the client of something.
 They should be sent as UTF-8 encoded JSON text or as a [permessage-deflate](https://www.rfc-editor.org/rfc/rfc7692) representation of that if supported.
@@ -258,14 +206,6 @@ The board has changed.
 ```typescript
 {
 	"type": "board-update";
-	"info"?: Partial<{
-		"name": string;
-		"shape": number[][]
-		"palette": Map<number, {
-			"name": string;
-			"value": number;
-		}>;
-	}>;
 	"data"?: Partial<{
 		"colors": Array<Change>;
 	}
@@ -369,10 +309,10 @@ Creates a placement.
 #### Response
 The created Placement object.
 ##### Headers
-| Header                | Value                                                                                                               |
-|-----------------------|---------------------------------------------------------------------------------------------------------------------|
-| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                      |
-| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available` |
+| Header                | Value                                                                                                                |
+|-----------------------|----------------------------------------------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                       |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available`. |
 #### Errors
 | Response Code            | Cause                                             |
 |--------------------------|---------------------------------------------------|
