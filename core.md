@@ -268,9 +268,6 @@ The board has changed.
 	}>;
 	"data"?: Partial<{
 		"colors": Array<Change>;
-		"timestamps": Array<Change>;
-		"initial": Array<Change>;
-		"mask": Array<Change>;
 	}
 }
 ```
@@ -278,10 +275,12 @@ Where a Change object is defined as:
 ```typescript
 {
 	"position": number;
-	"values": number[];
+	"values"?: number[];
+	"length": number;
 }
 ```
-Where `values` is a contiguous run of data and can be of any valid length.
+Where `values` — if present — is a contiguous run of data which has a length of `length`.
+If `values` is not present, the client should invalidate any cached data from `position` to `position + length`.
 
 In the vast majority of cases, this packet will look similar to the following, representing a placement event:
 ```json
@@ -289,10 +288,7 @@ In the vast majority of cases, this packet will look similar to the following, r
 	"type": "board-update",
 	"data": {
 		"colors": [
-			{ "position": 0, "values": [1] }
-		],
-		"timestamps": [
-			{ "position": 0, "values": [420] }
+			{ "position": 0, "values": [1], "length": 1 }
 		]
 	}
 }
@@ -324,89 +320,12 @@ Events received after this packet and before the data resources are loaded can b
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/data/initial
-### GET
-Represents the initial state of the board.
-#### Response
-Binary data. 
-8-bit palette index for every pixel.
-#### Errors
-| Response Code | Cause                                 |
-|---------------|---------------------------------------|
-| 403 Forbidden | Missing permission `boards.data.get`. |
-
-### PATCH
-Update the initial board.
-#### Request
-Binary data.
-Content-range can be specified.
-Content-type may be multipart/byteranges which allows the client to patch smaller segments individually if the server supports it.
-Server implementations must support content-range headers which specify a range aligning with shape boundaries, but need not support other range features.
-#### Response
-204 No Content
-#### Errors
-| Response Code | Cause                                   |
-|---------------|-----------------------------------------|
-| 403 Forbidden | Missing permission `boards.data.patch`. |
-| 409 Conflict  | Patch is considered invalid.            |
-
---------------------------------------------------------------------------------
-
 ## {board_uri}/data/colors
 ### GET
 Represents the current state of the board.
 #### Response
 Binary data. 
 8-bit palette index for every pixel.
-#### Errors
-| Response Code | Cause                                 |
-|---------------|---------------------------------------|
-| 403 Forbidden | Missing permission `boards.data.get`. |
-
---------------------------------------------------------------------------------
-
-## {board_uri}/data/mask
-### GET
-Represents where placements can be made within the board dimensions.
-Values correspond to the following behaviors:
-| Value | Placement Behavior                                        |
-|:-----:|-----------------------------------------------------------|
-|   0   | No placement allowed.                                     |
-|   1   | Placement allowed.                                        |
-|   2   | Placement allowed if an adjacent pixel has been modified. |
-#### Response
-Binary data. 
-8-bit mask identifier for every pixel.
-#### Errors
-| Response Code | Cause                                 |
-|---------------|---------------------------------------|
-| 403 Forbidden | Missing permission `boards.data.get`. |
-
-### PATCH
-Update the board mask.
-#### Request
-Binary data.
-Content-range can be specified.
-Content-type may be multipart/byteranges which allows the client to patch smaller segments individually if the server supports it.
-Server implementations must support content-range headers which specify a range aligning with shape boundaries, but need not support other range features.
-#### Response
-204 No Content
-#### Errors
-| Response Code | Cause                                   |
-|---------------|-----------------------------------------|
-| 403 Forbidden | Missing permission `boards.data.patch`. |
-| 409 Conflict  | Patch is considered invalid.            |
-
---------------------------------------------------------------------------------
-
-## {board_uri}/data/timestamps
-### GET
-Represents the last-modified time for all pixels on the board.
-#### Response
-Binary data. 
-32-bit unsigned timestamp for every pixel. 
-Bytes are little-endian ordered.
-Timestamp is seconds since `created_at` as defined in `{board_uri}/info`.
 #### Errors
 | Response Code | Cause                                 |
 |---------------|---------------------------------------|
