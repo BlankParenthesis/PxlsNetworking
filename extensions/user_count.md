@@ -7,6 +7,17 @@ This count is commonly used in calculating cooldown times and the server should 
 
 --------------------------------------------------------------------------------
 
+## /info
+### GET
+#### Response
+```typescript
+{
+	"extensions": ["user_count"];
+}
+```
+
+--------------------------------------------------------------------------------
+
 ## {board_uri}/users
 ### GET
 Gets the active user count.
