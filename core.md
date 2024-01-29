@@ -215,12 +215,14 @@ Where a Change object is defined as:
 ```typescript
 {
 	"position": number;
-	"values"?: number[];
+	"values": number[];
+} | {
+	"position": number;
 	"length": number;
 }
 ```
-Where `values` — if present — is a contiguous run of data which has a length of `length`.
-If `values` is not present, the client should invalidate any cached data from `position` to `position + length`.
+In the first instance, `values` is a contiguous run of data starting at `position`.
+In the second case, the client should invalidate any cached data from `position` to `position + length`.
 
 In the vast majority of cases, this packet will look similar to the following, representing a placement event:
 ```json
@@ -228,7 +230,7 @@ In the vast majority of cases, this packet will look similar to the following, r
 	"type": "board-update",
 	"data": {
 		"colors": [
-			{ "position": 0, "values": [1], "length": 1 }
+			{ "position": 0, "values": [1] }
 		]
 	}
 }
