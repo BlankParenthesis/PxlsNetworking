@@ -58,4 +58,4 @@ Set authentication state.
 	"token"?: string;
 }
 ```
-If `token` is not provided, the client should be treated as unauthenticated and should no longer sent authenticate packets.
+If `token` is not provided, the client should be treated as unauthenticated and should no longer send authenticate packets.
