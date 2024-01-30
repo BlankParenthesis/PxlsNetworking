@@ -7,9 +7,9 @@ This extension adds Ban objects which are described by following type:
 ```typescript
 {
 	"issued": Timestamp;
-	"expiry": Timestamp;
+	"expiry": Timestamp | null;
 	"issuer"?: User;
-	"reason": string;
+	"reason": string | null;
 }
 ```
 
@@ -68,8 +68,8 @@ Bans the user.
 #### Request
 ```typescript
 {
-	"expiry": Timestamp;
-	"reason": string;
+	"expiry": Timestamp | null;
+	"reason": string | null;
 }
 ```
 ##### Response
@@ -99,8 +99,8 @@ Updates the ban.
 #### Request
 ```typescript
 {
-	"expiry"?: Timestamp;
-	"reason"?: string;
+	"expiry"?: Timestamp | null;
+	"reason"?: string | null;
 }
 ```
 ##### Response
