@@ -8,9 +8,9 @@ While a faction might have a hierarchy, roles are uniform.
 Since roles help users distinguish other users, implementing this extension requires implementing the [users extension](./users.md).
 
 Roles also govern which permissions its members have.
-*Implementations lose the ability to arbitrarily decide a users permissions set by implementing this extensions.*
+*By implementing this extension, implementations lose the ability to arbitrarily decide a users permissions.*
 Instead, a user's permissions are determined entirely based on roles.
-Each role defines a set of permission keys and a user's permissions keys should be the union of the permissions for all roles they hold.
+Each role defines a set of permissions and a user's permissions should be the union of the permissions for all roles they hold.
 Granting a role the permission to edit roles *effectively grants all permissions to that role.*
 
 Role objects are defined by the following type:
