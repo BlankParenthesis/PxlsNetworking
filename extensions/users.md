@@ -48,7 +48,7 @@ The client user has changed.
 
 --------------------------------------------------------------------------------
 
-## /board/pixels/{x}/{y}
+## /board/pixels/{position}
 ### GET
 ```typescript
 {

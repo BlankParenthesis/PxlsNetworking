@@ -15,7 +15,7 @@ Implementing this extension provides users with the tools necessary to moderate 
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/pixels/{x}/{y?}/{z?}/…
+## {board_uri}/pixels/{position}
 ### POST
 #### Request
 ```typescript

@@ -26,7 +26,7 @@ This extension adds Ban objects which are described by following type:
 
 --------------------------------------------------------------------------------
 
-## /board/pixels/{x}/{y?}/{z?}/…
+## /board/pixels/{position}
 ### POST
 #### Errors
 | Response Code | Cause   |
