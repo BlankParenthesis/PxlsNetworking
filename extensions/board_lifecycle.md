@@ -38,9 +38,9 @@ A Board Reference.
 |----------|------------------------------------|
 | Location | The location of the created Board. |
 #### Errors
-| Response Code | Cause                            |
-|---------------|----------------------------------|
-| 403 Forbidden | Missing permission `boards.post` |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `boards.post`. |
 
 ### PATCH
 Updates the Board object.
@@ -59,18 +59,18 @@ Partial<{
 #### Response
 A Board Reference.
 #### Errors
-| Response Code | Cause                             |
-|---------------|-----------------------------------|
-| 403 Forbidden | Missing permission `boards.patch` |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `boards.patch`. |
 
 ### DELETE
 Deletes the Board object.
 #### Response
 *No Content*
 #### Errors
-| Response Code | Cause                              |
-|---------------|------------------------------------|
-| 403 Forbidden | Missing permission `boards.delete` |
+| Response Code | Cause                               |
+|---------------|-------------------------------------|
+| 403 Forbidden | Missing permission `boards.delete`. |
 
 --------------------------------------------------------------------------------
 

@@ -93,7 +93,7 @@ The following table provides variable names and where their value can be sourced
 | Variable Name       | Value Source                                                                            |
 |---------------------|-----------------------------------------------------------------------------------------| 
 | active_users        | The count of online users.                                                              |
-| is_background_pixel | True if the last pixel placed was not modified previously                               |
+| is_background_pixel | True if the last pixel placed was not modified previously.                              |
 | stack_target        | The cooldown will reflect how long it takes to accumulate this number of pixels from 0. |
 
 --------------------------------------------------------------------------------

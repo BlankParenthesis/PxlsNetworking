@@ -161,9 +161,9 @@ Lists all Board objects.
 #### Response
 A Paginated List of Board References.
 #### Errors
-| Response Code | Cause                            |
-|---------------|----------------------------------|
-| 403 Forbidden | Missing permission `boards.list` |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `boards.list`. |
 
 --------------------------------------------------------------------------------
 
@@ -178,9 +178,9 @@ A Board Reference.
 | Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                       |
 | Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available`. |
 #### Errors
-| Response Code | Cause                           |
-|---------------|---------------------------------|
-| 403 Forbidden | Missing permission `boards.get` |
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `boards.get`. |
 
 --------------------------------------------------------------------------------
 
