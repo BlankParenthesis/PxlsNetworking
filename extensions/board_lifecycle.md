@@ -90,3 +90,7 @@ The board has changed.
 	}>;
 }
 ```
+### Errors
+| Response Code | Cause                                         |
+|---------------|-----------------------------------------------|
+| 403 Forbidden | Missing permission `socket.boards.lifecycle`. |

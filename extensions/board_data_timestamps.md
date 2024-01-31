@@ -40,3 +40,8 @@ The board has changed.
 		"timestamps": Array<Change>;
 	}
 }
+```
+### Errors
+| Response Code | Cause                                          |
+|---------------|------------------------------------------------|
+| 403 Forbidden | Missing permission `socket.boards.timestamps`. |

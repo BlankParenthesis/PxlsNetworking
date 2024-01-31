@@ -259,6 +259,10 @@ Events received after this packet and before the data resources are loaded can b
 | 403 Forbidden            | Missing permission `socket.core`.   |
 | 422 Unprocessable Entity | No extensions specified.            |
 | 422 Unprocessable Entity | Requested extensions not supported. |
+### Websocket Errors
+| Close Code | Cause                |
+|------------|----------------------|
+| 1003       | Invalid packet sent. |
 
 --------------------------------------------------------------------------------
 
@@ -280,7 +284,7 @@ Binary data.
 Lists all placements.
 #### Response
 A Paginated List of Placement objects, sorted by timestamp ascending.  
-NOTE: Placements have no canonical location and must be sent as objects here rather than references.
+*NOTE: Placements have no canonical location and must be sent as objects here rather than references.*
 #### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|

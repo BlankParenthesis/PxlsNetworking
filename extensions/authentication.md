@@ -59,3 +59,29 @@ Set authentication state.
 }
 ```
 If `token` is not provided, the client should be treated as unauthenticated and should no longer send authenticate packets.
+
+### Errors
+With the sole exception of `socket.authenticate`, socket requests should not check user permissions until after the client sends the first Authenticate packet if using this extension.
+*NOTE: Since clients are authenticated after connection, the initial request is tested against the unauthenticated user permissions.*
+| Response Code            | Cause                                     |
+|--------------------------|-------------------------------------------|
+| 403 Forbidden            | Missing permission `socket.authenticate`. |
+### Websocket Errors
+After the client has sent the Authenticate packet, the server may immediately close the connection with a status of 1008.
+
+This should be done by specifying a [close reason](https://datatracker.ietf.org/doc/html/rfc6455#section-7.1.6) as json-encoded UTF-8 data with a valid error payload as defined in the following sub-sections:
+#### Invalid token
+```typescript
+{
+	"cause": "invalid-token";
+	"details"?: string;
+}
+```
+#### Missing permission
+```typescript
+{
+	"cause": "missing-permission";
+	"permission": string;
+}
+```
+Where `permission` is the string of the permission the client lacks *after* a successful authentication.

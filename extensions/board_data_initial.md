@@ -53,3 +53,8 @@ The board has changed.
 		"initial": Array<Change>;
 	}
 }
+```
+### Errors
+| Response Code | Cause                                       |
+|---------------|---------------------------------------------|
+| 403 Forbidden | Missing permission `socket.boards.initial`. |

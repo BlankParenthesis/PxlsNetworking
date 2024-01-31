@@ -59,3 +59,8 @@ The board has changed.
 		"mask": Array<Change>;
 	}
 }
+```
+### Errors
+| Response Code | Cause                                    |
+|---------------|------------------------------------------|
+| 403 Forbidden | Missing permission `socket.boards.mask`. |
