@@ -67,21 +67,10 @@ With the sole exception of `socket.authenticate`, socket requests should not che
 |--------------------------|-------------------------------------------|
 | 403 Forbidden            | Missing permission `socket.authenticate`. |
 ### Websocket Errors
-After the client has sent the Authenticate packet, the server may immediately close the connection with a status of 1008.
+| Close Code | Cause                                       |
+|------------|---------------------------------------------|
+| 4000       | Client failed to send Authenticate in time. |
+| 4001       | Missing permission.                         |
+| 4002       | Invalid token.                              |
 
-This should be done by specifying a [close reason](https://datatracker.ietf.org/doc/html/rfc6455#section-7.1.6) as json-encoded UTF-8 data with a valid error payload as defined in the following sub-sections:
-#### Invalid token
-```typescript
-{
-	"cause": "invalid-token";
-	"details"?: string;
-}
-```
-#### Missing permission
-```typescript
-{
-	"cause": "missing-permission";
-	"permission": string;
-}
-```
-Where `permission` is the string of the permission the client lacks *after* a successful authentication.
+*NOTE: 4001 should be sent to indicate the client lacks a permission after a successful authentication.*
