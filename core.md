@@ -10,7 +10,7 @@ This allows extensions to add new fields to responses in a flexible way.
 
 
 To be as RESTful as possible, objects have a canonical address which can be used to refer to them.
-Where an object is returned elsewhere, a Reference to it will be returned instead.
+When an object is returned elsewhere, a Reference to it will be returned instead.
 A Reference for an object T can be described with the following type:
 ```typescript
 type Reference<T> = {
@@ -18,7 +18,7 @@ type Reference<T> = {
 	"view"?: T;
 };
 ```
-where `uri` points to a location where `T` can be obtained with a simple GET request.
+where `uri` points to a location which `T` can be obtained from with a simple GET request.
 The `view` field may be populated by servers so that clients can operate faster and with less requests.
 
 Clients may need to specify an object as part of a request.
