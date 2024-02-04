@@ -35,7 +35,7 @@ If the [users extension](./users.md) is implemented, Notice objects gain an opti
 
 --------------------------------------------------------------------------------
 
-## /ws?extensions[]=board_notices
+## {board_uri}/socket?extensions[]=board_notices
 ### Server packets
 #### BoardNoticeCreated
 There is a new board notice.

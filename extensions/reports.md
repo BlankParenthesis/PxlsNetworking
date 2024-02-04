@@ -44,7 +44,7 @@ If the [users extension](./users.md) is implemented, Reports may additionally sp
 
 --------------------------------------------------------------------------------
 
-## /ws?extensions[]=reports
+## /socket?extensions[]=reports
 ### Server packets
 #### ReportCreated
 There is a new report.

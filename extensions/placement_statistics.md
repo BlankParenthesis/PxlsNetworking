@@ -32,7 +32,7 @@ This defines a PlacementStatistics object with the following type:
 
 --------------------------------------------------------------------------------
 
-## /ws?extensions[]=placement_statistics
+## /socket?extensions[]=placement_statistics
 ### Server packets
 #### StatsUpdate
 The client user's placement statistics have changed.

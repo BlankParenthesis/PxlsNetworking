@@ -36,7 +36,7 @@ If the [users extension](./users.md) is implemented, Notice objects gain an opti
 
 --------------------------------------------------------------------------------
 
-## /ws?extensions[]=site_notices
+## /socket?extensions[]=site_notices
 ### Server packets
 #### SiteNoticeCreated
 There is a new site notice.

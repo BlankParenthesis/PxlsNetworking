@@ -31,7 +31,7 @@ Placement objects gain an additional field due to this extension:
 
 --------------------------------------------------------------------------------
 
-## /ws?extensions[]=users
+## /socket?extensions[]=users
 ### Server packets
 #### UserUpdate
 The client user has changed.
