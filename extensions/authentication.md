@@ -39,7 +39,8 @@ Knowing this ID and secret implies a pre-existing relationship between the clien
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/socket?extensions[]=authentication
+## /socket?extensions[]=authentication
+*NOTE: The definitions here also apply to board sockets*
 ### Client packets
 Unlike regular HTTP requests, websocket connections have a significant duration.
 Credentials are unlikely to expire over the course of a regular HTTP request.
