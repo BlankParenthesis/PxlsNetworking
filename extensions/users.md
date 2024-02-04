@@ -95,6 +95,10 @@ Deletes a user.
 
 ## /users/current
 Requests made to this endpoint should be redirected using HTTP status 307 to the user object of the currently authenticated user.
-If the client is not authenticated, then the server should respond with a status of 401 - unauthorized.
 
 If any sub-endpoints are called on this, they should likewise be redirected, keeping the path.
+#### Errors
+| Response Code    | Cause                                   |
+|------------------|-----------------------------------------|
+| 401 Unauthorized | Not authenticated.                      |
+| 403 Forbidden    | Missing permission `users.current.get`. |
