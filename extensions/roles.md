@@ -94,7 +94,7 @@ A Paginated List of Role References.
 ### POST
 Creates a role.
 #### Request
-A Role object without an ID.
+A Role object.
 #### Response
 The created Role object.
 #### Errors

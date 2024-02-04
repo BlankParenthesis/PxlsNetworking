@@ -35,7 +35,7 @@ If both sub-fields are false, the user should no longer be considered a member.
 If the [users extension](./users.md) is implemented, Member objects will also contain the associated User object:
 ```typescript
 {
-	"user": User;
+	"user": Reference<User>;
 }
 ```
 

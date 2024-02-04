@@ -51,7 +51,7 @@ There is a new report.
 ```typescript
 {
 	"type": "report-created";
-	"report": Report;
+	"report": Reference<Report>;
 }
 ```
 #### ReportUpdated
@@ -59,7 +59,7 @@ A report has been updated.
 ```typescript
 {
 	"type": "report-updated";
-	"report": Report;
+	"report": Reference<Report>;
 }
 ```
 #### ReportRemoved
@@ -67,7 +67,7 @@ A report has been removed.
 ```typescript
 {
 	"type": "report-removed";
-	"id": number | string;
+	"report": Reference<Report>;
 }
 ```
 ### Errors
@@ -90,7 +90,8 @@ A Paginated List of Report References.
 ### POST
 Creates a Report.
 #### Request
-A Report object without an ID, history, or status (or reporter if the [users extension](./users.md) is implemented).
+A Report object without history or status.
+*NOTE: the reporter field from the [users extension](./users.md) should not be included here*
 #### Response
 A reference to the created Report object.
 #### Errors

@@ -7,7 +7,6 @@ For site-related notices, see the [site notices extension](./site_notices.md).
 Notice objects represent notices and are defined by the following type:
 ```typescript
 {
-	"id": number | string;
 	"title": string;
 	"content": string;
 	"created_at": Timestamp;
@@ -42,7 +41,7 @@ There is a new board notice.
 ```typescript
 {
 	"type": "board-notice-created";
-	"notice": Notice;
+	"notice": Reference<Notice>;
 }
 ```
 #### NoticeUpdated
@@ -50,7 +49,7 @@ A board notice has been updated.
 ```typescript
 {
 	"type": "board-notice-updated";
-	"notice": Notice;
+	"notice": Reference<Notice>;
 }
 ```
 #### NoticeRemoved
@@ -58,7 +57,7 @@ A board notice has been removed.
 ```typescript
 {
 	"type": "board-notice-removed";
-	"id": number | string;
+	"notice": Reference<Notice>;
 }
 ```
 ### Errors
@@ -81,7 +80,8 @@ A Paginated List of Notice References.
 ### POST
 Creates a board notice.
 #### Request
-A Notice object without an ID (or author if the [users extension](./users.md) is implemented).
+A Notice object.
+*NOTE: the author field from the [users extension](./users.md) should not be included here*
 #### Response
 The created Notice object.
 #### Errors
@@ -104,7 +104,8 @@ The Notice object.
 ### PATCH
 Updates a board notice.
 #### Request
-A partial Notice object without an ID (or author if the [users extension](./users.md) is implemented).
+A partial Notice object.
+*NOTE: the author field from the [users extension](./users.md) should not be included here*
 #### Response
 The updated Notice object.
 #### Errors

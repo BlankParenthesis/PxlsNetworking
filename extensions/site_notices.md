@@ -8,7 +8,6 @@ To help differentiate the two, many of the names pertaining to notices here have
 Notice objects represent notices and are defined by the following type:
 ```typescript
 {
-	"id": number | string;
 	"title": string;
 	"content": string;
 	"created_at": Timestamp;
@@ -43,7 +42,7 @@ There is a new site notice.
 ```typescript
 {
 	"type": "site-notice-created";
-	"notice": Notice;
+	"notice": Reference<Notice>;
 }
 ```
 #### SiteNoticeUpdated
@@ -51,7 +50,7 @@ A site notice has been updated.
 ```typescript
 {
 	"type": "site-notice-updated";
-	"notice": Notice;
+	"notice": Reference<Notice>;
 }
 ```
 #### SiteNoticetRemoved
@@ -59,7 +58,7 @@ A site notice has been removed.
 ```typescript
 {
 	"type": "site-notice-removed";
-	"id": number | string;
+	"notice": Reference<Notice>;
 }
 ```
 ### Errors
@@ -82,7 +81,8 @@ A Paginated List of Notice References.
 ### POST
 Creates a site notice.
 #### Request
-A Notice object without an ID (or author if the [users extension](./users.md) is implemented).
+A Notice object.
+*NOTE: the author field from the [users extension](./users.md) should not be included here*
 #### Response
 A reference to the created Notice.
 #### Errors
@@ -106,7 +106,8 @@ A Notice object.
 ### PATCH
 Updates a site notice.
 #### Request
-A partial Notice object without an ID (or author if the [users extension](./users.md) is implemented).
+A partial Notice object.
+*NOTE: the author field from the [users extension](./users.md) should not be included here*
 #### Response
 The updated Notice object.
 #### Errors

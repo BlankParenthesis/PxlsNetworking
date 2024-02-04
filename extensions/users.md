@@ -75,7 +75,7 @@ The User object.
 ### PATCH
 Updates a user.
 #### Request
-A partial User object without the id or created_at fields.
+A partial User object without created_at field.
 #### Response
 The updated User object.
 #### Errors
