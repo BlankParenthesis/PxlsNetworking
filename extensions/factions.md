@@ -6,8 +6,6 @@ Factions objects are defined by the following type:
 ```typescript
 {
 	"name": string;
-	"tag": string;
-	"color": number;
 	"created_at": Timestamp;
 	"size": number;
 }
@@ -65,13 +63,7 @@ A Paginated List of Faction References.
 ### POST
 Creates a faction.
 #### Request
-```typescript
-{
-	"name": string;
-	"tag": string;
-	"color": number;
-}
-```
+A Faction object without created_at or size.
 #### Response
 A reference to the created Faction object.
 #### Errors
@@ -96,13 +88,7 @@ The Faction object.
 ### PATCH
 Updates the Faction.
 #### Request
-```typescript
-Partial<{
-	"name": string;
-	"tag": string;
-	"color": number;
-}>
-```
+A partial Faction object without created_at or size.
 #### Response
 The update Faction object.
 #### Errors
@@ -145,6 +131,7 @@ A reference to the created Member object.
 #### Errors
 | Response Code | Cause                                                  |
 |---------------|--------------------------------------------------------|
+| 403 Forbidden | Server does not support the action (joining/inviting). |
 | 403 Forbidden | Missing permission `factions.get`.                     |
 | 403 Forbidden | Missing permission `factions.members.post`.            |
 | 404 Not Found | The user URI is invalid.                               |
