@@ -14,7 +14,7 @@ User objects are represented with the following type:
 Placement objects gain an additional field due to this extension:
 ```typescript
 {
-	"user"?: User;
+	"user"?: Reference<User>;
 }
 ```
 
@@ -38,23 +38,15 @@ The client user has changed.
 ```typescript
 {
 	"type": "user-updated";
-	"user": Partial<User>;
+	"user": {
+		"name"?: string;
+	};
 }
 ```
 ### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
 | 403 Forbidden | Missing permission `socket.users`. |
-
---------------------------------------------------------------------------------
-
-## /board/pixels/{position}
-### GET
-```typescript
-{
-	"user"?: User;
-}
-```
 
 --------------------------------------------------------------------------------
 
