@@ -34,8 +34,8 @@ Clients can append `/.well-known/openid-configuration` to this location to perfo
 Clients should use the OAuth 2.0 PKCE method described in [rfc7636](https://datatracker.ietf.org/doc/html/rfc7636) for initiating the login flow and retrieving the token.
 Clients may then refresh this token as required.
 If `client_id` is present and not null, it should be public and support any redirect URI with no required secret.
-Otherwise, clients will need to use a known public client id or a private client id and secret.
-Knowing this id and secret implies a pre-existing relationship between the client and server, making complete interchangeability difficult in these cases.
+Otherwise, clients will need to use a known public client ID or a private client ID and secret.
+Knowing this ID and secret implies a pre-existing relationship between the client and server, making complete interchangeability difficult in these cases.
 
 --------------------------------------------------------------------------------
 
