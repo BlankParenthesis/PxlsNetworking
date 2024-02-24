@@ -22,7 +22,8 @@ where `uri` points to a location which `T` can be obtained from with a simple GE
 The `view` field may be populated by servers so that clients can operate faster and with less requests.
 
 Clients may need to specify an object as part of a request.
-By using the URI of the object, clients need not know anything about internal IDs used by the server.
+This should be done with the object's canonical address.
+Because of this clients need not know anything about internal IDs used by the server.
 
 Server implementations may choose to logically arrange their reference URIs (e.g. `/users/{user_id}`), but are not required to do so.
 Clients should not assume such a structure and should not assume any server will populate the `view` field.
