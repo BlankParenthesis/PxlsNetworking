@@ -79,9 +79,10 @@ A partial User object without created_at field.
 #### Response
 The updated User object.
 #### Errors
-| Response Code | Cause                                                      |
-|---------------|------------------------------------------------------------|
-| 403 Forbidden | Missing permission `users.patch` or `users.current.patch`. |
+| Response Code            | Cause                                                      |
+|--------------------------|------------------------------------------------------------|
+| 403 Forbidden            | Missing permission `users.patch` or `users.current.patch`. |
+| 422 Unprocessable Entity | New username is not allowed.                               |
 
 ### DELETE
 Deletes a user.
