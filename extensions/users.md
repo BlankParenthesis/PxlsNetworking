@@ -38,9 +38,7 @@ The client user has changed.
 ```typescript
 {
 	"type": "user-updated";
-	"user": {
-		"name"?: string;
-	};
+	"user": Reference<User>;
 }
 ```
 ### Errors
