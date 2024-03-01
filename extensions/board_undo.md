@@ -7,9 +7,11 @@ Clients are expected to keep track of which actions can be retracted.
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["undo"];
@@ -18,23 +20,23 @@ Clients are expected to keep track of which actions can be retracted.
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/pixels/{position}
-### POST
-#### Response
-##### Headers
+### {board_uri}/pixels/{position}
+#### POST
+##### Response
+###### Headers
 | Header             | Value                                                                      |
 |--------------------|----------------------------------------------------------------------------|
 | Pxls-Undo-Deadline | Timestamp of when DELETE actions can no longer be sent for this placement. |
 
-### DELETE
+#### DELETE
 Undoes the last place action at the given coordinate.
-#### Response
-##### Headers
+##### Response
+###### Headers
 | Header                | Value                                                                          |
 |-----------------------|--------------------------------------------------------------------------------|
 | Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
 | Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
-#### Errors
+##### Errors
 | Response Code | Cause                                   |
 |---------------|-----------------------------------------|
 | 403 Forbidden | Missing permission `board.pixels.undo`. |
@@ -45,10 +47,10 @@ Undoes the last place action at the given coordinate.
 --------------------------------------------------------------------------------
 
 If the [board moderation extension](./board_moderation.md) is implemented, then the mass-place endpoint defined there also gets an undo timestamp sent back:
-## {board_uri}/pixels
-### PATCH
-#### Response
-##### Headers
+### {board_uri}/pixels
+#### PATCH
+##### Response
+###### Headers
 | Header             | Value                                                                      |
 |--------------------|----------------------------------------------------------------------------|
 | Pxls-Undo-Deadline | Timestamp of when DELETE actions can no longer be sent for this placement. |

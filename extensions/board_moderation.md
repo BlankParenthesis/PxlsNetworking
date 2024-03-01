@@ -4,9 +4,11 @@ Implementing this extension provides users with the tools necessary to moderate 
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["board_moderation"];
@@ -15,9 +17,9 @@ Implementing this extension provides users with the tools necessary to moderate 
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/pixels/{position}
-### POST
-#### Request
+### {board_uri}/pixels/{position}
+#### POST
+##### Request
 ```typescript
 {
 	"overrides"?:  {
@@ -27,7 +29,7 @@ Implementing this extension provides users with the tools necessary to moderate 
 	}
 }
 ```
-#### Errors
+##### Errors
 | Response Code | Cause                                                |
 |---------------|------------------------------------------------------|
 | 403 Forbidden | Missing permission `board.pixels.override.cooldown`. |
@@ -36,13 +38,13 @@ Implementing this extension provides users with the tools necessary to moderate 
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/pixels
-### PATCH
+### {board_uri}/pixels
+#### PATCH
 Replace a subarea of the board.
 This is most useful for when moderators need to censor or otherwise change a large area and other tools - such as user rollbacks - are insufficient.
 Since this obeys override rules, permission for this endpoint can be granted to regular users.
 If a user has not specified a cooldown override and has some but not all of the available pixels to make the action, the action should be rejected outright.
-#### Request
+##### Request
 ```typescript
 {
 	"from": number[],
@@ -56,19 +58,19 @@ If a user has not specified a cooldown override and has some but not all of the 
 }
 ```
 `from` and `to` are the start and end positions respectively.
-#### Response
+##### Response
 ```typescript
 {
 	"pixels_changed": number;
 }
 ```
-##### Headers
+###### Headers
 | Header                | Value                                                                          |
 |-----------------------|--------------------------------------------------------------------------------|
 | Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown. |
 | Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
 
-#### Errors
+##### Errors
 | Response Code            | Cause                                                |
 |--------------------------|------------------------------------------------------|
 | 403 Forbidden            | Missing permission `board.pixels.patch`.             |

@@ -98,9 +98,11 @@ The following table provides variable names and where their value can be sourced
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["cooldown_info"];
@@ -109,21 +111,21 @@ The following table provides variable names and where their value can be sourced
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/cooldown
-### GET
+### {board_uri}/cooldown
+#### GET
 Gets the cooldown formula of the board.
-#### Response
+##### Response
 ```typescript
 {
 	"formula": Formula;
 }
 ```
-#### Errors
+##### Errors
 | Response Code | Cause                                |
 |---------------|--------------------------------------|
 | 403 Forbidden | Missing permission `board.cooldown`. |
 
-#### Example
+##### Example
 This example shows the current pxls reference implementation formula.
 ```JSON
 {

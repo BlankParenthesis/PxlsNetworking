@@ -7,9 +7,11 @@ Clients are expected to obtain an OAuth 2.0 token and send this in the authoriza
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["authentication"];
@@ -18,10 +20,10 @@ Clients are expected to obtain an OAuth 2.0 token and send this in the authoriza
 
 --------------------------------------------------------------------------------
 
-## /auth
-### GET
+### /auth
+#### GET
 Gets information about where and how clients can obtain authentication tokens.
-#### Response
+##### Response
 ```typescript
 {
 	"issuer": string;
@@ -39,9 +41,9 @@ Knowing this ID and secret implies a pre-existing relationship between the clien
 
 --------------------------------------------------------------------------------
 
-## /socket?extensions[]=authentication
+### /socket?extensions[]=authentication
 *NOTE: The definitions here also apply to board sockets*
-### Client packets
+#### Client packets
 Unlike regular HTTP requests, websocket connections have a significant duration.
 Credentials are unlikely to expire over the course of a regular HTTP request.
 This allows regular requests to use headers for authentication.
@@ -51,7 +53,7 @@ This makes HTTP headers an inadequate method of authentication.
 Clients wishing to authenticate a websocket connection are required to send authenticate packets before the current authentication expires.
 Servers should not send any packets until the client's authentication is verified.
 Servers should keep connections open for at least 5 seconds to allow clients time to send an initial authenticate packet.
-#### Authenticate
+##### Authenticate
 Set authentication state.
 ```typescript
 {
@@ -61,13 +63,13 @@ Set authentication state.
 ```
 If `token` is not provided, the client should be treated as unauthenticated and should no longer send authenticate packets.
 
-### Errors
+#### Errors
 With the sole exception of `socket.authenticate`, socket requests should not check user permissions until after the client sends the first Authenticate packet if using this extension.
 *NOTE: Since clients are authenticated after connection, the initial request is tested against the unauthenticated user permissions.*
 | Response Code            | Cause                                     |
 |--------------------------|-------------------------------------------|
 | 403 Forbidden            | Missing permission `socket.authenticate`. |
-### Websocket Errors
+#### Websocket Errors
 | Close Code | Cause                                       |
 |------------|---------------------------------------------|
 | 4000       | Client failed to send Authenticate in time. |

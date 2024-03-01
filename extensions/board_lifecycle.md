@@ -5,9 +5,11 @@ Implementing this extensions allows clients to update the board metadata.
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["board_lifecycle"];
@@ -16,10 +18,10 @@ Implementing this extensions allows clients to update the board metadata.
 
 --------------------------------------------------------------------------------
 
-## {board_uri}
-### POST
+### {board_uri}
+#### POST
 Creates a new Board object.
-#### Request
+##### Request
 ```typescript
 {
 	"name": string;
@@ -31,20 +33,20 @@ Creates a new Board object.
 	"max_pixels_available": number;
 }
 ```
-#### Response
+##### Response
 A Board Reference.
-##### Headers
+###### Headers
 | Header   | Value                              |
 |----------|------------------------------------|
 | Location | The location of the created Board. |
-#### Errors
+##### Errors
 | Response Code | Cause                             |
 |---------------|-----------------------------------|
 | 403 Forbidden | Missing permission `boards.post`. |
 
-### PATCH
+#### PATCH
 Updates the Board object.
-#### Request
+##### Request
 ```typescript
 Partial<{
 	"name": string;
@@ -56,27 +58,27 @@ Partial<{
 	"max_pixels_available": number;
 }>
 ```
-#### Response
+##### Response
 A Board Reference.
-#### Errors
+##### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
 | 403 Forbidden | Missing permission `boards.patch`. |
 
-### DELETE
+#### DELETE
 Deletes the Board object.
-#### Response
+##### Response
 *No Content*
-#### Errors
+##### Errors
 | Response Code | Cause                               |
 |---------------|-------------------------------------|
 | 403 Forbidden | Missing permission `boards.delete`. |
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/socket?extensions[]=board_lifecycle
-### Server packets
-#### BoardUpdate
+### {board_uri}/socket?extensions[]=board_lifecycle
+#### Server packets
+##### BoardUpdate
 The board has changed.
 ```typescript
 {
@@ -90,7 +92,7 @@ The board has changed.
 	}>;
 }
 ```
-### Errors
+#### Errors
 | Response Code | Cause                                         |
 |---------------|-----------------------------------------------|
 | 403 Forbidden | Missing permission `socket.boards.lifecycle`. |

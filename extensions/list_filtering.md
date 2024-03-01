@@ -43,9 +43,11 @@ For example, in order to get all reports (see the [reports extension](./reports.
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["list_filtering"];

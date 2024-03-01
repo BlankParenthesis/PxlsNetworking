@@ -7,9 +7,11 @@ This count is commonly used in calculating cooldown times and the server should 
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["user_count"];
@@ -18,10 +20,10 @@ This count is commonly used in calculating cooldown times and the server should 
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/users
-### GET
+### {board_uri}/users
+#### GET
 Gets the active user count.
-#### Response
+##### Response
 ```typescript
 {
 	"active": number;
@@ -29,7 +31,7 @@ Gets the active user count.
 }
 ```
 `idle_timeout` is in seconds.
-#### Errors
+##### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
 | 403 Forbidden | Missing permission `boards.users`. |

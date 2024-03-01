@@ -21,9 +21,11 @@ This defines a PlacementStatistics object with the following type:
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["placement_statistics"];
@@ -32,9 +34,9 @@ This defines a PlacementStatistics object with the following type:
 
 --------------------------------------------------------------------------------
 
-## /socket?extensions[]=placement_statistics
-### Server packets
-#### StatsUpdate
+### /socket?extensions[]=placement_statistics
+#### Server packets
+##### StatsUpdate
 The client user's total placement statistics have changed.
 ```typescript
 {
@@ -42,16 +44,16 @@ The client user's total placement statistics have changed.
 	"stats": PlacementStatistics;
 }
 ```
-### Errors
+#### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
 | 403 Forbidden | Missing permission `socket.stats`. |
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/socket?extensions[]=placement_statistics
-### Server packets
-#### StatsUpdate
+### {board_uri}/socket?extensions[]=placement_statistics
+#### Server packets
+##### StatsUpdate
 The client user's placement statistics for this board have changed.
 ```typescript
 {
@@ -59,17 +61,17 @@ The client user's placement statistics for this board have changed.
 	"stats": PlacementStatistics;
 }
 ```
-### Errors
+#### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
 | 403 Forbidden | Missing permission `socket.stats`. |
 
 --------------------------------------------------------------------------------
 
-## /users/stats
-### GET
+### /users/stats
+#### GET
 Lists the placement statistics for all users.
-#### Response
+##### Response
 A Paginated List of the following type:
 ```typescript
 {
@@ -81,7 +83,7 @@ A Paginated List of the following type:
 	}>;
 }
 ```
-#### Errors
+##### Errors
 | Response Code | Cause                                  |
 |---------------|----------------------------------------|
 | 403 Forbidden | Missing permission `users.list`.       |
@@ -89,10 +91,10 @@ A Paginated List of the following type:
 
 --------------------------------------------------------------------------------
 
-## {user_uri}/stats
-### GET
+### {user_uri}/stats
+#### GET
 Gets the placement statistics for a user.
-#### Response
+##### Response
 ```typescript
 {
 	"totals": PlacementStatistics;
@@ -107,7 +109,7 @@ This might mean they provide information on all previous boards, only provide in
 
 For the field "totals", the entry represents the internal sum of all known statistics for the user.
 Notably, the sum of all other entries do not need to sum to the total provided.
-#### Errors
+##### Errors
 | Response Code | Cause                                                            |
 |---------------|------------------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.stats.get` or users.current.stats.get. |

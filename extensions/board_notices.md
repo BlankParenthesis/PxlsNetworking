@@ -23,9 +23,11 @@ If the [users extension](./users.md) is implemented, Notice objects gain an opti
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["board_notices"];
@@ -34,9 +36,9 @@ If the [users extension](./users.md) is implemented, Notice objects gain an opti
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/socket?extensions[]=board_notices
-### Server packets
-#### BoardNoticeCreated
+### {board_uri}/socket?extensions[]=board_notices
+#### Server packets
+##### BoardNoticeCreated
 There is a new board notice.
 ```typescript
 {
@@ -44,7 +46,7 @@ There is a new board notice.
 	"notice": Reference<Notice>;
 }
 ```
-#### NoticeUpdated
+##### NoticeUpdated
 A board notice has been updated.
 ```typescript
 {
@@ -52,7 +54,7 @@ A board notice has been updated.
 	"notice": Reference<Notice>;
 }
 ```
-#### NoticeRemoved
+##### NoticeRemoved
 A board notice has been removed.
 ```typescript
 {
@@ -60,62 +62,62 @@ A board notice has been removed.
 	"notice": Reference<Notice>;
 }
 ```
-### Errors
+#### Errors
 | Response Code | Cause                                      |
 |---------------|--------------------------------------------|
 | 403 Forbidden | Missing permission `socket.board.notices`. |
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/notices
-### GET
+### {board_uri}/notices
+#### GET
 Lists all board notices.
-#### Response
+##### Response
 A Paginated List of Notice References.
-#### Errors
+##### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|
 | 403 Forbidden | Missing permission `board.notices.list`. |
 
-### POST
+#### POST
 Creates a board notice.
-#### Request
+##### Request
 A Notice object.
 *NOTE: the author field from the [users extension](./users.md) should not be included here*
-#### Response
+##### Response
 The created Notice object.
-#### Errors
+##### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|
 | 403 Forbidden | Missing permission `board.notices.post`. |
 
 --------------------------------------------------------------------------------
 
-## {notice_uri}
-### GET
+### {notice_uri}
+#### GET
 Gets a board notice.
-#### Response
+##### Response
 The Notice object.
-#### Errors
+##### Errors
 | Response Code | Cause                                   |
 |---------------|-----------------------------------------|
 | 403 Forbidden | Missing permission `board.notices.get`. |
 
-### PATCH
+#### PATCH
 Updates a board notice.
-#### Request
+##### Request
 A partial Notice object.
 *NOTE: the author field from the [users extension](./users.md) should not be included here*
-#### Response
+##### Response
 The updated Notice object.
-#### Errors
+##### Errors
 | Response Code | Cause                                     |
 |---------------|-------------------------------------------|
 | 403 Forbidden | Missing permission `board.notices.patch`. |
 
-### DELETE
+#### DELETE
 Deletes the board notice.
-#### Errors
+##### Errors
 | Response Code | Cause                                      |
 |---------------|--------------------------------------------|
 | 403 Forbidden | Missing permission `board.notices.delete`. |

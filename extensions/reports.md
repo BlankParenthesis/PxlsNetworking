@@ -33,9 +33,11 @@ If the [users extension](./users.md) is implemented, Reports may additionally sp
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["reports"];
@@ -44,9 +46,9 @@ If the [users extension](./users.md) is implemented, Reports may additionally sp
 
 --------------------------------------------------------------------------------
 
-## /socket?extensions[]=reports
-### Server packets
-#### ReportCreated
+### /socket?extensions[]=reports
+#### Server packets
+##### ReportCreated
 There is a new report.
 ```typescript
 {
@@ -54,7 +56,7 @@ There is a new report.
 	"report": Reference<Report>;
 }
 ```
-#### ReportUpdated
+##### ReportUpdated
 A report has been updated.
 ```typescript
 {
@@ -62,7 +64,7 @@ A report has been updated.
 	"report": Reference<Report>;
 }
 ```
-#### ReportRemoved
+##### ReportRemoved
 A report has been removed.
 ```typescript
 {
@@ -70,31 +72,31 @@ A report has been removed.
 	"report": Reference<Report>;
 }
 ```
-### Errors
+#### Errors
 | Response Code | Cause                                |
 |---------------|--------------------------------------|
 | 403 Forbidden | Missing permission `socket.reports`. |
 
 --------------------------------------------------------------------------------
 
-## /reports
-### GET 
+### /reports
+#### GET 
 Lists all reports.
-#### Response
+##### Response
 A Paginated List of Report References.
-#### Errors
+##### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
 | 403 Forbidden | Missing permission `reports.list`. |
 
-### POST
+#### POST
 Creates a Report.
-#### Request
+##### Request
 A Report object without history or status.
 *NOTE: the reporter field from the [users extension](./users.md) should not be included here*
-#### Response
+##### Response
 A reference to the created Report object.
-#### Errors
+##### Errors
 | Response Code | Cause                                       |
 |---------------|---------------------------------------------|
 | 403 Forbidden | Missing permission `reports.post`.          |
@@ -106,57 +108,57 @@ A reference to the created Report object.
 
 If the [authentication extension](./authentication.md) is implemented, any created reports become owned by their poster.
 
-## /reports/owned
-### GET
+### /reports/owned
+#### GET
 Lists all reports owned by the client's user.
-#### Response
+##### Response
 A Paginated List of Report References.
-#### Errors
+##### Errors
 | Response Code | Cause                                                      |
 |---------------|------------------------------------------------------------|
 | 403 Forbidden | Missing permission `reports.list` or `reports.owned.list`. |
 
 --------------------------------------------------------------------------------
 
-## {report_uri}
-### GET
+### {report_uri}
+#### GET
 Gets a report.
-#### Response
+##### Response
 The Report object.
-#### Errors
+##### Errors
 | Response Code | Cause                                                    |
 |---------------|----------------------------------------------------------|
 | 403 Forbidden | Missing permission `reports.get` or `reports.owned.get`. |
 
-### PATCH
+#### PATCH
 Re-opens or closes the report.
-#### Request
+##### Request
 ```typescript
 {
 	"status": "OPENED" | "CLOSED";
 	"reason"?: string;
 }
 ```
-#### Response
+##### Response
 The updated Report object.
-#### Errors
+##### Errors
 | Response Code | Cause                                                        |
 |---------------|--------------------------------------------------------------|
 | 403 Forbidden | Missing permission `reports.patch` or `reports.owned.patch`. |
 
-### DELETE
+#### DELETE
 Deletes the report.
-#### Errors
+##### Errors
 | Response Code | Cause                                                          |
 |---------------|----------------------------------------------------------------|
 | 403 Forbidden | Missing permission `reports.delete` or `reports.owned.delete`. |
 
 --------------------------------------------------------------------------------
 
-## {report_uri}/history
-### GET
+### {report_uri}/history
+#### GET
 Lists all changes to a report.
-#### Response
+##### Response
 A Paginated List of the following type:
 ```typescript
 {
@@ -171,7 +173,7 @@ If the [users extension](./users.md) is implemented, history entries may additio
 	"user"?: User;
 }
 ```
-#### Errors
+##### Errors
 | Response Code | Cause                                                                      |
 |---------------|----------------------------------------------------------------------------|
 | 403 Forbidden | Missing permission `reports.get` or `reports.owned.get`.                   |

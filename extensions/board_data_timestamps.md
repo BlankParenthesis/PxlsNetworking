@@ -4,9 +4,11 @@ Implementing this extensions adds a new board data buffer, providing clients wit
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["board_timestamps"];
@@ -15,24 +17,24 @@ Implementing this extensions adds a new board data buffer, providing clients wit
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/data/timestamps
-### GET
+### {board_uri}/data/timestamps
+#### GET
 Represents the last-modified time for all pixels on the board.
-#### Response
+##### Response
 Binary data. 
 32-bit unsigned timestamp for every pixel. 
 Bytes are little-endian ordered.
 Timestamp is seconds since `created_at` as defined in `{board_uri}/info`.
-#### Errors
+##### Errors
 | Response Code | Cause                                 |
 |---------------|---------------------------------------|
 | 403 Forbidden | Missing permission `boards.data.get`. |
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/socket?extensions[]=board_timestamps
-### Server packets
-#### BoardUpdate
+### {board_uri}/socket?extensions[]=board_timestamps
+#### Server packets
+##### BoardUpdate
 The board has changed.
 ```typescript
 {
@@ -41,7 +43,7 @@ The board has changed.
 	}
 }
 ```
-### Errors
+#### Errors
 | Response Code | Cause                                          |
 |---------------|------------------------------------------------|
 | 403 Forbidden | Missing permission `socket.boards.timestamps`. |

@@ -24,9 +24,11 @@ Role objects are defined by the following type:
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["roles"];
@@ -35,46 +37,46 @@ Role objects are defined by the following type:
 
 --------------------------------------------------------------------------------
 
-## {user_uri}/roles
-### GET
+### {user_uri}/roles
+#### GET
 Lists all roles a user has.
-#### Response
+##### Response
 A Paginated List of Role objects.
-#### Errors
+##### Errors
 | Response Code | Cause                                                              |
 |---------------|--------------------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.get` or `users.current.get`.             |
 | 404 Forbidden | No such User exists.                                               |
 | 403 Forbidden | Missing permission `users.roles.get` or `users.current.roles.get`. |
 
-### POST
+#### POST
 Adds a role to a user.
-#### Request
+##### Request
 ```typescript
 {
 	"role": string;
 }
 ```
-#### Response
+##### Response
 A Paginated List of Role objects.
-#### Errors
+##### Errors
 | Response Code | Cause                                                                |
 |---------------|----------------------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.get` or `users.current.get`.               |
 | 403 Forbidden | Missing permission `users.roles.post` or `users.current.roles.post`. |
 | 404 Forbidden | No such Role exists.                                                 |
 
-### DELETE
+#### DELETE
 Removes a role from a user.
-#### Response
+##### Response
 A Paginated List of Role objects.
-#### Request
+##### Request
 ```typescript
 {
 	"role": string;
 }
 ```
-#### Errors
+##### Errors
 | Response Code | Cause                                                                    |
 |---------------|--------------------------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.get` or `users.current.get`.                   |
@@ -83,23 +85,23 @@ A Paginated List of Role objects.
 
 --------------------------------------------------------------------------------
 
-## /roles
-### GET
+### /roles
+#### GET
 Lists all roles.
-#### Response
+##### Response
 A Paginated List of Role References.
-#### Errors
+##### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
 | 403 Forbidden | Missing permission `roles.list`. |
 
-### POST
+#### POST
 Create a new role.
-#### Request
+##### Request
 A Role object
-#### Response
+##### Response
 A Reference to the created Role object.
-#### Errors
+##### Errors
 | Response Code            | Cause                            |
 |--------------------------|----------------------------------|
 | 403 Forbidden            | Missing permission `roles.post`. |
@@ -110,31 +112,31 @@ A Reference to the created Role object.
 
 --------------------------------------------------------------------------------
 
-## {role_uri}
-### GET
+### {role_uri}
+#### GET
 Gets the role.
-#### Response
+##### Response
 The Role object.
-#### Errors
+##### Errors
 | Response Code | Cause                           |
 |---------------|---------------------------------|
 | 403 Forbidden | Missing permission `roles.get`. |
 
-### PATCH
+#### PATCH
 Updates the role.
-#### Request
+##### Request
 A partial Role object.
-#### Response
+##### Response
 The updated Role object.
-#### Errors
+##### Errors
 | Response Code            | Cause                             |
 |--------------------------|-----------------------------------|
 | 403 Forbidden            | Missing permission `roles.patch`. |
 | 422 Unprocessable Entity | Role name is not allowed.         |
 
-### DELETE
+#### DELETE
 Deletes the role.
-#### Errors
+##### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
 | 403 Forbidden | Missing permission `roles.delete`. |

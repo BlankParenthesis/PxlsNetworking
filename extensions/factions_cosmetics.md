@@ -22,9 +22,11 @@ Faction objects are updated by this extension to contain these fields:
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["factions_cosmetics"];

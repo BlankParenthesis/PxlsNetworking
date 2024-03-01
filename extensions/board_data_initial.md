@@ -4,9 +4,11 @@ Implementing this extensions adds a new board data buffer, providing clients wit
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["board_initial"];
@@ -15,27 +17,27 @@ Implementing this extensions adds a new board data buffer, providing clients wit
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/data/initial
-### GET
+### {board_uri}/data/initial
+#### GET
 Represents the initial state of the board.
-#### Response
+##### Response
 Binary data. 
 8-bit palette index for every pixel.
-#### Errors
+##### Errors
 | Response Code | Cause                                 |
 |---------------|---------------------------------------|
 | 403 Forbidden | Missing permission `boards.data.get`. |
 
-### PATCH
+#### PATCH
 Update the initial board.
-#### Request
+##### Request
 Binary data.
 Content-range can be specified.
 Content-type may be multipart/byteranges which allows the client to patch smaller segments individually if the server supports it.
 Server implementations must support content-range headers which specify a range aligning with shape boundaries, but need not support other range features.
-#### Response
+##### Response
 204 No Content
-#### Errors
+##### Errors
 | Response Code | Cause                                   |
 |---------------|-----------------------------------------|
 | 403 Forbidden | Missing permission `boards.data.patch`. |
@@ -43,9 +45,9 @@ Server implementations must support content-range headers which specify a range 
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/socket?extensions[]=board_initial
-### Server packets
-#### BoardUpdate
+### {board_uri}/socket?extensions[]=board_initial
+#### Server packets
+##### BoardUpdate
 The board has changed.
 ```typescript
 {
@@ -54,7 +56,7 @@ The board has changed.
 	}
 }
 ```
-### Errors
+#### Errors
 | Response Code | Cause                                       |
 |---------------|---------------------------------------------|
 | 403 Forbidden | Missing permission `socket.boards.initial`. |

@@ -15,9 +15,11 @@ This extension adds Ban objects which are described by following type:
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["user_moderation"];
@@ -26,16 +28,16 @@ This extension adds Ban objects which are described by following type:
 
 --------------------------------------------------------------------------------
 
-## /board/pixels/{position}
-### POST
-#### Errors
+### /board/pixels/{position}
+#### POST
+##### Errors
 | Response Code | Cause   |
 |---------------|---------|
 | 403 Forbidden | Banned. |
 
 If the [board undo extension](./board_undo.md) is implemented, then undos are also unavailable due to bans:
-### DELETE
-#### Errors
+#### DELETE
+##### Errors
 | Response Code | Cause   |
 |---------------|---------|
 | 403 Forbidden | Banned. |
@@ -43,38 +45,38 @@ If the [board undo extension](./board_undo.md) is implemented, then undos are al
 --------------------------------------------------------------------------------
 
 If the [board moderation extension](./board_undo.md) is implemented, then mass-place events are also unavailable due to bans:
-## /board/pixels
-### PATCH
-#### Errors
+### /board/pixels
+#### PATCH
+##### Errors
 | Response Code | Cause   |
 |---------------|---------|
 | 403 Forbidden | Banned. |
 
 --------------------------------------------------------------------------------
 
-## {user_uri}/bans
-### GET
+### {user_uri}/bans
+#### GET
 Lists all bans issued to a user.
-#### Response
+##### Response
 A Paginated List of Ban References.
-##### Errors
+###### Errors
 | Response Code | Cause                                                              |
 |---------------|--------------------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.get` or `users.current.get`.             |
 | 403 Forbidden | Missing permission `users.bans.list` or `users.current.bans.list`. |
 
-### POST
+#### POST
 Bans the user.
-#### Request
+##### Request
 ```typescript
 {
 	"expiry": Timestamp | null;
 	"reason": string | null;
 }
 ```
-##### Response
+###### Response
 A reference to the created Ban object.
-##### Errors
+###### Errors
 | Response Code            | Cause                                                  |
 |--------------------------|--------------------------------------------------------|
 | 403 Forbidden            | Missing permission `users.get` or `users.current.get`. |
@@ -83,38 +85,38 @@ A reference to the created Ban object.
 
 --------------------------------------------------------------------------------
 
-## {ban_uri}
-### GET
+### {ban_uri}
+#### GET
 Gets a ban issued to a user.
-#### Response
+##### Response
 The Ban object.
-##### Errors
+###### Errors
 | Response Code | Cause                                                            |
 |---------------|------------------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.get` or `users.current.get`.           |
 | 403 Forbidden | Missing permission `users.bans.get` or `users.current.bans.get`. |
 
-### PATCH
+#### PATCH
 Updates the ban.
-#### Request
+##### Request
 ```typescript
 {
 	"expiry"?: Timestamp | null;
 	"reason"?: string | null;
 }
 ```
-##### Response
+###### Response
 The updated Ban object.
-##### Errors
+###### Errors
 | Response Code            | Cause                                                  |
 |--------------------------|--------------------------------------------------------|
 | 403 Forbidden            | Missing permission `users.get` or `users.current.get`. |
 | 403 Forbidden            | Missing permission `users.bans.patch`.                 |
 | 422 Unprocessable Entity | The ban reason is invalid.                             |
 
-### DELETE
+#### DELETE
 Removes the ban.
-##### Errors
+###### Errors
 | Response Code | Cause                                                  |
 |---------------|--------------------------------------------------------|
 | 403 Forbidden | Missing permission `users.get` or `users.current.get`. |

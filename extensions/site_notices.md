@@ -24,9 +24,11 @@ If the [users extension](./users.md) is implemented, Notice objects gain an opti
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["site_notices"];
@@ -35,9 +37,9 @@ If the [users extension](./users.md) is implemented, Notice objects gain an opti
 
 --------------------------------------------------------------------------------
 
-## /socket?extensions[]=site_notices
-### Server packets
-#### SiteNoticeCreated
+### /socket?extensions[]=site_notices
+#### Server packets
+##### SiteNoticeCreated
 There is a new site notice.
 ```typescript
 {
@@ -45,7 +47,7 @@ There is a new site notice.
 	"notice": Reference<Notice>;
 }
 ```
-#### SiteNoticeUpdated
+##### SiteNoticeUpdated
 A site notice has been updated.
 ```typescript
 {
@@ -53,7 +55,7 @@ A site notice has been updated.
 	"notice": Reference<Notice>;
 }
 ```
-#### SiteNoticetRemoved
+##### SiteNoticetRemoved
 A site notice has been removed.
 ```typescript
 {
@@ -61,64 +63,64 @@ A site notice has been removed.
 	"notice": Reference<Notice>;
 }
 ```
-### Errors
+#### Errors
 | Response Code | Cause                                     |
 |---------------|-------------------------------------------|
 | 403 Forbidden | Missing permission `socket.site.notices`. |
 
 --------------------------------------------------------------------------------
 
-## /notice
-### GET
+### /notice
+#### GET
 Lists all site notice.
-#### Response
+##### Response
 A Paginated List of Notice References.
-#### Errors
+##### Errors
 | Response Code | Cause                                   |
 |---------------|-----------------------------------------|
 | 403 Forbidden | Missing permission `site.notices.list`. |
 
-### POST
+#### POST
 Creates a site notice.
-#### Request
+##### Request
 A Notice object.
 *NOTE: the author field from the [users extension](./users.md) should not be included here*
-#### Response
+##### Response
 A reference to the created Notice.
-#### Errors
+##### Errors
 | Response Code | Cause                                   |
 |---------------|-----------------------------------------|
 | 403 Forbidden | Missing permission `site.notices.post`. |
 
 --------------------------------------------------------------------------------
 
-## {notices_uri}
-### GET
+### {notices_uri}
+#### GET
 Gets a site notice.
-#### Response
+##### Response
 A Notice object.
-#### Errors
+##### Errors
 | Response Code | Cause                                  |
 |---------------|----------------------------------------|
 | 403 Forbidden | Missing permission `site.notices.get`. |
 | 404 Not Found | No such Notice exists.                 |
 
-### PATCH
+#### PATCH
 Updates a site notice.
-#### Request
+##### Request
 A partial Notice object.
 *NOTE: the author field from the [users extension](./users.md) should not be included here*
-#### Response
+##### Response
 The updated Notice object.
-#### Errors
+##### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|
 | 403 Forbidden | Missing permission `site.notices.patch`. |
 | 404 Not Found | No such Notice exists.                   |
 
-### DELETE
+#### DELETE
 Deletes a site notice.
-#### Errors
+##### Errors
 | Response Code | Cause                                     |
 |---------------|-------------------------------------------|
 | 403 Forbidden | Missing permission `site.notices.delete`. |

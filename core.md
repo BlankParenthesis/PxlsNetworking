@@ -1,14 +1,23 @@
 Core Specification
 ==================
-All timestamps are Unix time unless specified otherwise. 
+
+## Preamble
+This specification defines the mechanisms and layouts to implement communication between a server and clients for an [r/place](https://reddit.com/r/place)-like application.
+
+Doing so requires some base understanding of common objects and systems.
+This section provides basic definitions which are used throughout the rest of these documents.
+
+### Timestamps
+All timestamps are [Unix time](https://en.wikipedia.org/wiki/Unix_time) in seconds unless specified otherwise. 
 They should be treated as the number type in practice but are represented clearly as "Timestamp" here.
 
+### Endpoint Overwriting
 A number of core protocol extensions exist. 
 Within these extensions, endpoints declared either here or in other extensions may be re-declared.
 These **duplicate response type definitions should be treated as the union of implemented definitions**.
 This allows extensions to add new fields to responses in a flexible way.
 
-
+### References
 To be as RESTful as possible, objects have a canonical address which can be used to refer to them.
 When an object is returned elsewhere, a Reference to it will be returned instead.
 A Reference for an object T can be described with the following type:
@@ -28,7 +37,7 @@ Because of this clients need not know anything about internal IDs used by the se
 Server implementations may choose to logically arrange their reference URIs (e.g. `/users/{user_id}`), but are not required to do so.
 Clients should not assume such a structure and should not assume any server will populate the `view` field.
 
-
+### Pagination
 Some endpoints return a list of objects rather that a single one.
 Sometimes too many objects will exist in this list to be reasonably sent in a single request.
 To solve this, all list endpoints return paginated responses.
@@ -50,6 +59,8 @@ The `next` and `previous` URIs should not result in duplicate items across pages
 Clients sequentially loading every "next" page until the end of a list should be sent every item in the list *exactly once*.
 
 
+### Objects
+#### Board
 At the core of Pxls is the board on which pixels are placed.
 This is represented here as the Board object defined by the following type:
 ```typescript
@@ -95,7 +106,7 @@ This is so that servers can reject blind client requests for chunked boards whic
 For orientation purposes, the default board orientation is left→right, then top→bottom, then back→front.
 Higher order boards are up to client interpretation.
 
-
+#### Placement
 Of equivalent importance to the board is the ability to modify it with Placements.
 A Placement object represents a change of board state at a particular time and is defined by the following type:
 ```typescript
@@ -107,7 +118,7 @@ A Placement object represents a change of board state at a particular time and i
 ```
 Placements are similar to pixels on the board and the two concepts are often treated interchangeably.
 
-
+#### Permissions
 Nearly all requests by the client can be rejected by the server implementation.
 It is useful for the client to know before making such requests if it will be allowed to do so.
 For this reason, each method of each endpoint is associated with a string denoting the permission to use that endpoint.
@@ -118,10 +129,12 @@ Such permissions should be used if the specified object belongs to the client us
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
+## Endpoints
+
+### /info
+#### GET
 Gets information about the server implementation.
-#### Response
+##### Response
 ```typescript
 {
 	"name"?: string;
@@ -132,7 +145,7 @@ Gets information about the server implementation.
 ```
 Extension definitions redefine the `extensions` field in this request.
 Implementations should return the union of all lists defined by every implemented extensions as a set.
-#### Errors
+##### Errors
 | Response Code | Cause                      |
 |---------------|----------------------------|
 | 403 Forbidden | Missing permission `info`. |
@@ -141,10 +154,10 @@ Implementations should return the union of all lists defined by every implemente
 
 --------------------------------------------------------------------------------
 
-## /access
-### GET
+### /access
+#### GET
 Gets information about what this client can do without encountering a permissions error.
-#### Response
+##### Response
 ```typescript
 {
 	"permissions": string[];
@@ -156,42 +169,42 @@ It represents the actions the client can take without encountering a permissions
 
 --------------------------------------------------------------------------------
 
-## /boards
-### GET
+### /boards
+#### GET
 Lists all Board objects.
-#### Response
+##### Response
 A Paginated List of Board References.
-#### Errors
+##### Errors
 | Response Code | Cause                             |
 |---------------|-----------------------------------|
 | 403 Forbidden | Missing permission `boards.list`. |
 
 --------------------------------------------------------------------------------
 
-## {board_uri}
-### GET
+### {board_uri}
+#### GET
 Gets a Board object.
-#### Response
+##### Response
 A Board Reference.
-##### Headers
+###### Headers
 | Header                | Value                                                                                                                |
 |-----------------------|----------------------------------------------------------------------------------------------------------------------|
 | Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                       |
 | Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available`. |
-#### Errors
+##### Errors
 | Response Code | Cause                            |
 |---------------|----------------------------------|
 | 403 Forbidden | Missing permission `boards.get`. |
 
 --------------------------------------------------------------------------------
 
-## /boards/default
+### /boards/default
 Requests made to this endpoint should be redirected using HTTP status 307 to the board object of the default board.
 If any sub-endpoints are called on this, the should likewise be redirected, keeping the path.
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/socket?extensions[]={extensions_list}
+### {board_uri}/socket?extensions[]={extensions_list}
 Websocket connection point.
 A connecting client may specify which extensions it wishes to be enabled on the websocket using the `extensions_list` query parameter.
 Extension names are the same as those in `/info`.
@@ -199,10 +212,10 @@ To receive the events defined here, the list should contain the value `core`.
 
 Servers should disconnect clients when metadata about the board changes which the client is not notified about.
 Because of this, clients should fetch the board metadata again after an unexpected socket disconnect.
-### Server packets
+#### Server packets
 These packets are sent by the server to inform the client of something.
 They should be sent as UTF-8 encoded JSON text or as a [permessage-deflate](https://www.rfc-editor.org/rfc/rfc7692) representation of that if supported.
-#### BoardUpdate
+##### BoardUpdate
 The board has changed.
 ```typescript
 {
@@ -236,7 +249,7 @@ In the vast majority of cases, this packet will look similar to the following, r
 	}
 }
 ```
-#### PixelsAvailable
+##### PixelsAvailable
 How many pixels may be placed by the current user without encountering a cooldown.
 ```typescript
 {
@@ -245,7 +258,7 @@ How many pixels may be placed by the current user without encountering a cooldow
 	"next"?: Timestamp; 
 }
 ```
-#### Ready
+##### Ready
 The first packet sent by the server. 
 After receiving this clients can begin fetching board data resources.
 Events received after this packet and before the data resources are loaded can be replayed after loading with a guarantee that the client will end up with the correct resource representation.
@@ -254,73 +267,73 @@ Events received after this packet and before the data resources are loaded can b
 	"type": "ready";
 }
 ```
-### Errors
+#### Errors
 | Response Code            | Cause                               |
 |--------------------------|-------------------------------------|
 | 403 Forbidden            | Missing permission `socket.core`.   |
 | 422 Unprocessable Entity | No extensions specified.            |
 | 422 Unprocessable Entity | Requested extensions not supported. |
-### Websocket Errors
+#### Websocket Errors
 | Close Code | Cause                |
 |------------|----------------------|
 | 1003       | Invalid packet sent. |
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/data/colors
-### GET
+### {board_uri}/data/colors
+#### GET
 Represents the current state of the board.
-#### Response
+##### Response
 Binary data. 
 8-bit palette index for every pixel.
-#### Errors
+##### Errors
 | Response Code | Cause                                 |
 |---------------|---------------------------------------|
 | 403 Forbidden | Missing permission `boards.data.get`. |
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/pixels
-### GET
+### {board_uri}/pixels
+#### GET
 Lists all placements.
-#### Response
+##### Response
 A Paginated List of Placement objects, sorted by timestamp ascending.  
 *NOTE: Placements have no canonical location and must be sent as objects here rather than references.*
-#### Errors
+##### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|
 | 403 Forbidden | Missing permission `boards.pixels.list`. |
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/pixels/{position}
-### GET
+### {board_uri}/pixels/{position}
+#### GET
 Gets the most recent placement for the specified board position.
-#### Response
+##### Response
 A Placement object.
-#### Errors
+##### Errors
 | Response Code | Cause                                  |
 |---------------|----------------------------------------|
 | 404 Not Found | Position has no placements.            |
 | 404 Not Found | Position outside of board dimensions.  |
 | 403 Forbidden | Missing permission `board.pixels.get`. |
 
-### POST
+#### POST
 Creates a placement.
-#### Request
+##### Request
 ```typescript
 {
 	"color": number;
 }
 ```
-#### Response
+##### Response
 The created Placement object.
-##### Headers
+###### Headers
 | Header                | Value                                                                                                                |
 |-----------------------|----------------------------------------------------------------------------------------------------------------------|
 | Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                       |
 | Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available`. |
-#### Errors
+##### Errors
 | Response Code            | Cause                                             |
 |--------------------------|---------------------------------------------------|
 | 404 Not Found            | Position outside of board dimensions.             |

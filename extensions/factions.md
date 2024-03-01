@@ -39,9 +39,11 @@ If the [users extension](./users.md) is implemented, Member objects will also co
 
 --------------------------------------------------------------------------------
 
-## /info
-### GET
-#### Response
+## Endpoints
+
+### /info
+#### GET
+##### Response
 ```typescript
 {
 	"extensions": ["factions"];
@@ -50,23 +52,23 @@ If the [users extension](./users.md) is implemented, Member objects will also co
 
 --------------------------------------------------------------------------------
 
-## /factions
-### GET
+### /factions
+#### GET
 Lists all factions.
-#### Response
+##### Response
 A Paginated List of Faction References.
-#### Errors
+##### Errors
 | Response Code | Cause                               |
 |---------------|-------------------------------------|
 | 403 Forbidden | Missing permission `factions.list`. |
 
-### POST
+#### POST
 Creates a faction.
-#### Request
+##### Request
 A Faction object without created_at or size.
-#### Response
+##### Response
 A reference to the created Faction object.
-#### Errors
+##### Errors
 | Response Code | Cause                               |
 |---------------|-------------------------------------|
 | 403 Forbidden | Missing permission `factions.post`. |
@@ -76,49 +78,49 @@ A reference to the created Faction object.
 
 --------------------------------------------------------------------------------
 
-## {faction_uri}
-### GET
-#### Response
+### {faction_uri}
+#### GET
+##### Response
 The Faction object.
-#### Errors
+##### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
 | 403 Forbidden | Missing permission `factions.get`. |
 
-### PATCH
+#### PATCH
 Updates the Faction.
-#### Request
+##### Request
 A partial Faction object without created_at or size.
-#### Response
+##### Response
 The update Faction object.
-#### Errors
+##### Errors
 | Response Code | Cause                                |
 |---------------|--------------------------------------|
 | 403 Forbidden | Missing permission `factions.patch`. |
 
-### DELETE
+#### DELETE
 Deletes the faction.
-#### Errors
+##### Errors
 | Response Code | Cause                                 |
 |---------------|---------------------------------------|
 | 403 Forbidden | Missing permission `factions.delete`. |
 
 --------------------------------------------------------------------------------
 
-## {faction_uri}/members
-### GET
+### {faction_uri}/members
+#### GET
 Lists all members of a faction.
-#### Response
+##### Response
 A Paginated List of Member objects.
-#### Errors
+##### Errors
 | Response Code | Cause                                      |
 |---------------|--------------------------------------------|
 | 403 Forbidden | Missing permission `factions.get`.         |
 | 403 Forbidden | Missing permission `factions.members.get`. |
 
-### POST
+#### POST
 Adds a new member to a faction.
-#### Request
+##### Request
 Empty unless the [users extension](./users.md) is implemented in which case, an optional User URI may be specified:
 ```typescript
 {
@@ -126,9 +128,9 @@ Empty unless the [users extension](./users.md) is implemented in which case, an 
 }
 ```
 If unspecified, the user added will be the currently authenticated one.
-#### Response
+##### Response
 A reference to the created Member object.
-#### Errors
+##### Errors
 | Response Code | Cause                                                  |
 |---------------|--------------------------------------------------------|
 | 403 Forbidden | Server does not support the action (joining/inviting). |
@@ -139,32 +141,32 @@ A reference to the created Member object.
 
 --------------------------------------------------------------------------------
 
-## {member_uri}
-### GET
+### {member_uri}
+#### GET
 Gets a faction member.
-#### Response
+##### Response
 A Member object.
-#### Errors
+##### Errors
 | Response Code | Cause                                      |
 |---------------|--------------------------------------------|
 | 403 Forbidden | Missing permission `factions.get`.         |
 | 403 Forbidden | Missing permission `factions.members.get`. |
 
-### PATCH
+#### PATCH
 Edit a faction member.
-#### Request
+##### Request
 A partial Member object.
-#### Response
+##### Response
 The updated Member object.
-#### Errors
+##### Errors
 | Response Code | Cause                                        |
 |---------------|----------------------------------------------|
 | 403 Forbidden | Missing permission `factions.get`.           |
 | 403 Forbidden | Missing permission `factions.members.patch`. |
 
-### DELETE
+#### DELETE
 Remove a faction member.
-#### Errors
+##### Errors
 | Response Code | Cause                                         |
 |---------------|-----------------------------------------------|
 | 403 Forbidden | Missing permission `factions.get`.            |
