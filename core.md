@@ -10,7 +10,7 @@ This allows extensions to add new fields to responses in a flexible way.
 
 
 To be as RESTful as possible, objects have a canonical address which can be used to refer to them.
-Where an object is returned elsewhere, a Reference to it will be returned instead.
+When an object is returned elsewhere, a Reference to it will be returned instead.
 A Reference for an object T can be described with the following type:
 ```typescript
 type Reference<T> = {
@@ -18,11 +18,12 @@ type Reference<T> = {
 	"view"?: T;
 };
 ```
-where `uri` points to a location where `T` can be obtained with a simple GET request.
+where `uri` points to a location which `T` can be obtained from with a simple GET request.
 The `view` field may be populated by servers so that clients can operate faster and with less requests.
 
 Clients may need to specify an object as part of a request.
-By using the URI of the object, clients need not know anything about internal IDs used by the server.
+This should be done with the object's canonical address.
+Because of this clients need not know anything about internal IDs used by the server.
 
 Server implementations may choose to logically arrange their reference URIs (e.g. `/users/{user_id}`), but are not required to do so.
 Clients should not assume such a structure and should not assume any server will populate the `view` field.
@@ -161,34 +162,9 @@ Lists all Board objects.
 #### Response
 A Paginated List of Board References.
 #### Errors
-| Response Code | Cause                            |
-|---------------|----------------------------------|
-| 403 Forbidden | Missing permission `boards.list` |
-
-### POST
-Creates a new Board object.
-#### Request
-```typescript
-{
-	"name": string;
-	"shape": number[][]
-	"palette": Map<number, {
-		"name": string;
-		"value": number;
-	}>;
-	"max_pixels_available": number;
-}
-```
-#### Response
-A Board Reference.
-##### Headers
-| Header   | Value                              |
-|----------|------------------------------------|
-| Location | The location of the created Board. |
-#### Errors
-| Response Code | Cause                            |
-|---------------|----------------------------------|
-| 403 Forbidden | Missing permission `boards.post` |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `boards.list`. |
 
 --------------------------------------------------------------------------------
 
@@ -198,44 +174,14 @@ Gets a Board object.
 #### Response
 A Board Reference.
 ##### Headers
-| Header                | Value                                                                                                               |
-|-----------------------|---------------------------------------------------------------------------------------------------------------------|
-| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                      |
-| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available` |
+| Header                | Value                                                                                                                |
+|-----------------------|----------------------------------------------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                       |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available`. |
 #### Errors
-| Response Code | Cause                           |
-|---------------|---------------------------------|
-| 403 Forbidden | Missing permission `boards.get` |
-
-### PATCH
-Updates the Board object.
-#### Request
-```typescript
-Partial<{
-	"name": string;
-	"shape": number[][]
-	"palette": Map<number, {
-		"name": string;
-		"value": number;
-	}>;
-	"max_pixels_available": number;
-}>
-```
-#### Response
-A Board Reference.
-#### Errors
-| Response Code | Cause                             |
-|---------------|-----------------------------------|
-| 403 Forbidden | Missing permission `boards.patch` |
-
-### DELETE
-Deletes the Board object.
-#### Response
-*No Content*
-#### Errors
-| Response Code | Cause                              |
-|---------------|------------------------------------|
-| 403 Forbidden | Missing permission `boards.delete` |
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `boards.get`. |
 
 --------------------------------------------------------------------------------
 
@@ -250,6 +196,9 @@ Websocket connection point.
 A connecting client may specify which extensions it wishes to be enabled on the websocket using the `extensions_list` query parameter.
 Extension names are the same as those in `/info`.
 To receive the events defined here, the list should contain the value `core`.
+
+Servers should disconnect clients when metadata about the board changes which the client is not notified about.
+Because of this, clients should fetch the board metadata again after an unexpected socket disconnect.
 ### Server packets
 These packets are sent by the server to inform the client of something.
 They should be sent as UTF-8 encoded JSON text or as a [permessage-deflate](https://www.rfc-editor.org/rfc/rfc7692) representation of that if supported.
@@ -258,19 +207,8 @@ The board has changed.
 ```typescript
 {
 	"type": "board-update";
-	"info"?: Partial<{
-		"name": string;
-		"shape": number[][]
-		"palette": Map<number, {
-			"name": string;
-			"value": number;
-		}>;
-	}>;
 	"data"?: Partial<{
 		"colors": Array<Change>;
-		"timestamps": Array<Change>;
-		"initial": Array<Change>;
-		"mask": Array<Change>;
 	}
 }
 ```
@@ -279,9 +217,13 @@ Where a Change object is defined as:
 {
 	"position": number;
 	"values": number[];
+} | {
+	"position": number;
+	"length": number;
 }
 ```
-Where `values` is a contiguous run of data and can be of any valid length.
+In the first instance, `values` is a contiguous run of data starting at `position`.
+In the second case, the client should invalidate any cached data from `position` to `position + length`.
 
 In the vast majority of cases, this packet will look similar to the following, representing a placement event:
 ```json
@@ -290,9 +232,6 @@ In the vast majority of cases, this packet will look similar to the following, r
 	"data": {
 		"colors": [
 			{ "position": 0, "values": [1] }
-		],
-		"timestamps": [
-			{ "position": 0, "values": [420] }
 		]
 	}
 }
@@ -321,34 +260,10 @@ Events received after this packet and before the data resources are loaded can b
 | 403 Forbidden            | Missing permission `socket.core`.   |
 | 422 Unprocessable Entity | No extensions specified.            |
 | 422 Unprocessable Entity | Requested extensions not supported. |
-
---------------------------------------------------------------------------------
-
-## {board_uri}/data/initial
-### GET
-Represents the initial state of the board.
-#### Response
-Binary data. 
-8-bit palette index for every pixel.
-#### Errors
-| Response Code | Cause                                 |
-|---------------|---------------------------------------|
-| 403 Forbidden | Missing permission `boards.data.get`. |
-
-### PATCH
-Update the initial board.
-#### Request
-Binary data.
-Content-range can be specified.
-Content-type may be multipart/byteranges which allows the client to patch smaller segments individually if the server supports it.
-Server implementations must support content-range headers which specify a range aligning with shape boundaries, but need not support other range features.
-#### Response
-204 No Content
-#### Errors
-| Response Code | Cause                                   |
-|---------------|-----------------------------------------|
-| 403 Forbidden | Missing permission `boards.data.patch`. |
-| 409 Conflict  | Patch is considered invalid.            |
+### Websocket Errors
+| Close Code | Cause                |
+|------------|----------------------|
+| 1003       | Invalid packet sent. |
 
 --------------------------------------------------------------------------------
 
@@ -365,79 +280,12 @@ Binary data.
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/data/mask
-### GET
-Represents where placements can be made within the board dimensions.
-Values correspond to the following behaviors:
-| Value | Placement Behavior                                        |
-|:-----:|-----------------------------------------------------------|
-|   0   | No placement allowed.                                     |
-|   1   | Placement allowed.                                        |
-|   2   | Placement allowed if an adjacent pixel has been modified. |
-#### Response
-Binary data. 
-8-bit mask identifier for every pixel.
-#### Errors
-| Response Code | Cause                                 |
-|---------------|---------------------------------------|
-| 403 Forbidden | Missing permission `boards.data.get`. |
-
-### PATCH
-Update the board mask.
-#### Request
-Binary data.
-Content-range can be specified.
-Content-type may be multipart/byteranges which allows the client to patch smaller segments individually if the server supports it.
-Server implementations must support content-range headers which specify a range aligning with shape boundaries, but need not support other range features.
-#### Response
-204 No Content
-#### Errors
-| Response Code | Cause                                   |
-|---------------|-----------------------------------------|
-| 403 Forbidden | Missing permission `boards.data.patch`. |
-| 409 Conflict  | Patch is considered invalid.            |
-
---------------------------------------------------------------------------------
-
-## {board_uri}/data/timestamps
-### GET
-Represents the last-modified time for all pixels on the board.
-#### Response
-Binary data. 
-32-bit unsigned timestamp for every pixel. 
-Bytes are little-endian ordered.
-Timestamp is seconds since `created_at` as defined in `{board_uri}/info`.
-#### Errors
-| Response Code | Cause                                 |
-|---------------|---------------------------------------|
-| 403 Forbidden | Missing permission `boards.data.get`. |
-
---------------------------------------------------------------------------------
-
-## {board_uri}/users
-### GET
-Gets the active user count.
-#### Response
-```typescript
-{
-	"active": number;
-	"idle_timeout": number;
-}
-```
-`idle_timeout` is in seconds.
-#### Errors
-| Response Code | Cause                              |
-|---------------|------------------------------------|
-| 403 Forbidden | Missing permission `boards.users`. |
-
---------------------------------------------------------------------------------
-
 ## {board_uri}/pixels
 ### GET
 Lists all placements.
 #### Response
 A Paginated List of Placement objects, sorted by timestamp ascending.  
-NOTE: Placements have no canonical location and must be sent as objects here rather than references.
+*NOTE: Placements have no canonical location and must be sent as objects here rather than references.*
 #### Errors
 | Response Code | Cause                                    |
 |---------------|------------------------------------------|
@@ -468,10 +316,10 @@ Creates a placement.
 #### Response
 The created Placement object.
 ##### Headers
-| Header                | Value                                                                                                               |
-|-----------------------|---------------------------------------------------------------------------------------------------------------------|
-| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                      |
-| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available` |
+| Header                | Value                                                                                                                |
+|-----------------------|----------------------------------------------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                       |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available`. |
 #### Errors
 | Response Code            | Cause                                             |
 |--------------------------|---------------------------------------------------|

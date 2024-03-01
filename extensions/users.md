@@ -14,7 +14,7 @@ User objects are represented with the following type:
 Placement objects gain an additional field due to this extension:
 ```typescript
 {
-	"user"?: User;
+	"user"?: Reference<User>;
 }
 ```
 
@@ -31,30 +31,20 @@ Placement objects gain an additional field due to this extension:
 
 --------------------------------------------------------------------------------
 
-## /ws?extensions[]=users
+## /socket?extensions[]=users
 ### Server packets
 #### UserUpdate
 The client user has changed.
 ```typescript
 {
 	"type": "user-updated";
-	"user": Partial<User>;
+	"user": Reference<User>;
 }
 ```
 ### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
 | 403 Forbidden | Missing permission `socket.users`. |
-
---------------------------------------------------------------------------------
-
-## /board/pixels/{x}/{y}
-### GET
-```typescript
-{
-	"user"?: User;
-}
-```
 
 --------------------------------------------------------------------------------
 
@@ -83,13 +73,14 @@ The User object.
 ### PATCH
 Updates a user.
 #### Request
-A partial User object without the id or created_at fields.
+A partial User object without created_at field.
 #### Response
 The updated User object.
 #### Errors
-| Response Code | Cause                                                      |
-|---------------|------------------------------------------------------------|
-| 403 Forbidden | Missing permission `users.patch` or `users.current.patch`. |
+| Response Code            | Cause                                                      |
+|--------------------------|------------------------------------------------------------|
+| 403 Forbidden            | Missing permission `users.patch` or `users.current.patch`. |
+| 422 Unprocessable Entity | New username is not allowed.                               |
 
 ### DELETE
 Deletes a user.
@@ -103,6 +94,10 @@ Deletes a user.
 
 ## /users/current
 Requests made to this endpoint should be redirected using HTTP status 307 to the user object of the currently authenticated user.
-If the client is not authenticated, then the server should respond with a status of 401 - unauthorized.
 
 If any sub-endpoints are called on this, they should likewise be redirected, keeping the path.
+#### Errors
+| Response Code    | Cause                                   |
+|------------------|-----------------------------------------|
+| 401 Unauthorized | Not authenticated.                      |
+| 403 Forbidden    | Missing permission `users.current.get`. |

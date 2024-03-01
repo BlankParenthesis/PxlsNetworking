@@ -34,12 +34,13 @@ Clients can append `/.well-known/openid-configuration` to this location to perfo
 Clients should use the OAuth 2.0 PKCE method described in [rfc7636](https://datatracker.ietf.org/doc/html/rfc7636) for initiating the login flow and retrieving the token.
 Clients may then refresh this token as required.
 If `client_id` is present and not null, it should be public and support any redirect URI with no required secret.
-Otherwise, clients will need to use a known public client id or a private client id and secret.
-Knowing this id and secret implies a pre-existing relationship between the client and server, making complete interchangeability difficult in these cases.
+Otherwise, clients will need to use a known public client ID or a private client ID and secret.
+Knowing this ID and secret implies a pre-existing relationship between the client and server, making complete interchangeability difficult in these cases.
 
 --------------------------------------------------------------------------------
 
-## {board_uri}/socket?extensions[]=authentication
+## /socket?extensions[]=authentication
+*NOTE: The definitions here also apply to board sockets*
 ### Client packets
 Unlike regular HTTP requests, websocket connections have a significant duration.
 Credentials are unlikely to expire over the course of a regular HTTP request.
@@ -58,4 +59,19 @@ Set authentication state.
 	"token"?: string;
 }
 ```
-If `token` is not provided, the client should be treated as unauthenticated and should no longer sent authenticate packets.
+If `token` is not provided, the client should be treated as unauthenticated and should no longer send authenticate packets.
+
+### Errors
+With the sole exception of `socket.authenticate`, socket requests should not check user permissions until after the client sends the first Authenticate packet if using this extension.
+*NOTE: Since clients are authenticated after connection, the initial request is tested against the unauthenticated user permissions.*
+| Response Code            | Cause                                     |
+|--------------------------|-------------------------------------------|
+| 403 Forbidden            | Missing permission `socket.authenticate`. |
+### Websocket Errors
+| Close Code | Cause                                       |
+|------------|---------------------------------------------|
+| 4000       | Client failed to send Authenticate in time. |
+| 4001       | Missing permission.                         |
+| 4002       | Invalid token.                              |
+
+*NOTE: 4001 should be sent to indicate the client lacks a permission after a successful authentication.*

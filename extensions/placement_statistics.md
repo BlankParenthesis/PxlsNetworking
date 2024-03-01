@@ -32,10 +32,27 @@ This defines a PlacementStatistics object with the following type:
 
 --------------------------------------------------------------------------------
 
-## /ws?extensions[]=placement_statistics
+## /socket?extensions[]=placement_statistics
 ### Server packets
 #### StatsUpdate
-The client user's placement statistics have changed.
+The client user's total placement statistics have changed.
+```typescript
+{
+	"type": "stats-updated";
+	"stats": PlacementStatistics;
+}
+```
+### Errors
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `socket.stats`. |
+
+--------------------------------------------------------------------------------
+
+## {board_uri}/socket?extensions[]=placement_statistics
+### Server packets
+#### StatsUpdate
+The client user's placement statistics for this board have changed.
 ```typescript
 {
 	"type": "stats-updated";
@@ -56,11 +73,12 @@ Lists the placement statistics for all users.
 A Paginated List of the following type:
 ```typescript
 {
-	"user": User;
-	"stats": {
-		"totals": PlacementStatistics;
-		[board_id: number | string]: PlacementStatistics;
-	};
+	"user": Reference<User>;
+	"totals": PlacementStatistics;
+	"boards": Array<{
+		"board": Reference<Board>;
+		"stats": PlacementStatistics;
+	}>;
 }
 ```
 #### Errors
@@ -78,7 +96,10 @@ Gets the placement statistics for a user.
 ```typescript
 {
 	"totals": PlacementStatistics;
-	[board_id: number | string]: PlacementStatistics;
+	"boards": Array<{
+		"board": Reference<Board>;
+		"stats": PlacementStatistics;
+	}>;
 }
 ```
 Implementations may provide information on as many or few boards as they choose.

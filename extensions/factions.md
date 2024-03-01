@@ -6,8 +6,6 @@ Factions objects are defined by the following type:
 ```typescript
 {
 	"name": string;
-	"tag": string;
-	"color": number;
 	"created_at": Timestamp;
 	"size": number;
 }
@@ -17,7 +15,7 @@ Factions identify users with Member objects which are defined by the following t
 ```typescript
 {
 	"displays_faction": boolean;
-	"approval": {
+	"join_intent": {
 		"member": boolean;
 		"faction": boolean;
 	}
@@ -25,15 +23,17 @@ Factions identify users with Member objects which are defined by the following t
 }
 ```
 
-The approval field can be used by implementations to require approval from a faction after a user has attempted to join before they are formally considered a member.
-The field's structure also facilitates users being invited and needing to accept before being formally considered a member.
-Implementors might reasonably choose to always return a fully-approved value for this field.
-It would be reasonable to automatically remove the member if neither side has approved the member.
+The join_intent field can optionally be used by implementations to do any of the following:
+- require approval from a faction after a user has attempted to join before they are formally considered a member
+- let a faction invite a user, which may be the only way that user can join that faction
+Implementors might reasonably choose to always return a fully-approved value for this field and skip these processes.
+
+If both sub-fields are false, the user should no longer be considered a member.
 
 If the [users extension](./users.md) is implemented, Member objects will also contain the associated User object:
 ```typescript
 {
-	"user": User;
+	"user": Reference<User>;
 }
 ```
 
@@ -63,13 +63,7 @@ A Paginated List of Faction References.
 ### POST
 Creates a faction.
 #### Request
-```typescript
-{
-	"name": string;
-	"tag": string;
-	"color": number;
-}
-```
+A Faction object without created_at or size.
 #### Response
 A reference to the created Faction object.
 #### Errors
@@ -94,13 +88,7 @@ The Faction object.
 ### PATCH
 Updates the Faction.
 #### Request
-```typescript
-Partial<{
-	"name": string;
-	"tag": string;
-	"color": number;
-}>
-```
+A partial Faction object without created_at or size.
 #### Response
 The update Faction object.
 #### Errors
@@ -143,6 +131,7 @@ A reference to the created Member object.
 #### Errors
 | Response Code | Cause                                                  |
 |---------------|--------------------------------------------------------|
+| 403 Forbidden | Server does not support the action (joining/inviting). |
 | 403 Forbidden | Missing permission `factions.get`.                     |
 | 403 Forbidden | Missing permission `factions.members.post`.            |
 | 404 Not Found | The user URI is invalid.                               |
