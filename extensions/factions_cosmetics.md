@@ -20,6 +20,13 @@ Faction objects are updated by this extension to contain these fields:
 
 `banner` is the uri of a large image to be used as a header or background associated with the faction.
 
+Faction members gain an additional field indicating that the faction may be displayed next to the user:
+```typescript
+{
+	"displays_faction": boolean;
+}
+```
+
 --------------------------------------------------------------------------------
 
 ## Endpoints

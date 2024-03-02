@@ -14,7 +14,6 @@ Factions objects are defined by the following type:
 Factions identify users with Member objects which are defined by the following type:
 ```typescript
 {
-	"displays_faction": boolean;
 	"join_intent": {
 		"member": boolean;
 		"faction": boolean;
