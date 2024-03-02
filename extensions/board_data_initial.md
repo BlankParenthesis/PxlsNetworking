@@ -45,10 +45,10 @@ Server implementations must support content-range headers which specify a range 
 
 --------------------------------------------------------------------------------
 
-### {board_uri}/socket?extensions[]=board_initial
+### {board_uri}/events?subscribe[]={events_list}
 #### Server packets
 ##### BoardUpdate
-The board has changed.
+Set `subscribe[]=data.initial` to add this field to the event.
 ```typescript
 {
 	"data"?: Partial<{
@@ -57,6 +57,6 @@ The board has changed.
 }
 ```
 #### Errors
-| Response Code | Cause                                       |
-|---------------|---------------------------------------------|
-| 403 Forbidden | Missing permission `socket.boards.initial`. |
+| Response Code | Cause                                            |
+|---------------|--------------------------------------------------|
+| 403 Forbidden | Missing permission `boards.events.data.initial`. |

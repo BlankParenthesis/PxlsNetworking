@@ -37,10 +37,11 @@ If the [users extension](./users.md) is implemented, Notice objects gain an opti
 
 --------------------------------------------------------------------------------
 
-### /socket?extensions[]=site_notices
+### /events?subscribe[]={events_list}
 #### Server packets
 ##### SiteNoticeCreated
-There is a new site notice.
+Sent when a site notice is created.
+Set `subscribe[]=notices` to receive.
 ```typescript
 {
 	"type": "site-notice-created";
@@ -48,15 +49,17 @@ There is a new site notice.
 }
 ```
 ##### SiteNoticeUpdated
-A site notice has been updated.
+Sent when a site notice is updated.
+Set `subscribe[]=notices` to receive.
 ```typescript
 {
 	"type": "site-notice-updated";
 	"notice": Reference<Notice>;
 }
 ```
-##### SiteNoticeRemoved
-A site notice has been removed.
+##### SiteNoticetRemoved
+Sent when a site notice is removed.
+Set `subscribe[]=notices` to receive.
 ```typescript
 {
 	"type": "site-notice-removed";
@@ -66,7 +69,7 @@ A site notice has been removed.
 #### Errors
 | Response Code | Cause                                |
 |---------------|--------------------------------------|
-| 403 Forbidden | Missing permission `socket.notices`. |
+| 403 Forbidden | Missing permission `events.notices`. |
 
 --------------------------------------------------------------------------------
 

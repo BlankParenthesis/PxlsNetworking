@@ -47,10 +47,11 @@ If the [users extension](./users.md) is implemented, Reports may additionally sp
 
 --------------------------------------------------------------------------------
 
-### /socket?extensions[]=reports
+### /events?subscribe[]={events_list}
 #### Server packets
 ##### ReportCreated
-There is a new report.
+Sent when a report is created.
+Set `subscribe[]=reports` to receive this event.
 ```typescript
 {
 	"type": "report-created";
@@ -58,7 +59,8 @@ There is a new report.
 }
 ```
 ##### ReportUpdated
-A report has been updated.
+Sent when a report is updated.
+Set `subscribe[]=reports` to receive this event.
 ```typescript
 {
 	"type": "report-updated";
@@ -66,17 +68,18 @@ A report has been updated.
 }
 ```
 ##### ReportRemoved
-A report has been removed.
+Sent when a report is removed.
+Set `subscribe[]=reports` to receive this event.
 ```typescript
 {
 	"type": "report-removed";
-	"report": Reference<Report>;
+	"report": Url;
 }
 ```
 #### Errors
 | Response Code | Cause                                |
 |---------------|--------------------------------------|
-| 403 Forbidden | Missing permission `socket.reports`. |
+| 403 Forbidden | Missing permission `events.reports`. |
 
 --------------------------------------------------------------------------------
 
