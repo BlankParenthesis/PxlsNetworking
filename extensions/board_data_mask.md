@@ -51,10 +51,10 @@ Server implementations must support content-range headers which specify a range 
 
 --------------------------------------------------------------------------------
 
-### {board_uri}/socket?extensions[]=board_mask
+### {board_uri}/events?subscribe[]={events_list}
 #### Server packets
 ##### BoardUpdate
-The board has changed.
+Set `subscribe[]=data.mask` to add this field to the event.
 ```typescript
 {
 	"data"?: Partial<{
@@ -63,6 +63,6 @@ The board has changed.
 }
 ```
 #### Errors
-| Response Code | Cause                                    |
-|---------------|------------------------------------------|
-| 403 Forbidden | Missing permission `socket.boards.mask`. |
+| Response Code | Cause                                         |
+|---------------|-----------------------------------------------|
+| 403 Forbidden | Missing permission `boards.events.data.mask`. |

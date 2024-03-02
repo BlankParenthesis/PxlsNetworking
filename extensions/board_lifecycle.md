@@ -76,15 +76,15 @@ Deletes the Board object.
 
 --------------------------------------------------------------------------------
 
-### {board_uri}/socket?extensions[]=board_lifecycle
+### {board_uri}/events?subscribe[]={events_list}
 #### Server packets
 ##### BoardUpdate
-The board has changed.
+Set `subscribe[]=info` to add this field to the event.
 ```typescript
 {
 	"info"?: Partial<{
 		"name": string;
-		"shape": number[][]
+		"shape": number[][];
 		"palette": Map<number, {
 			"name": string;
 			"value": number;
@@ -93,6 +93,6 @@ The board has changed.
 }
 ```
 #### Errors
-| Response Code | Cause                                         |
-|---------------|-----------------------------------------------|
-| 403 Forbidden | Missing permission `socket.boards.lifecycle`. |
+| Response Code | Cause                                    |
+|---------------|------------------------------------------|
+| 403 Forbidden | Missing permission `boards.events.info`. |

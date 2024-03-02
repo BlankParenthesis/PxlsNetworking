@@ -33,10 +33,12 @@ Placement objects gain an additional field due to this extension:
 
 --------------------------------------------------------------------------------
 
-### /socket?extensions[]=users
+### /events?subscribe[]={events_list}
 #### Server packets
 ##### UserUpdate
-The client user has changed.
+Sent when a user changes.
+Set `subscribe[]=users` to receive for all users.
+Set `subscribe[]=users.current` to receive for current user.
 ```typescript
 {
 	"type": "user-updated";
@@ -44,9 +46,10 @@ The client user has changed.
 }
 ```
 #### Errors
-| Response Code | Cause                              |
-|---------------|------------------------------------|
-| 403 Forbidden | Missing permission `socket.users`. |
+| Response Code | Cause                                     |
+|---------------|-------------------------------------------|
+| 403 Forbidden | Missing permission `events.user`.         |
+| 403 Forbidden | Missing permission `events.user.current`. |
 
 --------------------------------------------------------------------------------
 
