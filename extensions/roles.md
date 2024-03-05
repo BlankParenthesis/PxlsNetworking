@@ -76,11 +76,12 @@ Set `subscribe[]=users.roles` to receive, or `subscribe[]=users.current.roles` t
 }
 ```
 #### Errors
-| Response Code | Cause                                            |
-|---------------|--------------------------------------------------|
-| 403 Forbidden | Missing permission `events.roles`.               |
-| 403 Forbidden | Missing permission `events.users.roles`.         |
-| 403 Forbidden | Missing permission `events.users.current.roles`. |
+| Response Code            | Cause                                            |
+|--------------------------|--------------------------------------------------|
+| 403 Forbidden            | Missing permission `events.roles`.               |
+| 403 Forbidden            | Missing permission `events.users.roles`.         |
+| 403 Forbidden            | Missing permission `events.users.current.roles`. |
+| 422 Unprocessable Entity | Current and non-current subscriptions overlap.   |
 
 --------------------------------------------------------------------------------
 

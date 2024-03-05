@@ -29,12 +29,12 @@ Set `subscribe[]=boards` to add this field to the event.
 	"board": Reference<Board>;
 }
 ```
-##### BoardRemoved
+##### BoardDeleted
 Sent when a board is deleted.
 Set `subscribe[]=boards` to add this field to the event.
 ```typescript
 {
-	"type": "board-removed";
+	"type": "board-deleted";
 	"board": Url;
 }
 ```
