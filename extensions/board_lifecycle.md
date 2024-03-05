@@ -18,6 +18,33 @@ Implementing this extensions allows clients to update the board metadata.
 
 --------------------------------------------------------------------------------
 
+### /events?subscribe[]={events_list}
+#### Server packets
+##### BoardCreated
+Sent when a board is created.
+Set `subscribe[]=boards` to add this field to the event.
+```typescript
+{
+	"type": "board-created";
+	"board": Reference<Board>;
+}
+```
+##### BoardRemoved
+Sent when a board is deleted.
+Set `subscribe[]=boards` to add this field to the event.
+```typescript
+{
+	"type": "board-removed";
+	"board": Url;
+}
+```
+#### Errors
+| Response Code | Cause                               |
+|---------------|-------------------------------------|
+| 403 Forbidden | Missing permission `events.boards`. |
+
+--------------------------------------------------------------------------------
+
 ### {board_uri}
 #### POST
 Creates a new Board object.
