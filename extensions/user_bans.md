@@ -28,6 +28,46 @@ This extension adds Ban objects which are described by following type:
 
 --------------------------------------------------------------------------------
 
+### /events?subscribe[]={events_list}
+#### Server packets
+##### BanCreated
+Sent when a ban is created.
+Set `subscribe[]=users.bans` to receive, or `subscribe[]=users.current.bans` to receive for the current user.
+```typescript
+{
+	"type": "ban-created";
+	"user": Reference<User>;
+	"ban": Reference<Ban>;
+}
+```
+##### BanUpdated
+Sent when a ban is updated
+Set `subscribe[]=bans` to receive, or `subscribe[]=users.current.bans` to receive for the current user.
+```typescript
+{
+	"type": "ban-updated";
+	"user": Reference<User>;
+	"ban": Reference<Ban>;
+}
+```
+##### BanDeleted
+Sent when a ban is deleted.
+Set `subscribe[]=bans` to receive, or `subscribe[]=users.current.bans` to receive for the current user.
+```typescript
+{
+	"type": "ban-deleted";
+	"user": Reference<User>;
+	"ban": Url;
+}
+```
+#### Errors
+| Response Code | Cause                                           |
+|---------------|-------------------------------------------------|
+| 403 Forbidden | Missing permission `events.users.bans`.         |
+| 403 Forbidden | Missing permission `events.users.current.bans`. |
+
+--------------------------------------------------------------------------------
+
 ### {board_uri}/pixels/{position}
 #### POST
 ##### Errors
