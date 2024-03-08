@@ -47,9 +47,7 @@ If a user has not specified a cooldown override and has some but not all of the 
 ##### Request
 ```typescript
 {
-	"from": number[],
-	"to": number[],
-	"colors": number[];
+	"changes": RangeEdit[],
 	"overrides"?:  {
 		"cooldown": boolean;
 		"color": boolean;
@@ -57,7 +55,18 @@ If a user has not specified a cooldown override and has some but not all of the 
 	}
 }
 ```
-`from` and `to` are the start and end positions respectively.
+where a RangeEdit Object is defined as:
+```typescript
+{
+	"position": number;
+	"values": number[];
+} | {
+	"position": number;
+	"value": number;
+	"length": number;
+}
+```
+This format is similar to the Change object from the core BoardUpdate event, but the second variant must specify the value for all colors in the range.
 ##### Response
 ```typescript
 {
