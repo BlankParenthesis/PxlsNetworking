@@ -37,10 +37,11 @@ If the [users extension](./users.md) is implemented, Notice objects gain an opti
 
 --------------------------------------------------------------------------------
 
-### /socket?extensions[]=site_notices
+### /events?subscribe[]={events_list}
 #### Server packets
 ##### SiteNoticeCreated
-There is a new site notice.
+Sent when a site notice is created.
+Set `subscribe[]=notices` to receive.
 ```typescript
 {
 	"type": "site-notice-created";
@@ -48,7 +49,8 @@ There is a new site notice.
 }
 ```
 ##### SiteNoticeUpdated
-A site notice has been updated.
+Sent when a site notice is updated.
+Set `subscribe[]=notices` to receive.
 ```typescript
 {
 	"type": "site-notice-updated";
@@ -56,7 +58,8 @@ A site notice has been updated.
 }
 ```
 ##### SiteNoticetRemoved
-A site notice has been removed.
+Sent when a site notice is removed.
+Set `subscribe[]=notices` to receive.
 ```typescript
 {
 	"type": "site-notice-removed";
@@ -64,9 +67,9 @@ A site notice has been removed.
 }
 ```
 #### Errors
-| Response Code | Cause                                     |
-|---------------|-------------------------------------------|
-| 403 Forbidden | Missing permission `socket.site.notices`. |
+| Response Code | Cause                                |
+|---------------|--------------------------------------|
+| 403 Forbidden | Missing permission `events.notices`. |
 
 --------------------------------------------------------------------------------
 
@@ -76,9 +79,9 @@ Lists all site notice.
 ##### Response
 A Paginated List of Notice References.
 ##### Errors
-| Response Code | Cause                                   |
-|---------------|-----------------------------------------|
-| 403 Forbidden | Missing permission `site.notices.list`. |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `notices.list`. |
 
 #### POST
 Creates a site notice.
@@ -88,9 +91,9 @@ A Notice object.
 ##### Response
 A reference to the created Notice.
 ##### Errors
-| Response Code | Cause                                   |
-|---------------|-----------------------------------------|
-| 403 Forbidden | Missing permission `site.notices.post`. |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `notices.post`. |
 
 --------------------------------------------------------------------------------
 
@@ -100,10 +103,10 @@ Gets a site notice.
 ##### Response
 A Notice object.
 ##### Errors
-| Response Code | Cause                                  |
-|---------------|----------------------------------------|
-| 403 Forbidden | Missing permission `site.notices.get`. |
-| 404 Not Found | No such Notice exists.                 |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `notices.get`. |
+| 404 Not Found | No such Notice exists.            |
 
 #### PATCH
 Updates a site notice.
@@ -113,15 +116,15 @@ A partial Notice object.
 ##### Response
 The updated Notice object.
 ##### Errors
-| Response Code | Cause                                    |
-|---------------|------------------------------------------|
-| 403 Forbidden | Missing permission `site.notices.patch`. |
-| 404 Not Found | No such Notice exists.                   |
+| Response Code | Cause                               |
+|---------------|-------------------------------------|
+| 403 Forbidden | Missing permission `notices.patch`. |
+| 404 Not Found | No such Notice exists.              |
 
 #### DELETE
 Deletes a site notice.
 ##### Errors
-| Response Code | Cause                                     |
-|---------------|-------------------------------------------|
-| 403 Forbidden | Missing permission `site.notices.delete`. |
-| 404 Not Found | No such Notice exists.                    |
+| Response Code | Cause                                |
+|---------------|--------------------------------------|
+| 403 Forbidden | Missing permission `notices.delete`. |
+| 404 Not Found | No such Notice exists.               |

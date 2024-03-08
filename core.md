@@ -58,6 +58,11 @@ Server implementations must not return more items than this number but may retur
 The `next` and `previous` URIs should not result in duplicate items across pages when the list updates in-between fetches.
 Clients sequentially loading every "next" page until the end of a list should be sent every item in the list *exactly once*.
 
+### Websockets
+Some endpoints use [WebSockets](https://en.wikipedia.org/wiki/WebSocket).
+These endpoints allow servers to push data to clients to inform them of events that occur, such as objects updating.
+
+Data packets sent over these channels should be sent as UTF-8 encoded JSON text or as a [permessage-deflate](https://www.rfc-editor.org/rfc/rfc7692) representation of that if supported.
 
 ### Objects
 #### Board
@@ -154,6 +159,27 @@ Implementations should return the union of all lists defined by every implemente
 
 --------------------------------------------------------------------------------
 
+### /events?subscribe[]={events_list}
+Websocket connection point.
+
+A connecting client must specify which events it wishes to be sent on the websocket using the `subscribe` query parameter.
+#### Server Packets
+Sent when the permissions for a client change.
+Set `subscribe[]=access` to receive.
+##### AccessUpdate
+```typescript
+{
+	"type": "access-update";
+	"permissions": string[];
+}
+```
+#### Errors
+| Response Code | Cause                               |
+|---------------|-------------------------------------|
+| 403 Forbidden | Missing permission `events.access`. |
+
+--------------------------------------------------------------------------------
+
 ### /access
 #### GET
 Gets information about what this client can do without encountering a permissions error.
@@ -204,19 +230,17 @@ If any sub-endpoints are called on this, the should likewise be redirected, keep
 
 --------------------------------------------------------------------------------
 
-### {board_uri}/socket?extensions[]={extensions_list}
+### {board_uri}/events?subscribe[]={events_list}
 Websocket connection point.
-A connecting client may specify which extensions it wishes to be enabled on the websocket using the `extensions_list` query parameter.
-Extension names are the same as those in `/info`.
-To receive the events defined here, the list should contain the value `core`.
+
+A connecting client must specify which events it wishes to be sent on the websocket using the `subscribe` query parameter.
 
 Servers should disconnect clients when metadata about the board changes which the client is not notified about.
 Because of this, clients should fetch the board metadata again after an unexpected socket disconnect.
 #### Server packets
-These packets are sent by the server to inform the client of something.
-They should be sent as UTF-8 encoded JSON text or as a [permessage-deflate](https://www.rfc-editor.org/rfc/rfc7692) representation of that if supported.
 ##### BoardUpdate
-The board has changed.
+Sent when the board changes.
+Set `subscribe[]=data.colors` to receive.
 ```typescript
 {
 	"type": "board-update";
@@ -250,7 +274,10 @@ In the vast majority of cases, this packet will look similar to the following, r
 }
 ```
 ##### PixelsAvailable
-How many pixels may be placed by the current user without encountering a cooldown.
+Sent when the number of pixels available changes.
+This is defined as the number of placements that may be made by the client without encountering a cooldown.
+
+Set `subscribe[]=cooldown` to receive.
 ```typescript
 {
 	"type": "pixels-available";
@@ -260,7 +287,7 @@ How many pixels may be placed by the current user without encountering a cooldow
 ```
 ##### Ready
 The first packet sent by the server. 
-After receiving this clients can begin fetching board data resources.
+After receiving this, clients can begin fetching board data resources.
 Events received after this packet and before the data resources are loaded can be replayed after loading with a guarantee that the client will end up with the correct resource representation.
 ```typescript
 {
@@ -268,11 +295,12 @@ Events received after this packet and before the data resources are loaded can b
 }
 ```
 #### Errors
-| Response Code            | Cause                               |
-|--------------------------|-------------------------------------|
-| 403 Forbidden            | Missing permission `socket.core`.   |
-| 422 Unprocessable Entity | No extensions specified.            |
-| 422 Unprocessable Entity | Requested extensions not supported. |
+| Response Code            | Cause                                           |
+|--------------------------|-------------------------------------------------|
+| 403 Forbidden            | Missing permission `boards.events.cooldown`.    |
+| 403 Forbidden            | Missing permission `boards.events.data.colors`. |
+| 422 Unprocessable Entity | No events specified.                            |
+| 422 Unprocessable Entity | Requested events not supported.                 |
 #### Websocket Errors
 | Close Code | Cause                |
 |------------|----------------------|

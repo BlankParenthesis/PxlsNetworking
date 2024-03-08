@@ -51,6 +51,54 @@ If the [users extension](./users.md) is implemented, Member objects will also co
 
 --------------------------------------------------------------------------------
 
+### /events?subscribe[]={events_list}
+#### Server packets
+##### FactionCreated
+Sent when a faction is created.
+Set `subscribe[]=factions` to receive.
+```typescript
+{
+	"type": "faction-created";
+	"faction": Reference<Faction>;
+}
+```
+##### FactionUpdated
+Sent when a faction is updated.
+Set `subscribe[]=factions` to receive.
+```typescript
+{
+	"type": "faction-updated";
+	"faction": Reference<Faction>;
+}
+```
+##### FactionDeleted
+Sent when a faction is deleted.
+Set `subscribe[]=factions` to receive.
+```typescript
+{
+	"type": "faction-deleted";
+	"faction": Url;
+}
+```
+##### MemberChanged
+Sent when a faction member is updated.
+Set `subscribe[]=factions.members` to receive or `subscribe[]=factions.current.members` to receive for changes involving the user (those where they are the member, or they own an involved faction).
+```typescript
+{
+	"type": "faction-member-updated";
+	"faction": Reference<Faction>;
+	"member": Reference<Member>;
+}
+```
+#### Errors
+| Response Code | Cause                                                 |
+|---------------|-------------------------------------------------------|
+| 403 Forbidden | Missing permission `events.factions`.                 |
+| 403 Forbidden | Missing permission `events.factions.members`.         |
+| 403 Forbidden | Missing permission `events.factions.current.members`. |
+
+--------------------------------------------------------------------------------
+
 ### /factions
 #### GET
 Lists all factions.

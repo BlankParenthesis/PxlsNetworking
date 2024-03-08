@@ -41,12 +41,17 @@ Knowing this ID and secret implies a pre-existing relationship between the clien
 
 --------------------------------------------------------------------------------
 
-### /socket?extensions[]=authentication
+--------------------------------------------------------------------------------
+
+### /events?subscribe[]={events_list}&authenticate={"true" | "false"}
 *NOTE: The definitions here also apply to board sockets*
+
+If the query parameter `authenticate` is set to `true`, setting up a socket connection should be handled slightly differently — as detailed here.
 #### Client packets
-Unlike regular HTTP requests, websocket connections have a significant duration.
 Credentials are unlikely to expire over the course of a regular HTTP request.
 This allows regular requests to use headers for authentication.
+
+Unlike regular HTTP requests, websocket connections have a significant duration.
 Websocket connections are likely to last long enough that credentials will expire.
 This makes HTTP headers an inadequate method of authentication.
 
@@ -54,7 +59,7 @@ Clients wishing to authenticate a websocket connection are required to send auth
 Servers should not send any packets until the client's authentication is verified.
 Servers should keep connections open for at least 5 seconds to allow clients time to send an initial authenticate packet.
 ##### Authenticate
-Set authentication state.
+Sets the authentication state.
 ```typescript
 {
 	"type": "authenticate";
