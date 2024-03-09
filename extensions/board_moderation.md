@@ -20,6 +20,10 @@ Implementing this extension provides users with the tools necessary to moderate 
 ### {board_uri}/pixels/{position}
 #### POST
 ##### Request
+Overrides allow users to edit board content in typically forbidden ways:
+- `cooldown`: ignore the cooldown calculation when inserting a pixel
+- `color`: use palette indices marked as "system_only"
+- `mask`: ignore the placement mask when inserting a pixel
 ```typescript
 {
 	"overrides"?:  {

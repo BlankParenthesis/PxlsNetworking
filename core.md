@@ -71,11 +71,14 @@ This is represented here as the Board object defined by the following type:
 	"palette": Map<number, {
 		"name": string;
 		"value": number;
+		"system_only"?: boolean;
 	}>;
 	"max_pixels_available": number;
 }
 ```
 The `value` field of each entry in `palette` is a 4-byte RGBA color value.
+If the `system_only` field is set to true, the value can be sent by the server but not used as part a request by the client.
+Clients should not display such entries to users.
 
 `shape` indicates the ordering of data for the board.
 It usually contains a single array of size 2 with its elements representing width and height respectively.
@@ -339,6 +342,7 @@ The created Placement object.
 | 404 Not Found            | Position outside of board dimensions.             |
 | 403 Forbidden            | Missing permission `board.pixels.post`.           |
 | 403 Forbidden            | Position is not placable according to board mask. |
+| 403 Forbidden            | Palette index has `system_only` set to true.      |
 | 409 Conflict             | Placement would have no effect.                   |
 | 422 Unprocessable Entity | Color does not exist on the palette.              |
 | 429 Too Many Requests    | No available pixels to place.                     |
