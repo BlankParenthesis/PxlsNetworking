@@ -26,7 +26,7 @@ Clients are expected to keep track of which actions can be retracted.
 ###### Headers
 | Header             | Value                                                                      |
 |--------------------|----------------------------------------------------------------------------|
-| Pxls-Undo-Deadline | Timestamp of when DELETE actions can no longer be sent for this placement. |
+| Pxls-Undo-Deadline | Timestamp before which DELETE actions can be performed for this placement. |
 
 #### DELETE
 Undoes the last place action at the given coordinate.
