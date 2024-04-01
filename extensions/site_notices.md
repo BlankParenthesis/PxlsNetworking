@@ -55,7 +55,7 @@ A site notice has been updated.
 	"notice": Reference<Notice>;
 }
 ```
-##### SiteNoticetRemoved
+##### SiteNoticeRemoved
 A site notice has been removed.
 ```typescript
 {
