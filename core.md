@@ -273,7 +273,7 @@ Events received after this packet and before the data resources are loaded can b
 #### Errors
 | Response Code            | Cause                               |
 |--------------------------|-------------------------------------|
-| 403 Forbidden            | Missing permission `socket.core`.   |
+| 403 Forbidden            | Missing permission `boards.events`. |
 | 422 Unprocessable Entity | No extensions specified.            |
 | 422 Unprocessable Entity | Requested extensions not supported. |
 #### Websocket Errors
@@ -315,11 +315,11 @@ Gets the most recent placement for the specified board position.
 ##### Response
 A Placement object.
 ##### Errors
-| Response Code | Cause                                  |
-|---------------|----------------------------------------|
-| 404 Not Found | Position has no placements.            |
-| 404 Not Found | Position outside of board dimensions.  |
-| 403 Forbidden | Missing permission `board.pixels.get`. |
+| Response Code | Cause                                   |
+|---------------|-----------------------------------------|
+| 404 Not Found | Position has no placements.             |
+| 404 Not Found | Position outside of board dimensions.   |
+| 403 Forbidden | Missing permission `boards.pixels.get`. |
 
 #### POST
 Creates a placement.
@@ -340,7 +340,7 @@ The created Placement object.
 | Response Code            | Cause                                             |
 |--------------------------|---------------------------------------------------|
 | 404 Not Found            | Position outside of board dimensions.             |
-| 403 Forbidden            | Missing permission `board.pixels.post`.           |
+| 403 Forbidden            | Missing permission `boards.pixels.post`.          |
 | 403 Forbidden            | Position is not placable according to board mask. |
 | 403 Forbidden            | Palette index has `system_only` set to true.      |
 | 409 Conflict             | Placement would have no effect.                   |

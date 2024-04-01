@@ -34,11 +34,11 @@ Overrides allow users to edit board content in typically forbidden ways:
 }
 ```
 ##### Errors
-| Response Code | Cause                                                |
-|---------------|------------------------------------------------------|
-| 403 Forbidden | Missing permission `board.pixels.override.cooldown`. |
-| 403 Forbidden | Missing permission `board.pixels.override.color`.    |
-| 403 Forbidden | Missing permission `board.pixels.override.mask`.     |
+| Response Code | Cause                                                 |
+|---------------|-------------------------------------------------------|
+| 403 Forbidden | Missing permission `boards.pixels.override.cooldown`. |
+| 403 Forbidden | Missing permission `boards.pixels.override.color`.    |
+| 403 Forbidden | Missing permission `boards.pixels.override.mask`.     |
 
 --------------------------------------------------------------------------------
 
@@ -84,14 +84,15 @@ This format is similar to the Change object from the core BoardUpdate event, but
 | Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase.                            |
 
 ##### Errors
-| Response Code            | Cause                                                |
-|--------------------------|------------------------------------------------------|
-| 403 Forbidden            | Missing permission `board.pixels.patch`.             |
-| 404 Not Found            | Position outside of board dimensions.                |
-| 403 Forbidden            | Missing permission `board.pixels.override.cooldown`. |
-| 403 Forbidden            | Missing permission `board.pixels.override.color`.    |
-| 403 Forbidden            | Missing permission `board.pixels.override.mask`.     |
-| 403 Forbidden            | Position is not placable according to board mask.    |
-| 409 Conflict             | Placement would have no effect.                      |
-| 422 Unprocessable Entity | Color does not exist on the palette.                 |
-| 429 Too Many Requests    | No available pixels to place.                        |
+| Response Code            | Cause                                                 |
+|--------------------------|-------------------------------------------------------|
+| 403 Forbidden            | Missing permission `boards.pixels.patch`.             |
+| 404 Not Found            | Position outside of board dimensions.                 |
+| 403 Forbidden            | Missing permission `boards.pixels.override.cooldown`. |
+| 403 Forbidden            | Missing permission `boards.pixels.override.color`.    |
+| 403 Forbidden            | Missing permission `boards.pixels.override.mask`.     |
+| 403 Forbidden            | Position is not placable according to board mask.     |
+| 409 Conflict             | Placement would have no effect.                       |
+| 422 Unprocessable Entity | Color does not exist on the palette.                  |
+| 422 Unprocessable Entity | Ranges overlap.                                       |
+| 429 Too Many Requests    | No available pixels to place.                         |
