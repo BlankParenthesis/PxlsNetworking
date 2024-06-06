@@ -11,14 +11,14 @@ Notice objects represent notices and are defined by the following type:
 	"title": string;
 	"content": string;
 	"created_at": Timestamp;
-	"expires_at": Timestamp;
+	"expires_at"?: Timestamp;
 }
 ```
 
 If the [users extension](./users.md) is implemented, Notice objects gain an optional author field:
 ```typescript
 {
-	"author"?: User;
+	"author"?: Reference<User>;
 }
 ```
 
@@ -64,21 +64,21 @@ A site notice has been removed.
 }
 ```
 #### Errors
-| Response Code | Cause                                     |
-|---------------|-------------------------------------------|
-| 403 Forbidden | Missing permission `socket.site.notices`. |
+| Response Code | Cause                                |
+|---------------|--------------------------------------|
+| 403 Forbidden | Missing permission `socket.notices`. |
 
 --------------------------------------------------------------------------------
 
-### /notice
+### /notices
 #### GET
 Lists all site notice.
 ##### Response
 A Paginated List of Notice References.
 ##### Errors
-| Response Code | Cause                                   |
-|---------------|-----------------------------------------|
-| 403 Forbidden | Missing permission `site.notices.list`. |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `notices.list`. |
 
 #### POST
 Creates a site notice.
@@ -88,9 +88,9 @@ A Notice object.
 ##### Response
 A reference to the created Notice.
 ##### Errors
-| Response Code | Cause                                   |
-|---------------|-----------------------------------------|
-| 403 Forbidden | Missing permission `site.notices.post`. |
+| Response Code | Cause                              |
+|---------------|------------------------------------|
+| 403 Forbidden | Missing permission `notices.post`. |
 
 --------------------------------------------------------------------------------
 
@@ -100,10 +100,10 @@ Gets a site notice.
 ##### Response
 A Notice object.
 ##### Errors
-| Response Code | Cause                                  |
-|---------------|----------------------------------------|
-| 403 Forbidden | Missing permission `site.notices.get`. |
-| 404 Not Found | No such Notice exists.                 |
+| Response Code | Cause                             |
+|---------------|-----------------------------------|
+| 403 Forbidden | Missing permission `notices.get`. |
+| 404 Not Found | No such Notice exists.            |
 
 #### PATCH
 Updates a site notice.
@@ -113,15 +113,15 @@ A partial Notice object.
 ##### Response
 The updated Notice object.
 ##### Errors
-| Response Code | Cause                                    |
-|---------------|------------------------------------------|
-| 403 Forbidden | Missing permission `site.notices.patch`. |
-| 404 Not Found | No such Notice exists.                   |
+| Response Code | Cause                               |
+|---------------|-------------------------------------|
+| 403 Forbidden | Missing permission `notices.patch`. |
+| 404 Not Found | No such Notice exists.              |
 
 #### DELETE
 Deletes a site notice.
 ##### Errors
-| Response Code | Cause                                     |
-|---------------|-------------------------------------------|
-| 403 Forbidden | Missing permission `site.notices.delete`. |
-| 404 Not Found | No such Notice exists.                    |
+| Response Code | Cause                                |
+|---------------|--------------------------------------|
+| 403 Forbidden | Missing permission `notices.delete`. |
+| 404 Not Found | No such Notice exists.               |
