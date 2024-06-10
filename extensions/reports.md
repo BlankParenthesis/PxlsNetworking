@@ -6,7 +6,8 @@ Reports are represented with Report objects which are described by the type belo
 ```typescript
 {
 	"artifacts": Array<{
-		"uri": string;
+		"reference": Reference<any>;
+		"type": string;
 		"timestamp"?: Timestamp;
 	}>;
 	"status": "OPENED" | "CLOSED";
@@ -14,9 +15,9 @@ Reports are represented with Report objects which are described by the type belo
 }
 ```
 
-The artifact uris provided in this object should reference valid objects when the report is created.
+The artifact type provided in this object should reference valid objects when the report is created.
 Some potential examples:
-- /board/pixels/0/0
+- /boards/1/pixels/0
 - /users/12
 - /roles/2
 
@@ -27,7 +28,7 @@ The status and reason in the root of the object reflect the most recent entry in
 If the [users extension](./users.md) is implemented, Reports may additionally specify the user who created them:
 ```typescript
 {
-	"reporter"?: User;
+	"reporter"?: Reference<User>;
 }
 ```
 
@@ -97,12 +98,12 @@ A Report object without history or status.
 ##### Response
 A reference to the created Report object.
 ##### Errors
-| Response Code | Cause                                       |
-|---------------|---------------------------------------------|
-| 403 Forbidden | Missing permission `reports.post`.          |
-| 422 Forbidden | Invalid message.                            |
-| 422 Forbidden | No artifacts provided.                      |
-| 422 Forbidden | One or more provided artifacts are invalid. |
+| Response Code | Cause                                                   |
+|---------------|---------------------------------------------------------|
+| 403 Forbidden | Missing permission `reports.post`.                      |
+| 422 Unprocessable Content | Invalid message.                            |
+| 422 Unprocessable Content | No artifacts provided.                      |
+| 422 Unprocessable Content | One or more provided artifacts are invalid. |
 
 --------------------------------------------------------------------------------
 
@@ -170,7 +171,7 @@ A Paginated List of the following type:
 If the [users extension](./users.md) is implemented, history entries may additionally contain information on the user responsible for a history event:
 ```typescript
 {
-	"user"?: User;
+	"reporter"?: User;
 }
 ```
 ##### Errors
