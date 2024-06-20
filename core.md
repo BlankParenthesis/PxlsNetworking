@@ -188,7 +188,7 @@ A Paginated List of Board References.
 #### GET
 Gets a Board object.
 ##### Response
-A Board Reference.
+A Board Object.
 ###### Headers
 | Header                | Value                                                                                                                |
 |-----------------------|----------------------------------------------------------------------------------------------------------------------|
@@ -202,8 +202,20 @@ A Board Reference.
 --------------------------------------------------------------------------------
 
 ### /boards/default
-Requests made to this endpoint should be redirected using HTTP status 307 to the board object of the default board.
-If any sub-endpoints are called on this, the should likewise be redirected, keeping the path.
+#### GET
+Gets the default Board object.
+##### Response
+A Board Reference.
+###### Headers
+| Header                | Value                                                                                                                |
+|-----------------------|----------------------------------------------------------------------------------------------------------------------|
+| Pxls-Pixels-Available | Number of placements the client can create before being subject to a cooldown.                                       |
+| Pxls-Next-Available   | Timestamp of when `Pixels-Available` will increase. Not sent when `Pxls-Pixels-Available` is `max_pixels_available`. |
+##### Errors
+| Response Code | Cause                            |
+|---------------|----------------------------------|
+| 403 Forbidden | Missing permission `boards.get`. |
+| 404 Not Found | There is no default board.       |
 
 --------------------------------------------------------------------------------
 
