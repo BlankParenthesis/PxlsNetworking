@@ -6,17 +6,27 @@ Since this builds on user objects, implementing this extension requires implemen
 This defines a PlacementStatistics object with the following type:
 ```typescript
 {
-	"colors": {
-		"total": {
-			"placed": number;
-			"undone": number;
-		};
-		[index: number]: {
-			"placed": number;
-			"undone": number;
-		};
-	};
+	"placed": number;
 };
+```
+a BoardStatistics object as:
+```typescript
+{
+	"colors": {
+		[index: number]: PlacementStatistics;
+	};
+}
+```
+and a UserStatistics object as:
+```typescript
+{
+	"user": Reference<User>;
+	"totals": PlacementStatistics;
+	"boards": Array<{
+		"board": Reference<Board>;
+		"stats": BoardStatistics;
+	}>;
+}
 ```
 
 --------------------------------------------------------------------------------
@@ -41,7 +51,7 @@ The client user's total placement statistics have changed.
 ```typescript
 {
 	"type": "stats-updated";
-	"stats": PlacementStatistics;
+	"stats": UserStatistics;
 }
 ```
 #### Errors
@@ -58,7 +68,7 @@ The client user's placement statistics for this board have changed.
 ```typescript
 {
 	"type": "stats-updated";
-	"stats": PlacementStatistics;
+	"stats": BoardStatistics;
 }
 ```
 #### Errors
@@ -72,17 +82,7 @@ The client user's placement statistics for this board have changed.
 #### GET
 Lists the placement statistics for all users.
 ##### Response
-A Paginated List of the following type:
-```typescript
-{
-	"user": Reference<User>;
-	"totals": PlacementStatistics;
-	"boards": Array<{
-		"board": Reference<Board>;
-		"stats": PlacementStatistics;
-	}>;
-}
-```
+A Paginated List of UserStatistics objects.
 ##### Errors
 | Response Code | Cause                                  |
 |---------------|----------------------------------------|
@@ -95,15 +95,8 @@ A Paginated List of the following type:
 #### GET
 Gets the placement statistics for a user.
 ##### Response
-```typescript
-{
-	"totals": PlacementStatistics;
-	"boards": Array<{
-		"board": Reference<Board>;
-		"stats": PlacementStatistics;
-	}>;
-}
-```
+A UserStatistics object.
+
 Implementations may provide information on as many or few boards as they choose.
 This might mean they provide information on all previous boards, only provide information for the current board, or don't provide board specific data at all.
 
