@@ -32,10 +32,10 @@ Timestamp is seconds since `created_at` as defined in `{board_uri}/info`.
 
 --------------------------------------------------------------------------------
 
-### {board_uri}/socket?extensions[]=board_timestamps
+### {board_uri}/events?subscribe[]={events_list}
 #### Server packets
 ##### BoardUpdate
-The board has changed.
+Set `subscribe[]=data.timestamps` to add this field to the event.
 ```typescript
 {
 	"data"?: Partial<{
@@ -44,6 +44,6 @@ The board has changed.
 }
 ```
 #### Errors
-| Response Code | Cause                                          |
-|---------------|------------------------------------------------|
-| 403 Forbidden | Missing permission `socket.boards.timestamps`. |
+| Response Code | Cause                                               |
+|---------------|-----------------------------------------------------|
+| 403 Forbidden | Missing permission `boards.events.data.timestamps`. |

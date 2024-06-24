@@ -44,10 +44,11 @@ and a UserStatistics object as:
 
 --------------------------------------------------------------------------------
 
-### /socket?extensions[]=placement_statistics
+### /events?subscribe={events_list}
 #### Server packets
 ##### StatsUpdate
 The client user's total placement statistics have changed.
+Set `subscribe=stats` to receive this.
 ```typescript
 {
 	"type": "stats-updated";
@@ -57,14 +58,15 @@ The client user's total placement statistics have changed.
 #### Errors
 | Response Code | Cause                              |
 |---------------|------------------------------------|
-| 403 Forbidden | Missing permission `socket.stats`. |
+| 403 Forbidden | Missing permission `events.stats`. |
 
 --------------------------------------------------------------------------------
 
-### {board_uri}/socket?extensions[]=placement_statistics
+### {board_uri}/events?subscribe[]={events_list}
 #### Server packets
 ##### StatsUpdate
 The client user's placement statistics for this board have changed.
+Set `subscribe=stats` to receive this.
 ```typescript
 {
 	"type": "stats-updated";
@@ -72,9 +74,9 @@ The client user's placement statistics for this board have changed.
 }
 ```
 #### Errors
-| Response Code | Cause                              |
-|---------------|------------------------------------|
-| 403 Forbidden | Missing permission `socket.stats`. |
+| Response Code | Cause                                     |
+|---------------|-------------------------------------------|
+| 403 Forbidden | Missing permission `events.boards.stats`. |
 
 --------------------------------------------------------------------------------
 

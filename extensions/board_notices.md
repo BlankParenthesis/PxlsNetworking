@@ -36,10 +36,11 @@ If the [users extension](./users.md) is implemented, Notice objects gain an opti
 
 --------------------------------------------------------------------------------
 
-### {board_uri}/socket?extensions[]=board_notices
+### {board_uri}/events?subscribe[]={events_list}
 #### Server packets
 ##### BoardNoticeCreated
-There is a new board notice.
+Sent when a board notice is created.
+Set `subscribe[]=notices` to receive.
 ```typescript
 {
 	"type": "board-notice-created";
@@ -47,7 +48,8 @@ There is a new board notice.
 }
 ```
 ##### NoticeUpdated
-A board notice has been updated.
+Sent when a board notice is updated.
+Set `subscribe[]=notices` to receive.
 ```typescript
 {
 	"type": "board-notice-updated";
@@ -55,7 +57,8 @@ A board notice has been updated.
 }
 ```
 ##### NoticeRemoved
-A board notice has been removed.
+Sent whne a board notice is removed.
+Set `subscribe[]=notices` to receive.
 ```typescript
 {
 	"type": "board-notice-removed";
@@ -63,9 +66,9 @@ A board notice has been removed.
 }
 ```
 #### Errors
-| Response Code | Cause                                      |
-|---------------|--------------------------------------------|
-| 403 Forbidden | Missing permission `socket.board.notices`. |
+| Response Code | Cause                                       |
+|---------------|---------------------------------------------|
+| 403 Forbidden | Missing permission `boards.events.notices`. |
 
 --------------------------------------------------------------------------------
 
@@ -75,9 +78,9 @@ Lists all board notices.
 ##### Response
 A Paginated List of Notice References.
 ##### Errors
-| Response Code | Cause                                    |
-|---------------|------------------------------------------|
-| 403 Forbidden | Missing permission `board.notices.list`. |
+| Response Code | Cause                                     |
+|---------------|-------------------------------------------|
+| 403 Forbidden | Missing permission `boards.notices.list`. |
 
 #### POST
 Creates a board notice.
@@ -87,9 +90,9 @@ A Notice object.
 ##### Response
 The created Notice object.
 ##### Errors
-| Response Code | Cause                                    |
-|---------------|------------------------------------------|
-| 403 Forbidden | Missing permission `board.notices.post`. |
+| Response Code | Cause                                     |
+|---------------|-------------------------------------------|
+| 403 Forbidden | Missing permission `boards.notices.post`. |
 
 --------------------------------------------------------------------------------
 
@@ -99,9 +102,9 @@ Gets a board notice.
 ##### Response
 The Notice object.
 ##### Errors
-| Response Code | Cause                                   |
-|---------------|-----------------------------------------|
-| 403 Forbidden | Missing permission `board.notices.get`. |
+| Response Code | Cause                                    |
+|---------------|------------------------------------------|
+| 403 Forbidden | Missing permission `boards.notices.get`. |
 
 #### PATCH
 Updates a board notice.
@@ -111,13 +114,13 @@ A partial Notice object.
 ##### Response
 The updated Notice object.
 ##### Errors
-| Response Code | Cause                                     |
-|---------------|-------------------------------------------|
-| 403 Forbidden | Missing permission `board.notices.patch`. |
+| Response Code | Cause                                      |
+|---------------|--------------------------------------------|
+| 403 Forbidden | Missing permission `boards.notices.patch`. |
 
 #### DELETE
 Deletes the board notice.
 ##### Errors
-| Response Code | Cause                                      |
-|---------------|--------------------------------------------|
-| 403 Forbidden | Missing permission `board.notices.delete`. |
+| Response Code | Cause                                       |
+|---------------|---------------------------------------------|
+| 403 Forbidden | Missing permission `boards.notices.delete`. |

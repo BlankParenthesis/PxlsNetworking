@@ -37,6 +37,54 @@ Role objects are defined by the following type:
 
 --------------------------------------------------------------------------------
 
+### /events?subscribe[]={events_list}
+#### Server packets
+##### RoleCreated
+Sent when a role is created.
+Set `subscribe[]=roles` to receive.
+```typescript
+{
+	"type": "role-created";
+	"role": Reference<Role>;
+}
+```
+##### RoleUpdated
+Sent when a role is updated.
+Set `subscribe[]=roles` to receive.
+```typescript
+{
+	"type": "role-updated";
+	"role": Reference<Role>;
+}
+```
+##### RoleDeleted
+Sent when a role is deleted.
+Set `subscribe[]=roles` to receive.
+```typescript
+{
+	"type": "role-deleted";
+	"role": Url;
+}
+```
+##### UserRolesUpdated
+Sent when the roles assigned to a user changes.
+Set `subscribe[]=users.roles` to receive, or `subscribe[]=users.current.roles` to receive for the current user.
+```typescript
+{
+	"type": "user-roles-updated";
+	"user": Url;
+}
+```
+#### Errors
+| Response Code            | Cause                                            |
+|--------------------------|--------------------------------------------------|
+| 403 Forbidden            | Missing permission `events.roles`.               |
+| 403 Forbidden            | Missing permission `events.users.roles`.         |
+| 403 Forbidden            | Missing permission `events.users.current.roles`. |
+| 422 Unprocessable Entity | Current and non-current subscriptions overlap.   |
+
+--------------------------------------------------------------------------------
+
 ### {user_uri}/roles
 #### GET
 Lists all roles a user has.
