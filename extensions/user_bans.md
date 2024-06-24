@@ -6,9 +6,9 @@ Since this concerns user objects directly, implementing this extension requires 
 This extension adds Ban objects which are described by following type:
 ```typescript
 {
-	"issued": Timestamp;
-	"expiry": Timestamp | null;
-	"issuer"?: User;
+	"created_at": Timestamp;
+	"expires_at": Timestamp | null;
+	"issuer"?: Reference<User>;
 	"reason": string | null;
 }
 ```
@@ -22,13 +22,13 @@ This extension adds Ban objects which are described by following type:
 ##### Response
 ```typescript
 {
-	"extensions": ["user_moderation"];
+	"extensions": ["user_bans"];
 }
 ```
 
 --------------------------------------------------------------------------------
 
-### /board/pixels/{position}
+### {board_uri}/pixels/{position}
 #### POST
 ##### Errors
 | Response Code | Cause   |
@@ -45,7 +45,7 @@ If the [board undo extension](./board_undo.md) is implemented, then undos are al
 --------------------------------------------------------------------------------
 
 If the [board moderation extension](./board_undo.md) is implemented, then mass-place events are also unavailable due to bans:
-### /board/pixels
+### {board_uri}/pixels
 #### PATCH
 ##### Errors
 | Response Code | Cause   |
