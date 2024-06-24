@@ -56,6 +56,7 @@ Creates a new Board object.
 	"palette": Map<number, {
 		"name": string;
 		"value": number;
+		"system_only"?: boolean;
 	}>;
 	"max_pixels_available": number;
 }
@@ -81,10 +82,13 @@ Partial<{
 	"palette": Map<number, {
 		"name": string;
 		"value": number;
+		"system_only"?: boolean;
 	}>;
 	"max_pixels_available": number;
 }>
 ```
+NOTE: changes to `max_pixels_available` should send PixelsAvailable events to
+notify clients of the pixels now available.
 ##### Response
 A Board Reference.
 ##### Errors
@@ -115,7 +119,9 @@ Set `subscribe[]=info` to add this field to the event.
 		"palette": Map<number, {
 			"name": string;
 			"value": number;
+			"system_only"?: boolean;
 		}>;
+		"max_pixels_available": number;
 	}>;
 }
 ```
