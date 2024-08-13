@@ -218,3 +218,17 @@ Remove a faction member.
 |---------------|-----------------------------------------------|
 | 403 Forbidden | Missing permission `factions.get`.            |
 | 403 Forbidden | Missing permission `factions.members.delete`. |
+
+### {user_uri}/factions
+If the [users extension](./users.md) is implemented, users also get an endpoint
+to list factions they have an associated Member object with.
+#### GET
+Lists all factions this user has a membership with.
+##### Response
+A Paginated List of Faction References.
+##### Errors
+| Response Code | Cause                                                                      |
+|---------------|----------------------------------------------------------------------------|
+| 403 Forbidden | Missing permission `users.get` or `users.current.get`.                     |
+| 404 Forbidden | No such User exists.                                                       |
+| 403 Forbidden | Missing permission `users.factions.list` or `users.current.factions.list`. |
