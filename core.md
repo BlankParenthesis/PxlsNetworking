@@ -176,6 +176,15 @@ Set `subscribe[]=access` to receive.
 	"permissions": string[];
 }
 ```
+#### Client packets
+##### Ping
+Can be sent by clients without access to websocket controls to have the server send a ping.
+This is useful for browser environments which currently do not have access to this and may need to demonstrate to a proxy that the connection is open to keep it alive.
+```typescript
+{
+	"type": "ping";
+}
+```
 #### Errors
 | Response Code | Cause                               |
 |---------------|-------------------------------------|
@@ -309,6 +318,16 @@ Events received after this packet and before the data resources are loaded can b
 	"type": "ready";
 }
 ```
+#### Client packets
+##### Ping
+Can be sent by clients without access to websocket controls to have the server send a ping.
+This is useful for browser environments which currently do not have access to this and may need to demonstrate to a proxy that the connection is open to keep it alive.
+```typescript
+{
+	"type": "ping";
+}
+```
+
 #### Errors
 | Response Code            | Cause                                           |
 |--------------------------|-------------------------------------------------|
