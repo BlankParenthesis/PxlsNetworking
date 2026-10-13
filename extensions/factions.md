@@ -225,7 +225,13 @@ to list factions they have an associated Member object with.
 #### GET
 Lists all factions this user has a membership with.
 ##### Response
-A Paginated List of Faction References.
+A Paginated List of the following object: 
+```ts
+{
+	"faction": Reference<Faction>;
+	"member": Reference<FactionMember>;
+}
+```
 ##### Errors
 | Response Code | Cause                                                                      |
 |---------------|----------------------------------------------------------------------------|
