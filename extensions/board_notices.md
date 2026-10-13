@@ -17,7 +17,7 @@ Notice objects represent notices and are defined by the following type:
 If the [users extension](./users.md) is implemented, Notice objects gain an optional author field:
 ```typescript
 {
-	"author"?: User;
+	"author"?: Reference<User>;
 }
 ```
 
