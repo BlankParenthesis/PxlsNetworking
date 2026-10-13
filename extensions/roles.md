@@ -105,6 +105,7 @@ Adds a role to a user.
 	"role": string;
 }
 ```
+Where `role` is a role uri.
 ##### Response
 A Paginated List of Role objects.
 ##### Errors
@@ -124,6 +125,7 @@ A Paginated List of Role objects.
 	"role": string;
 }
 ```
+Where `role` is a role uri.
 ##### Errors
 | Response Code | Cause                                                                    |
 |---------------|--------------------------------------------------------------------------|
